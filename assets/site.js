@@ -13,7 +13,7 @@
   ];
   const STATUS = "[Status readout: Placeholder]";
   // Shown when someone clicks a link that has no page yet, on pages with data-lock-dead-links
-  const LOCKED_MESSAGE = "[Locked link message: Placeholder]";
+  const LOCKED_MESSAGE = "DENIED";
   const NAV = [
     { items: [{ label: "Home", href: "", page: "home" }] },
     { heading: "Branches", items: [
