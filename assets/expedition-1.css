@@ -33,9 +33,20 @@
 .snapshot figcaption { margin-top: 10px; text-align: center; color: #3a2a24; font: 20px "La Belle Aurore", cursive; }
 .snapshot figcaption.ph { color: #7a6a62; font-style: normal; }
 
+/* The rest of the photos, scattered like loose prints */
+.snapshots { display: flex; flex-wrap: wrap; gap: 26px 22px; align-items: flex-start; justify-content: center; margin: 24px 0 8px; }
+.snapshot.small { margin: 0; padding: 9px 9px 14px; width: 260px; }
+.snapshot.small img { max-width: none; }
+.snapshot.small figcaption { font-size: 16px; }
+.snapshots .snapshot:nth-child(3n+1) { transform: rotate(1.8deg); }
+.snapshots .snapshot:nth-child(3n+2) { transform: rotate(-1.2deg); margin-top: 14px; }
+.snapshots .snapshot:nth-child(3n) { transform: rotate(2.4deg); margin-top: 4px; }
+.snapshots .snapshot:hover { transform: none; z-index: 1; position: relative; }
+
 @media (max-width: 560px) {
   .exp-hero-inner { flex-direction: column; align-items: flex-start; }
   .exp-hero .frame img { width: 140px; }
   .exp-hero h1 { font-size: 30px; }
-  .snapshot { transform: none; }
+  .snapshot, .snapshots .snapshot { transform: none; margin-top: 0; }
+  .snapshot.small { width: 100%; }
 }
