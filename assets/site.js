@@ -11,7 +11,16 @@
     { label: "About", href: "#" },
     { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
-  const STATUS = "Access approved and sanity stable.";
+  // Sanity readout: the banner status follows the visitor's sanity (100 = full).
+  // Each stage shows while sanity is at or above its "min". Highest first.
+  const SANITY_STAGES = [
+    { min: 80, text: "Access approved and sanity stable." },
+    { min: 60, text: "[Sanity stage 2: Placeholder]" },
+    { min: 40, text: "[Sanity stage 3: Placeholder]" },
+    { min: 20, text: "[Sanity stage 4: Placeholder]" },
+    { min: 0,  text: "[Sanity stage 5: Placeholder]" }
+  ];
+  const SANITY_RECOVERY = 1; // points regained per second on safe pages (<body data-safe>)
   // Shown when someone clicks a link that has no page yet, on pages with data-lock-dead-links
   const LOCKED_MESSAGE = "DENIED";
   const NAV = [
@@ -63,7 +72,7 @@
           <nav class="top-links" aria-label="Quick links">
             ${BANNER_LINKS.map(l => `<a href="${link(l.href)}"${/^https?:/.test(l.href) ? ' target="_blank" rel="noopener"' : ""}>${esc(l.label)}</a>`).join("")}
           </nav>
-          <p class="status ${STATUS.startsWith("[") ? "ph" : ""}">${esc(STATUS)}</p>
+          <p class="status" id="site-status" aria-live="polite"></p>
           <div class="search">
             <label class="search-box"><span aria-hidden="true">&gt;</span>
               <input type="search" id="site-search" placeholder="search" autocomplete="off" aria-label="Search the archive" aria-controls="site-search-results">
@@ -132,4 +141,28 @@
       });
     });
   }
+  // ── Sanity ──
+  // Kept in this visitor's browser only. Safe pages slowly restore it; hensa pages can
+  // drain it with PeoSanity.drain(points), or passively with <body data-sanity-drain="points per second">.
+  const KEY = "peo-sanity";
+  const clamp = v => Math.max(0, Math.min(100, v));
+  let sanity = 100;
+  try { const saved = parseFloat(localStorage.getItem(KEY)); if (!isNaN(saved)) sanity = clamp(saved); } catch (e) {}
+  const status = document.getElementById("site-status");
+  const render = () => {
+    if (!status) return;
+    const stage = SANITY_STAGES.find(s => sanity >= s.min) || SANITY_STAGES[SANITY_STAGES.length - 1];
+    status.textContent = stage.text;
+    status.classList.toggle("ph", stage.text.startsWith("["));
+  };
+  const set = v => {
+    sanity = clamp(v);
+    try { localStorage.setItem(KEY, String(sanity)); } catch (e) {}
+    render();
+  };
+  window.PeoSanity = { get: () => sanity, drain: n => set(sanity - n), restore: n => set(sanity + n) };
+  render();
+  const perSecond = document.body.hasAttribute("data-safe") ? SANITY_RECOVERY
+    : -(parseFloat(document.body.dataset.sanityDrain) || 0);
+  if (perSecond) setInterval(() => { if (!document.hidden && clamp(sanity + perSecond) !== sanity) set(sanity + perSecond); }, 1000);
 })();
