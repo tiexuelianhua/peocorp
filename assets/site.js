@@ -15,11 +15,21 @@
   // Each stage shows while sanity is at or above its "min". Highest first.
   const SANITY_STAGES = [
     { min: 80, text: "Access approved and sanity stable." },
-    { min: 60, text: "[Sanity stage 2: Placeholder]" },
-    { min: 40, text: "[Sanity stage 3: Placeholder]" },
-    { min: 20, text: "[Sanity stage 4: Placeholder]" },
-    { min: 0,  text: "[Sanity stage 5: Placeholder]" }
+    { min: 60, text: "Access approved and sanity is average." },
+    { min: 40, text: "Access approved and sanity is dropping." },
+    { min: 20, text: "Access approved and sanity is low." },
+    { min: 0,  text: "Access approved and sanity is critically low." }
   ];
+  // At zero: the warning floods the screen, then the visitor is booted from the site.
+  const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY !!";
+  const CRITICAL_FLOOD_MS = 2600; // how long the warning takes to cover the screen
+  const CRITICAL_HOLD_MS = 1800;  // how long the final warning stays before the boot
+  const BOOT_URL = "https://www.google.com";
+  const SANITY_AFTER_BOOT = 20;   // what a booted visitor comes back with
+  // The Voices: as sanity drops (stage 3 and below), text blurs and twitches, and at the
+  // lowest stages faint pictures flash up. Add image paths (relative to the site root) here.
+  const VOICE_IMAGES = [];
+  const VOICE_IMAGE_OPACITY = 0.12;
   const SANITY_RECOVERY = 1; // points regained per second on safe pages (<body data-safe>)
   // Shown when someone clicks a link that has no page yet, on pages with data-lock-dead-links
   const LOCKED_MESSAGE = "DENIED";
@@ -154,15 +164,88 @@
     const stage = SANITY_STAGES.find(s => sanity >= s.min) || SANITY_STAGES[SANITY_STAGES.length - 1];
     status.textContent = stage.text;
     status.classList.toggle("ph", stage.text.startsWith("["));
+    const n = SANITY_STAGES.indexOf(stage) + 1;
+    for (let i = 1; i <= SANITY_STAGES.length; i++) document.body.classList.toggle("sanity-" + i, i === n);
   };
+  let booting = false;
   const set = v => {
     sanity = clamp(v);
     try { localStorage.setItem(KEY, String(sanity)); } catch (e) {}
     render();
+    if (sanity === 0 && !booting && !document.body.hasAttribute("data-safe")) critical();
   };
+
+  // Black terminal, copies of the warning popping up faster and faster until the screen
+  // is covered, then a clean screen with the warning alone, then out.
+  function critical() {
+    booting = true;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const screen = document.createElement("div");
+    screen.className = "critical";
+    screen.setAttribute("role", "alert");
+    document.body.append(screen);
+    const line = text => Object.assign(document.createElement("span"), { textContent: text });
+    const boot = () => {
+      screen.textContent = "";
+      const last = line(CRITICAL);
+      last.className = "critical-final";
+      screen.append(last);
+      try { localStorage.setItem(KEY, String(SANITY_AFTER_BOOT)); } catch (e) {}
+      setTimeout(() => location.replace(BOOT_URL), CRITICAL_HOLD_MS);
+    };
+    if (reduce) return boot();
+    const probe = line(CRITICAL);
+    screen.append(probe);
+    const w = probe.offsetWidth, h = probe.offsetHeight;
+    probe.remove();
+    const total = Math.ceil((innerWidth / (w * 0.5) + 2) * (innerHeight / (h * 0.8) + 1) * 1.5);
+    const start = performance.now();
+    let shown = 0;
+    (function frame() {
+      const due = Math.min(total, Math.floor(total * ((performance.now() - start) / CRITICAL_FLOOD_MS) ** 2));
+      for (; shown < due; shown++) {
+        const s = line(CRITICAL);
+        s.style.left = (Math.random() * (innerWidth + w) - w) + "px";
+        s.style.top = (Math.random() * (innerHeight + h) - h) + "px";
+        screen.append(s);
+      }
+      if (shown < total) setTimeout(frame, 30);
+      else setTimeout(boot, 400);
+    })();
+  }
   window.PeoSanity = { get: () => sanity, drain: n => set(sanity - n), restore: n => set(sanity + n) };
   render();
   const perSecond = document.body.hasAttribute("data-safe") ? SANITY_RECOVERY
     : -(parseFloat(document.body.dataset.sanityDrain) || 0);
   if (perSecond) setInterval(() => { if (!document.hidden && clamp(sanity + perSecond) !== sanity) set(sanity + perSecond); }, 1000);
+  // ── The Voices ──
+  // Every so often, a random block of text glitches; lower sanity = more often, and faint pictures.
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const stageNow = () => SANITY_STAGES.indexOf(SANITY_STAGES.find(s => sanity >= s.min)) + 1;
+    const voices = () => {
+      const n = stageNow();
+      if (n >= 3 && !document.hidden) {
+        const blocks = document.querySelectorAll("main p, main li, main h1, main h2, main dd, .page-text");
+        const pick = blocks[Math.floor(Math.random() * blocks.length)];
+        if (pick) {
+          pick.classList.add("voice-glitch");
+          setTimeout(() => pick.classList.remove("voice-glitch"), 250 + Math.random() * 350);
+        }
+        if (n >= 4 && VOICE_IMAGES.length && Math.random() < (n === 5 ? 0.35 : 0.15)) {
+          const img = document.createElement("img");
+          img.className = "voice-image";
+          img.alt = "";
+          img.src = ROOT + VOICE_IMAGES[Math.floor(Math.random() * VOICE_IMAGES.length)];
+          img.style.left = Math.random() * 70 + "vw";
+          img.style.top = Math.random() * 70 + "vh";
+          img.style.setProperty("--o", VOICE_IMAGE_OPACITY);
+          document.body.append(img);
+          setTimeout(() => img.remove(), 700 + Math.random() * 600);
+        }
+      }
+      const gap = { 3: 6000, 4: 3000, 5: 1200 }[n] || 4000;
+      setTimeout(voices, gap * (0.5 + Math.random()));
+    };
+    setTimeout(voices, 2000);
+  }
 })();

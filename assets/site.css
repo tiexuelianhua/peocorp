@@ -85,6 +85,24 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 a.locked { opacity: 0.45; cursor: not-allowed; text-decoration: none; }
 .locked-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; margin: 0; padding: 8px 16px; max-width: calc(100% - 32px); box-sizing: border-box; background: #000; border: 1px solid var(--accent); color: var(--accent); font: 14px var(--term-font); }
 
+/* The Voices: low sanity blurs and twitches the page (stages from site.js) */
+body.sanity-3 main { filter: blur(0.3px); }
+body.sanity-4 main { filter: blur(0.6px); animation: voices-sway 7s ease-in-out infinite; }
+body.sanity-5 main { filter: blur(1px); animation: voices-sway 3.5s ease-in-out infinite; }
+@keyframes voices-sway { 0%, 100% { transform: none; } 50% { transform: translateX(1px) skewX(-0.3deg); } }
+.voice-glitch { animation: voice-glitch 0.12s steps(1) infinite; }
+@keyframes voice-glitch {
+  0%  { transform: translateX(-3px); filter: blur(2px); opacity: 0.7; }
+  50% { transform: translateX(3px); filter: blur(0); text-shadow: -2px 0 rgba(255, 60, 60, 0.6), 2px 0 rgba(60, 200, 255, 0.6); }
+}
+.voice-image { position: fixed; z-index: 1500; max-width: 30vw; max-height: 30vh; opacity: var(--o); pointer-events: none; filter: grayscale(1) blur(1px); }
+@media (prefers-reduced-motion: reduce) { body[class*="sanity-"] main { animation: none; } }
+
+/* Sanity at zero: the critical warning screen (see site.js) */
+.critical { position: fixed; inset: 0; z-index: 2000; background: #000; overflow: hidden; }
+.critical span { position: absolute; white-space: pre; color: #63c125; font: 18px/1.5 var(--term-font); }
+.critical .critical-final { position: static; display: block; padding: 16px 20px; white-space: pre-wrap; }
+
 .disclaimer { margin-top: 32px; font-size: 13px; color: var(--muted); font-style: italic; }
 
 footer.site { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
