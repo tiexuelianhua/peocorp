@@ -152,7 +152,7 @@ Carrying a bouquet of flowers, weeping.
 
     <details class="page sculk">
       <summary>Sculk Page</summary>
-      <div class="page-text">Forget-me-not
+      <div class="page-text sculk-cover" tabindex="0">Forget-me-not
 Forget-me-not
 Forget-me-not
 Forget-me-not
@@ -181,5 +181,21 @@ My tears, that I shed for you.</div>
 <footer class="site">
   <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
 </footer>
+
+<script>
+// The cursor or a tap purifies a circle of sculk where it rests.
+const PURIFY_RADIUS = "90px";
+document.querySelectorAll(".sculk-cover").forEach(el => {
+  const purify = e => {
+    const box = el.getBoundingClientRect();
+    el.style.setProperty("--x", (e.clientX - box.left) + "px");
+    el.style.setProperty("--y", (e.clientY - box.top) + "px");
+    el.style.setProperty("--r", PURIFY_RADIUS);
+  };
+  el.addEventListener("pointermove", purify);
+  el.addEventListener("pointerdown", purify);
+  el.addEventListener("pointerleave", () => el.style.setProperty("--r", "0px"));
+});
+</script>
 </body>
 </html>
