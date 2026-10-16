@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peoverse Archive</title>
+<style>
+  :root {
+    /* Peo's shirt green (same hue as the reference photo, brightened so it reads on black) */
+    --peo-green: #63c125;
+    --term-bg: #000000;
+    --term-font: Consolas, "Lucida Console", "Courier New", monospace; /* Windows Command Prompt fonts */
+  }
+  html, body { margin: 0; }
+  body { font-family: system-ui, sans-serif; background: #ffffff; color: #111111; }
+  body.intro-active { overflow: hidden; }
+
+  /* ── Intro terminal ── */
+  #intro {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--term-bg);
+    transition: opacity 900ms ease;
+  }
+  #intro.fade { opacity: 0; }
+  #term {
+    padding: 16px 20px;
+    color: var(--peo-green);
+    font: 18px/1.5 var(--term-font);
+    white-space: pre-wrap;
+    transition: transform 900ms cubic-bezier(.6,0,.4,1);
+  }
+  #intro.fade #term { transform: translateY(-100vh); }
+  .cursor { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .yn { display: inline-flex; gap: 0; }
+  .yn button {
+    font: inherit; color: var(--peo-green); background: transparent;
+    border: 0; padding: 0 2px; cursor: pointer;
+  }
+  .yn button[aria-pressed="true"] { background: var(--peo-green); color: var(--term-bg); }
+  .yn button:focus-visible { outline: 1px dashed var(--peo-green); outline-offset: 2px; }
+  .yn .slash { padding: 0 1px; }
+
+  #skip {
+    position: fixed; right: 16px; bottom: 16px;
+    font: 14px var(--term-font); color: var(--peo-green);
+    background: transparent; border: 1px solid var(--peo-green);
+    padding: 6px 12px; cursor: pointer;
+  }
+  #skip:focus-visible { outline: 2px solid var(--peo-green); outline-offset: 2px; }
+
+  @media (max-width: 480px) { #term { font-size: 15px; padding: 16px; } }
+  @media (prefers-reduced-motion: reduce) {
+    #intro, #term { transition: none; }
+    .cursor { animation: none; }
+  }
+
+  /* ── Placeholder page (the real home page goes here later) ── */
+  main { max-width: 760px; margin: 0 auto; padding: 48px 16px; }
+</style>
+</head>
+<body class="intro-active">
+
+<div id="intro" role="dialog" aria-modal="true" aria-label="Access check">
+  <div id="term" aria-live="polite"></div>
+  <button id="skip" type="button">Skip</button>
+</div>
+
+<main>
+  <p>[Home page goes here]</p>
+</main>
+
+<script>
+// ── Settings: adjust speed here (milliseconds) ──
+const TYPE_MS = 55;     // per typed character
+const ERASE_MS = 18;    // per erased character (held backspace)
+const LINE_PAUSE = 600; // pause after each line
+const DOT_PAUSE = 280;  // extra pause after each ". " in the dotted lines
+
+const LINES = ["CONNECTING. . .", "Verifying. . ."];
+const QUESTION = "Are you sure you want to do this? ";
+const FAREWELL = "May Peo be with you.";
+const DENIED = "ACCESS DENIED.";
+const DENIED_URL = "https://www.google.com"; // where "N" sends visitors
+
+const intro = document.getElementById("intro");
+const term = document.getElementById("term");
+const skipBtn = document.getElementById("skip");
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+
+// The terminal is a list of text lines plus a blinking cursor at the end.
+let lines = [""];
+let tail = null; // optional element (the Y/N choice) shown after the last line
+function render() {
+  term.textContent = lines.join("\n");
+  if (tail) term.appendChild(tail);
+  const c = document.createElement("span");
+  c.className = "cursor"; c.textContent = "_";
+  term.appendChild(c);
+}
+
+async function type(text) {
+  for (const ch of text) {
+    if (done) return;
+    lines[lines.length - 1] += ch; render();
+    await wait(TYPE_MS + (ch === "." ? DOT_PAUSE : 0));
+  }
+}
+async function newline() { lines.push(""); render(); }
+async function eraseAll() {
+  tail = null;
+  while (!done && (lines.length > 1 || lines[0].length)) {
+    const last = lines.length - 1;
+    if (lines[last].length) lines[last] = lines[last].slice(0, -1);
+    else lines.pop();
+    render();
+    await wait(ERASE_MS);
+  }
+}
+
+// Y/N prompt: arrow keys switch, Enter confirms, or click an option.
+function askYesNo() {
+  return new Promise(resolve => {
+    const wrap = document.createElement("span");
+    wrap.className = "yn";
+    wrap.setAttribute("role", "group");
+    wrap.setAttribute("aria-label", "Yes or no");
+    const y = Object.assign(document.createElement("button"), { type: "button", textContent: "Y" });
+    const slash = Object.assign(document.createElement("span"), { className: "slash", textContent: "/" });
+    const n = Object.assign(document.createElement("button"), { type: "button", textContent: "N" });
+    y.setAttribute("aria-label", "Yes"); n.setAttribute("aria-label", "No");
+    wrap.append(y, slash, n);
+    let choice = "Y";
+    const show = () => { y.setAttribute("aria-pressed", choice === "Y"); n.setAttribute("aria-pressed", choice === "N"); };
+    const pick = c => { cleanup(); resolve(c); };
+    const onKey = e => {
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+        e.preventDefault(); choice = choice === "Y" ? "N" : "Y"; show(); (choice === "Y" ? y : n).focus();
+      } else if (e.key === "Enter") { e.preventDefault(); pick(choice); }
+    };
+    function cleanup() { document.removeEventListener("keydown", onKey); }
+    y.addEventListener("click", () => pick("Y"));
+    n.addEventListener("click", () => pick("N"));
+    y.addEventListener("mouseenter", () => { choice = "Y"; show(); });
+    n.addEventListener("mouseenter", () => { choice = "N"; show(); });
+    document.addEventListener("keydown", onKey);
+    show();
+    tail = wrap; render(); y.focus();
+  });
+}
+
+let done = false;
+async function run() {
+  await wait(400);
+  for (const line of LINES) {
+    await type(line); await wait(LINE_PAUSE); await newline();
+  }
+  await type(QUESTION);
+  const answer = await askYesNo();
+  if (done) return;
+  if (answer === "N") {
+    // "N": erase everything, deny access, and send the visitor away.
+    await wait(250);
+    await eraseAll();
+    await wait(LINE_PAUSE);
+    await type(DENIED);
+    await wait(1200);
+    if (!done) location.replace(DENIED_URL);
+    return;
+  }
+  await wait(250);
+  await eraseAll();
+  await wait(LINE_PAUSE);
+  await type(FAREWELL);
+  await wait(1200);
+  finish(false);
+}
+
+function finish(instant) {
+  if (done && !instant) return;
+  done = true;
+  try { sessionStorage.setItem("peoIntroSeen", "1"); } catch (e) {}
+  if (instant || reduce) {
+    intro.remove(); document.body.classList.remove("intro-active"); return;
+  }
+  intro.classList.add("fade");
+  setTimeout(() => { intro.remove(); document.body.classList.remove("intro-active"); }, 950);
+}
+
+skipBtn.addEventListener("click", () => finish(true));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("intro")) finish(true); });
+
+// Once per visit: the intro is skipped if it already played in this browser tab session.
+let seen = false;
+try { seen = sessionStorage.getItem("peoIntroSeen") === "1"; } catch (e) {}
+if (seen) finish(true); else run();
+</script>
+</body>
+</html>
