@@ -48,12 +48,17 @@ details.page summary::-webkit-details-marker { display: none; }
 details.page summary::before { content: "[+] "; color: var(--muted); }
 details.page[open] summary::before { content: "[-] "; }
 details.page summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.page-text { padding: 4px 24px 16px; white-space: pre-line; font-family: Georgia, "Times New Roman", serif; font-size: 17px; line-height: 1.7; }
+/* Journal pages: typed out like Peo Corp's recorded transcription of the firsthand account */
+.page-text { padding: 4px 24px 16px; white-space: pre-line; text-align: center; font-family: "Special Elite", "Courier New", monospace; font-size: 16px; line-height: 1.8; }
+details.page summary { text-align: center; }
+/* The sculk page box shrinks to its writing, centered */
+details.page.sculk { width: fit-content; min-width: 280px; max-width: 100%; margin-left: auto; margin-right: auto; }
 
 /* The sculk page */
 details.page.sculk { border-color: #1d5a5c; background: #08191a; }
 details.page.sculk summary { color: #3fd6d6; }
-details.page.sculk .page-text { color: #a9e9e6; }
+/* The sculk page can't be transcribed, so it shows the raw handwriting */
+details.page.sculk .page-text { color: #a9e9e6; font-family: "La Belle Aurore", cursive; font-size: 22px; line-height: 1.6; }
 
 /* Sculk covering text. The cursor (or a tap) purifies a circle that follows it;
    keyboard focus reveals all of it. The text stays readable to screen readers. */
