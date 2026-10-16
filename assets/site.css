@@ -113,10 +113,19 @@ body.sanity-5 main { filter: blur(1px); animation: voices-sway 3.5s ease-in-out 
 }
 @media (prefers-reduced-motion: reduce) { .status-flicker { animation: none; } }
 
-/* Sanity at zero: the critical warning screen (see site.js) */
-.critical { position: fixed; inset: 0; z-index: 2000; background: #000; overflow: hidden; }
-.critical span { position: absolute; white-space: pre; color: #63c125; font: 18px/1.5 var(--term-font); }
-.critical .critical-final { position: static; display: block; padding: 16px 20px; white-space: pre-wrap; }
+/* Sanity at zero: the screen goes black for the Voices' lines and the warning (see site.js) */
+.critical { position: fixed; inset: 0; z-index: 2000; background: #000; overflow: hidden; opacity: 0; }
+.critical .critical-final { position: absolute; left: 0; top: 0; margin: 0; padding: 16px 20px; color: #63c125; font: 18px/1.5 var(--term-font); white-space: pre-wrap; }
+
+/* The Voices' lines: red, typed out at random spots, then fading */
+.voice-lines { position: fixed; inset: 0; z-index: 1600; pointer-events: none; overflow: hidden; }
+.voice-line {
+  position: absolute; max-width: calc(100vw - 32px);
+  color: #d0342c; font: 16px/1.4 var(--term-font); text-shadow: 0 0 6px rgba(208, 52, 44, 0.45);
+  opacity: 0.8; transition: opacity 1.5s ease;
+}
+.critical .voice-line { opacity: 1; font-size: 18px; }
+.voice-line.fading { opacity: 0; }
 
 .disclaimer { margin-top: 32px; font-size: 13px; color: var(--muted); font-style: italic; }
 

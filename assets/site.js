@@ -20,18 +20,26 @@
     { min: 20, text: "Access approved and sanity is low." },
     { min: 0,  text: "Access approved and sanity is critically low." }
   ];
-  // At zero: the warning floods the screen, then the visitor is booted from the site.
-  const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY !!";
-  // The Voices' lines that flood the screen before the warning
-  const CRITICAL_LINES = [
+  // The Voices' lines: typed out in red at random spots, then fading away.
+  // A few start at "low" sanity; at zero many come at once before the warning.
+  const VOICE_LINES = [
     "IT'S REAL, I'VE SEEN IT. IT'S REAL, I'VE SEEN IT. IT'S REAL, I'VE SEEN IT.",
     "THEY SAID IT. WE SAID IT. YOU WILL BELIEVE THE TRUTH",
     "THE WAY TO THE SOUTH",
     "THE SEARCH WILL COMMENCE.",
     "IT'S A LIE, I KNOW IT. IT'S A LIE, I KNOW IT. IT'S A LIE, I KNOW IT."
   ];
-  const CRITICAL_FLOOD_MS = 2600; // how long the warning takes to cover the screen
-  const CRITICAL_HOLD_MS = 1800;  // how long the final warning stays before the boot
+  const VOICE_TYPE_MS = 45;      // per typed character
+  const VOICE_HOLD_MS = 2500;    // how long a finished line stays before fading
+  const VOICE_LINE_FADE_MS = 1500;
+  // At "low" (stage 4) and "critically low" (stage 5): most lines at once, and the wait between them
+  const VOICE_LINE_STAGES = { 4: { max: 1, gap: [15000, 30000] }, 5: { max: 2, gap: [6000, 14000] } };
+  // At zero: the screen goes black, this many lines appear, then the warning (in green), then the boot.
+  const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY !!";
+  const CRITICAL_LINE_COUNT = 14;
+  const CRITICAL_LINE_GAP_MS = 450;   // time between each new line starting
+  const CRITICAL_FADE_MS = 1200;      // how long the screen takes to go black
+  const CRITICAL_HOLD_MS = 1800;      // how long the warning stays before the boot
   const BOOT_URL = "https://www.google.com";
   const SANITY_AFTER_BOOT = 20;   // what a booted visitor comes back with
   // The Voices: as sanity drops (stage 3 and below), text blurs and twitches, and at the
@@ -195,42 +203,67 @@
     if (sanity === 0 && !booting && !document.body.hasAttribute("data-safe")) critical();
   };
 
-  // Black terminal, the Voices' lines popping up faster and faster until the screen
-  // is covered, then a clean screen with the warning alone, then out.
-  function critical() {
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  // Types one of the Voices' lines at a random free spot in `layer`, holds it, then fades it out.
+  async function speak(layer, text, hold = VOICE_HOLD_MS) {
+    const el = document.createElement("span");
+    el.className = "voice-line";
+    el.textContent = text;
+    el.style.visibility = "hidden";
+    layer.append(el);
+    const w = el.offsetWidth, h = el.offsetHeight;
+    // Each line reserves its full finished size, even while it's still being typed
+    const taken = [...layer.querySelectorAll(".voice-line")].filter(o => o !== el && o.box).map(o => o.box);
+    let x = 16, y = 16;
+    for (let tries = 0; tries < 25; tries++) {
+      x = 16 + Math.random() * Math.max(0, innerWidth - w - 32);
+      y = 16 + Math.random() * Math.max(0, innerHeight - h - 32);
+      if (!taken.some(r => x < r.right + 12 && x + w > r.left - 12 && y < r.bottom + 8 && y + h > r.top - 8)) break;
+    }
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.box = { left: x, top: y, right: x + w, bottom: y + h };
+    el.textContent = "";
+    el.style.visibility = "";
+    for (const ch of text) { el.textContent += ch; await sleep(VOICE_TYPE_MS); }
+    await sleep(hold);
+    el.classList.add("fading");
+    await sleep(VOICE_LINE_FADE_MS);
+    el.remove();
+  }
+  const randomLine = () => VOICE_LINES[Math.floor(Math.random() * VOICE_LINES.length)];
+
+  // At zero: fade to black, the Voices' lines come one after another, then the warning, then out.
+  async function critical() {
     booting = true;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const screen = document.createElement("div");
     screen.className = "critical";
     screen.setAttribute("role", "alert");
     document.body.append(screen);
-    const line = text => Object.assign(document.createElement("span"), { textContent: text });
-    const boot = () => {
-      screen.textContent = "";
-      const last = line(CRITICAL);
-      last.className = "critical-final";
-      screen.append(last);
-      try { localStorage.setItem(KEY, String(SANITY_AFTER_BOOT)); } catch (e) {}
-      setTimeout(() => location.replace(BOOT_URL), CRITICAL_HOLD_MS);
-    };
-    if (reduce) return boot();
-    const probes = CRITICAL_LINES.map(t => screen.appendChild(line(t)));
-    const w = probes.reduce((sum, p) => sum + p.offsetWidth, 0) / probes.length, h = probes[0].offsetHeight;
-    probes.forEach(p => p.remove());
-    const total = Math.ceil((innerWidth / (w * 0.5) + 2) * (innerHeight / (h * 0.8) + 1) * 1.5);
-    const start = performance.now();
-    let shown = 0;
-    (function frame() {
-      const due = Math.min(total, Math.floor(total * ((performance.now() - start) / CRITICAL_FLOOD_MS) ** 2));
-      for (; shown < due; shown++) {
-        const s = line(CRITICAL_LINES[Math.floor(Math.random() * CRITICAL_LINES.length)]);
-        s.style.left = (Math.random() * (innerWidth + w) - w) + "px";
-        s.style.top = (Math.random() * (innerHeight + h) - h) + "px";
-        screen.append(s);
+    if (!reduce) {
+      screen.style.transition = `opacity ${CRITICAL_FADE_MS}ms ease`;
+      await sleep(30);
+      screen.style.opacity = "1";
+      await sleep(CRITICAL_FADE_MS);
+      const lines = [];
+      for (let i = 0; i < CRITICAL_LINE_COUNT; i++) {
+        lines.push(speak(screen, randomLine(), 2000));
+        await sleep(CRITICAL_LINE_GAP_MS);
       }
-      if (shown < total) setTimeout(frame, 30);
-      else setTimeout(boot, 400);
-    })();
+      await Promise.all(lines);
+    } else {
+      screen.style.opacity = "1";
+    }
+    const last = document.createElement("p");
+    last.className = "critical-final";
+    screen.append(last);
+    if (reduce) last.textContent = CRITICAL;
+    else for (const ch of CRITICAL) { last.textContent += ch; await sleep(VOICE_TYPE_MS); }
+    try { localStorage.setItem(KEY, String(SANITY_AFTER_BOOT)); } catch (e) {}
+    await sleep(CRITICAL_HOLD_MS);
+    location.replace(BOOT_URL);
   }
   window.PeoSanity = { get: () => sanity, drain: n => set(sanity - n), restore: n => set(sanity + n) };
   render();
@@ -277,5 +310,18 @@
       setTimeout(voices, gap * (0.5 + Math.random()));
     };
     setTimeout(voices, 2000);
+
+    // The Voices' lines, typed over the page at "low" and "critically low"
+    const layer = document.createElement("div");
+    layer.className = "voice-lines";
+    layer.setAttribute("aria-hidden", "true");
+    document.body.append(layer);
+    const lineLoop = () => {
+      const cfg = VOICE_LINE_STAGES[stageNow()];
+      if (cfg && !document.hidden && !booting && layer.children.length < cfg.max) speak(layer, randomLine());
+      const gap = cfg ? cfg.gap[0] + Math.random() * (cfg.gap[1] - cfg.gap[0]) : 5000;
+      setTimeout(lineLoop, gap);
+    };
+    setTimeout(lineLoop, 4000);
   }
 })();
