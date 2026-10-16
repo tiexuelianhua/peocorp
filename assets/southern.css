@@ -24,7 +24,7 @@
 .hero p { margin: 8px 0 0; font: 14px var(--term-font); color: var(--muted); }
 
 /* Entry file header */
-.file { display: grid; grid-template-columns: max-content 1fr; gap: 6px 20px; font: 17px var(--term-font); }
+.file { display: grid; grid-template-columns: max-content 1fr; gap: 6px 24px; font: 20px var(--term-font); }
 .file dt { color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
 .file dd { margin: 0; }
 
