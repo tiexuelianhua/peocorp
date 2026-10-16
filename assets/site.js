@@ -13,14 +13,15 @@
   ];
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
   // Each stage shows while sanity is at or above its "min". Highest first.
+  // The readout is "<text> Sanity: N%" with the live number (rounded up, so 0% only at exactly 0).
   // The "zero" stage shows only at exactly 0. "blink" makes the readout blink constantly.
   const SANITY_STAGES = [
-    { min: 80, text: "Access approved. Sanity: 100%" },
-    { min: 60, text: "Access approved. Sanity: 75%" },
-    { min: 40, text: "Access approved. Sanity: 50%" },
-    { min: 20, text: "Access approved. Sanity: 25%" },
-    { min: 0,  text: "Access approved. Sanity: 5%", blink: true },
-    { min: 0,  text: "???????. Sanity: 0%", blink: true, zero: true }
+    { min: 80, text: "Access approved." },
+    { min: 60, text: "Access approved." },
+    { min: 40, text: "Access approved." },
+    { min: 20, text: "Access approved." },
+    { min: 0,  text: "Access approved.", blink: true },
+    { min: 0,  text: "???????.", blink: true, zero: true }
   ];
   // The Voices' lines: typed out in red at random spots, then fading away.
   // A few start at "low" sanity; at zero many come at once before the warning.
@@ -184,13 +185,14 @@
   let lastStage = 0;
   // Stage number (1 = highest) for the current sanity
   const stageNow = () => {
-    const stage = sanity === 0 ? SANITY_STAGES.find(s => s.zero) : SANITY_STAGES.find(s => !s.zero && sanity >= s.min);
+    const shown = Math.ceil(sanity); // go by the number on the readout
+    const stage = shown === 0 ? SANITY_STAGES.find(s => s.zero) : SANITY_STAGES.find(s => !s.zero && shown >= s.min);
     return SANITY_STAGES.indexOf(stage || SANITY_STAGES[SANITY_STAGES.length - 1]) + 1;
   };
   const render = () => {
     if (!status) return;
     const n = stageNow(), stage = SANITY_STAGES[n - 1];
-    status.textContent = stage.text;
+    status.textContent = `${stage.text} Sanity: ${Math.ceil(sanity)}%`;
     status.classList.toggle("ph", stage.text.startsWith("["));
     status.classList.toggle("status-blink", !!stage.blink);
     // The readout flickers whenever it moves to a new stage
