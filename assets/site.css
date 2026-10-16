@@ -107,6 +107,8 @@ body:is(.sanity-5, .sanity-6) main.voice-shudder { animation: voice-shudder 0.08
   50% { transform: translateX(3px); filter: blur(0); text-shadow: -2px 0 rgba(255, 60, 60, 0.6), 2px 0 rgba(60, 200, 255, 0.6); }
 }
 body:is(.sanity-5, .sanity-6) .voice-glitch { animation-name: voice-glitch-hard; }
+/* The banner and menu only get the short, mild version */
+.frame-glitch { animation: voice-glitch 0.12s steps(1) infinite; }
 @keyframes voice-glitch-hard {
   0%  { transform: translateX(-7px) skewX(4deg); filter: blur(3px); opacity: 0.5; }
   50% { transform: translateX(6px); filter: blur(0); text-shadow: -4px 0 rgba(255, 60, 60, 0.8), 4px 0 rgba(60, 200, 255, 0.8); }

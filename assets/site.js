@@ -205,7 +205,8 @@
       render.flickerTimer = setTimeout(() => status.classList.remove("status-flicker"), 750);
     }
     lastStage = n;
-    for (let i = 1; i <= SANITY_STAGES.length; i++) document.body.classList.toggle("sanity-" + i, i === n);
+    // The Home page stays calm: no sanity effects there, only the readout changes
+    for (let i = 1; i <= SANITY_STAGES.length; i++) document.body.classList.toggle("sanity-" + i, i === n && CURRENT !== "home");
   };
   let booting = false;
   const set = v => {
@@ -291,7 +292,7 @@
   if (perSecond) setInterval(() => { if (!document.hidden && clamp(sanity + perSecond) !== sanity) set(sanity + perSecond); }, 1000);
   // ── The Voices ──
   // Every so often, a random block of text glitches; lower sanity = more often, and faint pictures.
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (CURRENT !== "home" && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const voices = () => {
       const n = stageNow();
       if (n >= 3 && !document.hidden) {
@@ -302,6 +303,16 @@
           if (!pick) continue;
           pick.classList.add("voice-glitch");
           setTimeout(() => pick.classList.remove("voice-glitch"), (n >= 5 ? 400 : 250) + Math.random() * 350);
+        }
+        // At 5% and below, now and then the banner or menu twitches too (never the Home links)
+        if (n >= 5 && Math.random() < 0.25) {
+          const frame = [...document.querySelectorAll(".site-name, .tagline, .top-links a, nav.side h2, nav.side a")]
+            .filter(el => el.textContent.trim() !== "Home");
+          const pick = frame[Math.floor(Math.random() * frame.length)];
+          if (pick) {
+            pick.classList.add("frame-glitch");
+            setTimeout(() => pick.classList.remove("frame-glitch"), 150 + Math.random() * 200);
+          }
         }
         const main = document.querySelector("main");
         if (n >= 5 && main && Math.random() < 0.12) {
@@ -328,7 +339,7 @@
           setTimeout(() => { img.style.opacity = 0; setTimeout(() => img.remove(), VOICE_FADE_MS); }, VOICE_FADE_MS + linger);
         }
       }
-      const gap = { 3: 6000, 4: 3000, 5: 1200 }[n] || 4000;
+      const gap = { 3: 6000, 4: 3000, 5: 1200, 6: 1200 }[n] || 4000;
       setTimeout(voices, gap * (0.5 + Math.random()));
     };
     setTimeout(voices, 2000);
