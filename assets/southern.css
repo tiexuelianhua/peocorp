@@ -28,6 +28,11 @@
 .file dt { color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
 .file dd { margin: 0; }
 
+/* Image of the hensa, floated beside the entry like an SCP photo */
+.hensa-img { float: right; margin: 0 0 16px 24px; padding: 10px; background: var(--panel); border: 1px solid var(--line); text-align: center; font: 12px var(--term-font); color: var(--muted); }
+.hensa-img img { display: block; width: 160px; height: 160px; image-rendering: pixelated; background: #0b0807; margin-bottom: 8px; }
+@media (max-width: 560px) { .hensa-img { float: none; margin: 0 auto 16px; width: max-content; } }
+
 .redact { background: #000; color: #000; border-radius: 1px; user-select: none; }
 
 /* Inspector notes */
