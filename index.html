@@ -84,6 +84,14 @@ const FLOOD_HOLD = 500; // how long the covered screen stays before vanishing
 const LINES = ["CONNECTING. . .", "Verifying. . ."];
 const QUESTION = "Are you sure you want to do this? ";
 const FAREWELL = "May Peo be with you.";
+// Easter eggs: on a rare visit, one of these replaces a single copy hidden in the flood.
+const EGG_CHANCE = 0.01; // 1% of visits
+const EASTER_EGGS = [
+  "May Bablate be with you.",
+  "May Poe be with you.",
+  "May Wes be with you.",
+  "Mogu?"
+];
 const DENIED = "ACCESS DENIED.";
 const DENIED_URL = "https://www.google.com"; // where "N" sends visitors
 
@@ -206,6 +214,13 @@ function flood() {
     [spots[i], spots[j]] = [spots[j], spots[i]];
   }
 
+  // On a rare visit, one random easter egg replaces one random copy.
+  const eggs = new Map();
+  if (Math.random() < EGG_CHANCE) {
+    const text = EASTER_EGGS[Math.floor(Math.random() * EASTER_EGGS.length)];
+    eggs.set(Math.floor(Math.random() * spots.length), text);
+  }
+
   return new Promise(resolve => {
     const start = performance.now();
     let shown = 0;
@@ -216,7 +231,7 @@ function flood() {
       const batch = document.createDocumentFragment();
       for (; shown < due; shown++) {
         const s = document.createElement("span");
-        s.textContent = FAREWELL;
+        s.textContent = eggs.get(shown) || FAREWELL;
         s.style.left = spots[shown][0] + "px";
         s.style.top = spots[shown][1] + "px";
         batch.appendChild(s);
