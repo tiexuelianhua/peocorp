@@ -39,10 +39,10 @@
   const VOICE_LINE_STAGES = { 4: { max: 1, gap: [15000, 30000] }, 5: { max: 2, gap: [6000, 14000] }, 6: { max: 2, gap: [6000, 14000] } };
   // At zero: the screen goes black, this many lines appear, then the warning (in green), then the boot.
   const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY. !!";
-  const CRITICAL_LINE_COUNT = 14;
-  const CRITICAL_LINE_GAP_MS = 450;   // time between each new line starting
-  const CRITICAL_OPENING_LINES = 5;   // Voices lines typed over the page first
-  const CRITICAL_OPENING_GAP_MS = 500;
+  const CRITICAL_LINE_COUNT = 24;
+  const CRITICAL_LINE_GAP_MS = 300;   // time between each new line starting
+  const CRITICAL_OPENING_LINES = 12;   // Voices lines typed over the page first
+  const CRITICAL_OPENING_GAP_MS = 300;
   const CRITICAL_FADE_MS = 3500;      // the page distorts and blurs while going black, this long
   const CRITICAL_HOLD_MS = 1800;      // how long the warning stays before the boot
   const BOOT_URL = "https://www.google.com";
@@ -227,15 +227,18 @@
     el.textContent = text;
     el.style.visibility = "hidden";
     layer.append(el);
-    const w = el.offsetWidth, h = el.offsetHeight;
+    const w = Math.ceil(el.getBoundingClientRect().width) + 1, h = el.offsetHeight;
+    el.style.width = w + "px"; // keep the measured wrapping once it's moved into place
     // Each line reserves its full finished size, even while it's still being typed
     const taken = [...layer.querySelectorAll(".voice-line")].filter(o => o !== el && o.box).map(o => o.box);
-    let x = 16, y = 16;
-    for (let tries = 0; tries < 25; tries++) {
+    // No free spot: skip this line rather than cover another one, so everything stays readable
+    let x, y, free = false;
+    for (let tries = 0; tries < 40 && !free; tries++) {
       x = 16 + Math.random() * Math.max(0, innerWidth - w - 32);
       y = 16 + Math.random() * Math.max(0, innerHeight - h - 32);
-      if (!taken.some(r => x < r.right + 12 && x + w > r.left - 12 && y < r.bottom + 8 && y + h > r.top - 8)) break;
+      free = !taken.some(r => x < r.right + 12 && x + w > r.left - 12 && y < r.bottom + 8 && y + h > r.top - 8);
     }
+    if (!free) { el.remove(); return; }
     el.style.left = x + "px";
     el.style.top = y + "px";
     el.box = { left: x, top: y, right: x + w, bottom: y + h };
@@ -259,10 +262,14 @@
     screen.setAttribute("role", "alert");
     document.body.append(screen);
     if (!reduce) {
-      const opening = document.createElement("div");
-      opening.className = "voice-lines";
-      opening.setAttribute("aria-hidden", "true");
-      document.body.append(opening);
+      // Share the page's own Voices layer so these lines and any already showing never overlap
+      let opening = document.querySelector("body > .voice-lines");
+      if (!opening) {
+        opening = document.createElement("div");
+        opening.className = "voice-lines";
+        opening.setAttribute("aria-hidden", "true");
+        document.body.append(opening);
+      }
       for (let i = 0; i < CRITICAL_OPENING_LINES; i++) {
         speak(opening, randomLine(), 6000);
         await sleep(CRITICAL_OPENING_GAP_MS);
