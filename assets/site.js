@@ -7,7 +7,7 @@
   // ── Edit these lists to change the banner and sidebar on every page ──
   const BANNER_LINKS = [
     { label: "Home", href: "" },
-    { label: "Southern Branch", href: "southern/" },
+    { label: "Branches", href: "branches/" },
     { label: "About", href: "#" },
     { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
@@ -15,6 +15,7 @@
   const NAV = [
     { items: [{ label: "Home", href: "", page: "home" }] },
     { heading: "Branches", items: [
+      { label: "All branches", href: "branches/", page: "branches" },
       { label: "Hilltop Branch", href: "#" },
       { label: "Realmouth Branch", href: "#" },
       { label: "Dreamland Branch", href: "#" },
@@ -36,7 +37,8 @@
   const SEARCH = [
     { title: "SO-02-88", href: "southern/so-02-88.html", where: "Southern Branch", words: "sculk journal book poem forget-me-not" },
     { title: "SO-08-88", href: "https://thepeoverse.blogspot.com/2026/03/so-08-88.html", where: "Southern Branch (blog)", words: "plushie infinity eight" },
-    { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" }
+    { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
+    { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern" }
   ];
 
   const link = href => (/^(https?:|#)/.test(href) ? href : ROOT + href) || "./";

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Branches · Peo Corp</title>
+<link rel="stylesheet" href="../assets/site.css?v=8">
+<style>
+  /* Each branch card uses that branch's colors (from the brainstorm doc) */
+  .branches { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .branch {
+    border: 1px solid var(--line); border-left: 6px solid var(--b1);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--b1) 14%, var(--panel)), var(--panel) 60%);
+    padding: 14px 18px;
+  }
+  .branch h2 { margin: 0; border: 0; padding: 0; font-size: 20px; color: var(--b1); }
+  .branch h2 a { color: inherit; text-decoration: none; }
+  .branch h2 a:hover { text-decoration: underline; }
+  .branch .depth { margin: 2px 0 8px; font: 12px var(--term-font); color: var(--b2); text-transform: uppercase; letter-spacing: 0.1em; }
+  .branch p { margin: 0; }
+  .hilltop    { --b1: #7fd63f; --b2: #d2cfc0; } /* brightest, closest to Peo's colors */
+  .realmouth  { --b1: #c88a52; --b2: #d9b48f; } /* brownish orange, leaning brown */
+  .dreamland  { --b1: #8fe07a; --b2: #f2f2ee; } /* green and white */
+  .kipshyrian { --b1: #ff9a2e; --b2: #7cc8ff; } /* orange with a matching sky blue */
+  .zomgoosian { --b1: #4f9d5e; --b2: #6e8fd6; } /* dark green and dark blue, brightened to read */
+  .southern   { --b1: #ff8a2a; --b2: #c96a3a; } /* lava */
+</style>
+</head>
+<body data-page="branches">
+
+<header class="banner" id="site-banner"></header>
+
+<div class="layout">
+  <nav class="side" id="site-nav" aria-label="Site"></nav>
+
+  <main>
+    <p class="crumbs" style="font:13px var(--term-font);color:var(--muted);margin:0 0 10px"><a href="../" style="color:var(--muted)">Home</a> / Branches</p>
+    <h1>Branches</h1>
+    <p class="ph">[Branches overview: Placeholder]</p>
+
+    <ul class="branches">
+      <li class="branch hilltop">
+        <h2>Hilltop Branch</h2>
+        <p class="depth">Uppermost</p>
+        <p class="ph">[Hilltop Branch description: Placeholder]</p>
+      </li>
+      <li class="branch realmouth">
+        <h2>Realmouth Branch</h2>
+        <p class="ph">[Realmouth Branch description: Placeholder]</p>
+      </li>
+      <li class="branch dreamland">
+        <h2>Dreamland Branch</h2>
+        <p class="ph">[Dreamland Branch description: Placeholder]</p>
+      </li>
+      <li class="branch kipshyrian">
+        <h2>Kipshyrian Branch</h2>
+        <p class="ph">[Kipshyrian Branch description: Placeholder]</p>
+      </li>
+      <li class="branch zomgoosian">
+        <h2>Zomgoosian Branch</h2>
+        <p class="ph">[Zomgoosian Branch description: Placeholder]</p>
+      </li>
+      <li class="branch southern">
+        <h2><a href="../southern/">Southern Branch</a></h2>
+        <p class="depth">Lowermost</p>
+        <p class="ph">[Southern Branch description: Placeholder]</p>
+      </li>
+    </ul>
+  </main>
+</div>
+
+<footer class="site">
+  <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
+</footer>
+
+<script src="../assets/site.js?v=8" data-root="../"></script>
+</body>
+</html>
