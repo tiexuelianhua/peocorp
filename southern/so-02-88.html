@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Special+Elite&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=50">
-<link rel="stylesheet" href="../assets/southern.css?v=50">
+<link rel="stylesheet" href="../assets/site.css?v=51">
+<link rel="stylesheet" href="../assets/southern.css?v=51">
 </head>
 <body data-page="southern" data-lock-dead-links>
 
@@ -55,6 +55,12 @@
     <p>Details.</p>
 
     <h2>Story</h2>
+    <details class="clearance">
+      <summary>
+        <span class="clr-status">Access Approved</span>
+        <span class="clr-sub ph">[Clearance note: Placeholder]</span>
+      </summary>
+      <div class="clr-body">
     <div class="note">
       <span class="label">Inspector Note</span>
       <p>Unknown time prior to/during the sculk infection. Hell, barely any of this is related to the era. Maybe it’s literature? Couldn’t tell ya.</p>
@@ -155,6 +161,8 @@ My tears, that I shed for you.</div>
       <p>Sculk is waterproof somehow?<br>The book’s just been stuck in containment.<br>Did someone pour water on this thing?</p>
       <p>It smells awfully salty. Has it always been like this?</p>
     </div>
+      </div>
+    </details>
 
     <!-- Revision log and references, hidden until there is a revision to record
     <section class="file-footer" aria-label="Revision log and references">
@@ -179,9 +187,27 @@ My tears, that I shed for you.</div>
   <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
 </footer>
 
-<script src="../assets/site.js?v=50" data-root="../"></script>
+<script src="../assets/site.js?v=51" data-root="../"></script>
 
 <script>
+// Opening the clearance file checks credentials for a moment first
+document.querySelectorAll("details.clearance").forEach(d => {
+  const status = d.querySelector(".clr-status");
+  const label = status.textContent;
+  d.querySelector("summary").addEventListener("click", e => {
+    if (d.open) return;
+    e.preventDefault();
+    if (d.classList.contains("verifying")) return;
+    d.classList.add("verifying");
+    status.textContent = "Verifying. . .";
+    setTimeout(() => {
+      d.classList.remove("verifying");
+      status.textContent = label;
+      d.open = true;
+    }, 900);
+  });
+});
+
 // The cursor or a tap purifies a circle of sculk where it rests.
 const PURIFY_RADIUS = "90px";
 document.querySelectorAll(".sculk-cover").forEach(el => {

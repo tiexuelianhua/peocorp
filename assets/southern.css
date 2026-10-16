@@ -147,3 +147,16 @@ details.page.sculk .page-text { color: #a9e9e6; font-family: "La Belle Aurore", 
 .branch-photo { margin: 22px 0; }
 .branch-photo img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
 .branch-photo figcaption { margin-top: 6px; font-size: 13px; color: var(--muted); font-style: italic; }
+
+/* Clearance gate: the story sits behind an "Access Approved" file */
+details.clearance { border: 1px solid #2f5a22; border-left: 4px solid #63c125; background: #0f140d; margin: 16px 0; }
+details.clearance > summary { cursor: pointer; list-style: none; padding: 12px 16px; font-family: var(--term-font); }
+details.clearance > summary::-webkit-details-marker { display: none; }
+details.clearance > summary:focus-visible { outline: 2px solid #63c125; outline-offset: -2px; }
+.clr-status { display: block; font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase; color: #63c125; }
+.clr-status::before { content: "[+] "; color: var(--muted); letter-spacing: 0; }
+details.clearance[open] .clr-status::before { content: "[-] "; }
+.clr-sub { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; }
+details.clearance.verifying .clr-status { color: var(--muted); animation: clr-blink 0.3s steps(1) infinite; }
+@keyframes clr-blink { 50% { opacity: 0.35; } }
+.clr-body { border-top: 1px solid #2f5a22; padding: 4px 16px 12px; }
