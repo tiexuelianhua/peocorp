@@ -99,7 +99,7 @@ body.sanity-5 main { filter: blur(1px); animation: voices-sway 3.5s ease-in-out 
    and the soft round mask hides the picture's edges so no rectangle shows */
 .voice-image {
   position: fixed; z-index: 1500; max-width: 30vw; max-height: 30vh; opacity: 0; pointer-events: none;
-  mix-blend-mode: screen; filter: blur(1.5px);
+  mix-blend-mode: screen; filter: blur(2px);
   -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
   mask-image: radial-gradient(closest-side, #000 55%, transparent);
 }

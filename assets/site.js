@@ -45,7 +45,7 @@
   // The Voices: as sanity drops (stage 3 and below), text blurs and twitches, and at the
   // lowest stages faint pictures flash up. Add image paths (relative to the site root) here.
   const VOICE_IMAGES = ["assets/voices/voices-1.jpg", "assets/voices/voices-2.jpg", "assets/voices/voices-3.jpg", "assets/voices/voices-4.jpg"];
-  const VOICE_IMAGE_OPACITY = 0.25;
+  const VOICE_IMAGE_OPACITY = 0.18;
   // They creep in slowly and linger, so it feels like they've been there a while before you notice.
   const VOICE_FADE_MS = 6000;               // fade in (and out) time
   const VOICE_LINGER_MS = [15000, 30000];   // how long one stays, between these
@@ -297,8 +297,13 @@
           img.className = "voice-image";
           img.alt = "";
           img.src = ROOT + VOICE_IMAGES[Math.floor(Math.random() * VOICE_IMAGES.length)];
-          img.style.left = Math.random() * 70 + "vw";
-          img.style.top = Math.random() * 70 + "vh";
+          // Random spot, kept away from any picture already showing
+          const others = [...document.querySelectorAll(".voice-image")].map(o => [parseFloat(o.style.left), parseFloat(o.style.top)]);
+          let x, y, tries = 0;
+          do { x = Math.random() * 70; y = Math.random() * 70; }
+          while (++tries < 20 && others.some(([ox, oy]) => Math.abs(ox - x) < 30 && Math.abs(oy - y) < 30));
+          img.style.left = x + "vw";
+          img.style.top = y + "vh";
           img.style.transition = `opacity ${VOICE_FADE_MS}ms ease-in-out`;
           document.body.append(img);
           setTimeout(() => { img.style.opacity = VOICE_IMAGE_OPACITY; }, 50);
