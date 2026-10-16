@@ -39,7 +39,8 @@
     { title: "SO-08-88", href: "https://thepeoverse.blogspot.com/2026/03/so-08-88.html", where: "Southern Branch (blog)", words: "plushie infinity eight" },
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
     { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern" },
-    { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" }
+    { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
+    { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" }
   ];
 
   const link = href => (/^(https?:|#)/.test(href) ? href : ROOT + href) || "./";

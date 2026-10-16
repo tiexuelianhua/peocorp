@@ -4,7 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Expedition Logs · Peo Corp</title>
-<link rel="stylesheet" href="../assets/site.css?v=9">
+<link rel="stylesheet" href="../assets/site.css?v=10">
+<style>
+  /* One card per expedition, topped with its photo when there is one */
+  .exp-cards { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .exp-card { background: var(--panel); border: 1px solid var(--line); overflow: hidden; display: flex; flex-direction: column; }
+  .exp-card .cover { height: 150px; background: #000 center / cover; border-bottom: 1px solid var(--line); }
+  .exp-card .cover.empty { background: repeating-linear-gradient(45deg, #222427 0 10px, #26282b 10px 20px); }
+  .exp-card .body { padding: 12px 14px 14px; }
+  .exp-card h2 { margin: 0 0 6px; border: 0; padding: 0; font-size: 18px; }
+  .exp-card h2 a { color: var(--accent); text-decoration: none; }
+  .exp-card h2 a:hover { text-decoration: underline; }
+  .exp-card p { margin: 0; font-size: 14px; }
+</style>
 </head>
 <body data-page="expeditions">
 
@@ -18,25 +30,30 @@
     <h1>Expedition logs</h1>
     <p class="ph">[Expedition logs overview: Placeholder]</p>
 
-    <h2 id="expedition-1">Expedition 1</h2>
-    <p class="ph">[Expedition 1 description: Placeholder]</p>
-    <div class="gallery">
-      <figure>
-        <img src="../assets/expeditions/expedition-1-1.jpg" alt="A figure in a long dress and wide hat standing in a dark corridor" width="262" height="320" loading="lazy">
-        <figcaption class="ph">[Expedition 1 photo 1 caption: Placeholder]</figcaption>
-      </figure>
-      <figure>
-        <img src="../assets/expeditions/expedition-1-2.jpg" alt="Four expedition members posing against a concrete wall" width="1200" height="458" loading="lazy">
-        <figcaption class="ph">[Expedition 1 photo 2 caption: Placeholder]</figcaption>
-      </figure>
-    </div>
-
-    <h2 id="expedition-2">Zomgoosia Expeditions (Expedition 2)</h2>
-    <p class="ph">[Zomgoosia Expeditions description: Placeholder]</p>
-
-    <h2 id="expedition-3">Golden Hour Hotel (Expedition 3)</h2>
-    <p class="ph">[Golden Hour Hotel description: Placeholder]</p>
-    <p><a href="https://thepeoverse.blogspot.com/2024/09/pt-1-accounts-of-golden-hour-hotel.html">[PT 1] The Accounts of Golden Hour Hotel</a>, by Rocky, on The Peoverse blog</p>
+    <ul class="exp-cards">
+      <li class="exp-card">
+        <a class="cover" href="expedition-1.html" style="background-image: url('../assets/expeditions/expedition-1-1.jpg'); background-position: center 30%;" aria-label="Expedition 1"></a>
+        <div class="body">
+          <h2><a href="expedition-1.html">Expedition 1</a></h2>
+          <p class="ph">[Expedition 1 summary: Placeholder]</p>
+        </div>
+      </li>
+      <li class="exp-card">
+        <div class="cover empty"></div>
+        <div class="body">
+          <h2>Zomgoosia Expeditions</h2>
+          <p class="ph">[Expedition 2 summary: Placeholder]</p>
+        </div>
+      </li>
+      <li class="exp-card">
+        <div class="cover empty"></div>
+        <div class="body">
+          <h2>Golden Hour Hotel</h2>
+          <p class="ph">[Expedition 3 summary: Placeholder]</p>
+          <p style="margin-top:8px"><a href="https://thepeoverse.blogspot.com/2024/09/pt-1-accounts-of-golden-hour-hotel.html">Rocky's account on The Peoverse blog</a></p>
+        </div>
+      </li>
+    </ul>
   </main>
 </div>
 
@@ -44,6 +61,6 @@
   <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
 </footer>
 
-<script src="../assets/site.js?v=9" data-root="../"></script>
+<script src="../assets/site.js?v=10" data-root="../"></script>
 </body>
 </html>

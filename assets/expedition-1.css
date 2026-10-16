@@ -1,0 +1,41 @@
+/* Expedition 1 theme: the murky dark reds and dim warm light of the corridor photo. Loaded after site.css. */
+:root {
+  --bg: #120c0b;
+  --panel: #1d1413;
+  --line: #3d2924;
+  --text: #e5d6cb;
+  --muted: #a88f84;
+  --accent: #d9a066;   /* dim lamp light */
+  --link: #e3b48a;
+}
+
+/* Header: the corridor photo blurred behind, and sharp in a frame in front */
+.exp-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.exp-hero::before {
+  content: ""; position: absolute; inset: -40px;
+  background: url("expeditions/expedition-1-1.jpg") center 40% / cover;
+  filter: blur(18px) brightness(0.45);
+}
+.exp-hero-inner { position: relative; max-width: 1100px; margin: 0 auto; padding: 32px 16px; display: flex; gap: 28px; align-items: center; }
+.exp-hero .frame { flex: none; padding: 6px; background: #0b0706; border: 1px solid var(--line); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6); }
+.exp-hero .frame img { display: block; width: 180px; height: auto; }
+.exp-hero h1 { margin: 0; font: 700 38px/1.1 var(--term-font); color: var(--accent); }
+.exp-hero .crumbs a { color: var(--muted); }
+
+/* The group photo as a printed snapshot pinned to the page */
+.snapshot {
+  display: inline-block; margin: 20px 0 8px; padding: 12px 12px 18px;
+  background: #f4efe6; transform: rotate(-1.5deg);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+  max-width: 100%; box-sizing: border-box;
+}
+.snapshot img { display: block; width: 100%; max-width: 640px; height: auto; }
+.snapshot figcaption { margin-top: 10px; text-align: center; color: #3a2a24; font: 20px "La Belle Aurore", cursive; }
+.snapshot figcaption.ph { color: #7a6a62; font-style: normal; }
+
+@media (max-width: 560px) {
+  .exp-hero-inner { flex-direction: column; align-items: flex-start; }
+  .exp-hero .frame img { width: 140px; }
+  .exp-hero h1 { font-size: 30px; }
+  .snapshot { transform: none; }
+}
