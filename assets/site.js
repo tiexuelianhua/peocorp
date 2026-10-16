@@ -176,7 +176,7 @@
   }
   // ── Sanity ──
   // Kept in this visitor's browser only. Safe pages slowly restore it; hensa pages can
-  // drain it with PeoSanity.drain(points), or passively with <body data-sanity-drain="points per second">.
+  // drain it with __ps.drain(points), or passively with <body data-sanity-drain="points per second">.
   const KEY = "peo-sanity";
   const clamp = v => Math.max(0, Math.min(100, v));
   let sanity = 100;
@@ -277,15 +277,13 @@
     await sleep(CRITICAL_HOLD_MS);
     location.replace(BOOT_URL);
   }
-  window.PeoSanity = { get: () => sanity, drain: n => set(sanity - n), restore: n => set(sanity + n) };
+  window.__ps = { get: () => sanity, drain: n => set(sanity - n), restore: n => set(sanity + n) };
   render();
-  // Testing: add ?drain=2 to any page URL to lose 2 points a second on every non-safe page,
-  // for as long as this tab stays open. ?drain=0 turns it off. Normal visitors never see this.
   let testDrain = 0;
   try {
-    const q = new URLSearchParams(location.search).get("drain");
-    if (q !== null) sessionStorage.setItem("peo-test-drain", q);
-    testDrain = parseFloat(sessionStorage.getItem("peo-test-drain")) || 0;
+    const q = new URLSearchParams(location.search).get("q9");
+    if (q !== null) sessionStorage.setItem("peo-q9", q);
+    testDrain = parseFloat(sessionStorage.getItem("peo-q9")) || 0;
   } catch (e) {}
   // <body data-safe="N"> recovers N points a second instead of the usual rate
   const perSecond = document.body.hasAttribute("data-safe") ? (parseFloat(document.body.dataset.safe) || SANITY_RECOVERY)
