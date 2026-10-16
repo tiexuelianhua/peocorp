@@ -74,7 +74,10 @@
 
     const input = banner.querySelector("#site-search");
     const list = banner.querySelector("#site-search-results");
+    let active = 0; // which result Enter opens; arrow keys move it
+    const mark = () => list.querySelectorAll("a").forEach((a, i) => a.classList.toggle("active", i === active));
     const show = () => {
+      active = 0;
       const q = input.value.trim().toLowerCase();
       if (!q) { list.hidden = true; list.innerHTML = ""; return; }
       const hits = SEARCH.filter(s => (s.title + " " + s.where + " " + s.words).toLowerCase().includes(q));
@@ -82,11 +85,19 @@
         ? hits.map(s => `<li><a href="${link(s.href)}"><span class="code">${esc(s.title)}</span> <span class="where">${esc(s.where)}</span></a></li>`).join("")
         : `<li class="none">No matching files.</li>`;
       list.hidden = false;
+      mark();
     };
     input.addEventListener("input", show);
     input.addEventListener("focus", show);
     input.addEventListener("keydown", e => {
-      if (e.key === "Enter") { const first = list.querySelector("a"); if (first) location.href = first.href; }
+      const links = list.querySelectorAll("a");
+      if ((e.key === "ArrowDown" || e.key === "ArrowUp") && links.length && !list.hidden) {
+        e.preventDefault();
+        active = (active + (e.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        mark();
+        links[active].scrollIntoView({ block: "nearest" });
+      }
+      if (e.key === "Enter" && links[active]) location.href = links[active].href;
       if (e.key === "Escape") { input.value = ""; show(); }
     });
     document.addEventListener("click", e => { if (!banner.querySelector(".search").contains(e.target)) list.hidden = true; });
