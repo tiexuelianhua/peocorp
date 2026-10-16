@@ -83,3 +83,8 @@ details.page.sculk .page-text { color: #a9e9e6; font-family: "La Belle Aurore", 
 .attachment.revealed .attach-frame img { opacity: 1; }
 .attachment { scroll-margin-top: 24px; }
 @media (prefers-reduced-motion: reduce) { .attachment .attach-frame img { transition: none; } }
+
+/* A real photo rather than a pixel-art item */
+.hensa-img.photo img { image-rendering: auto; height: auto; }
+/* Sub-parts of a Story section, e.g. <The Present> */
+.story-part { margin: 18px 0 6px; font: 16px var(--term-font); color: var(--accent); }
