@@ -59,23 +59,15 @@ details.page.sculk .page-text { color: #a9e9e6; }
    keyboard focus reveals all of it. The text stays readable to screen readers. */
 .sculk-cover { position: relative; outline: none; --r: 0px; --x: 50%; --y: 50%; }
 .sculk-cover::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: url("sculk-0.png") 0 0 / 48px 48px;
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  /* Solid dark sculk underneath, so nothing shows through while the texture loads */
+  background: #0c2427 url("sculk-0.png") 0 0 / 48px 48px;
   image-rendering: pixelated;
-  animation: sculk-pulse 4s steps(1) infinite;
   -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), transparent 55%, #000 100%);
           mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), transparent 55%, #000 100%);
 }
 .sculk-cover:focus-visible::after { opacity: 0; }
 .sculk-cover:focus-visible { box-shadow: 0 0 0 2px #3fd6d6; }
-@keyframes sculk-pulse {
-  0%   { background-image: url("sculk-0.png"); }
-  25%  { background-image: url("sculk-1.png"); }
-  50%  { background-image: url("sculk-2.png"); }
-  75%  { background-image: url("sculk-3.png"); }
-}
-@media (prefers-reduced-motion: reduce) { .sculk-cover::after { animation: none; } }
-
-/* Rocky's forget-me-not petals, lying on top of the sculk */
+/* Rocky's forget-me-not petals, hidden under the sculk near the text; purifying reveals them */
 .sculk-wrap { position: relative; }
-.petal { position: absolute; z-index: 1; height: auto; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)); }
+.petal { position: absolute; z-index: 1; height: auto; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)); }
