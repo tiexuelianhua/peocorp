@@ -11,7 +11,7 @@
     { label: "About", href: "#" },
     { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
-  const STATUS = "[Status readout: Placeholder]";
+  const STATUS = "Access approved and sanity stable.";
   // Shown when someone clicks a link that has no page yet, on pages with data-lock-dead-links
   const LOCKED_MESSAGE = "DENIED";
   const NAV = [
