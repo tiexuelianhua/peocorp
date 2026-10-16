@@ -64,7 +64,8 @@ details.page.sculk .page-text { color: #a9e9e6; font-family: "La Belle Aurore", 
 
 /* Sculk covering text. The cursor (or a tap) purifies a circle that follows it;
    keyboard focus reveals all of it. The text stays readable to screen readers. */
-.sculk-cover { position: relative; outline: none; --r: 0px; --x: 50%; --y: 50%; }
+/* When idle the circle is parked off the page (a zero-size circle hides everything on some phones) */
+.sculk-cover { position: relative; outline: none; --r: 90px; --x: -999px; --y: -999px; }
 .sculk-cover::after {
   content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
   /* Solid dark sculk underneath, so nothing shows through while the texture loads */
