@@ -287,7 +287,8 @@
     if (q !== null) sessionStorage.setItem("peo-test-drain", q);
     testDrain = parseFloat(sessionStorage.getItem("peo-test-drain")) || 0;
   } catch (e) {}
-  const perSecond = document.body.hasAttribute("data-safe") ? SANITY_RECOVERY
+  // <body data-safe="N"> recovers N points a second instead of the usual rate
+  const perSecond = document.body.hasAttribute("data-safe") ? (parseFloat(document.body.dataset.safe) || SANITY_RECOVERY)
     : -((parseFloat(document.body.dataset.sanityDrain) || 0) + testDrain);
   if (perSecond) setInterval(() => { if (!document.hidden && clamp(sanity + perSecond) !== sanity) set(sanity + perSecond); }, 1000);
   // ── The Voices ──
