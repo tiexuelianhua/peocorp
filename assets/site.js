@@ -37,7 +37,11 @@
   // The Voices: as sanity drops (stage 3 and below), text blurs and twitches, and at the
   // lowest stages faint pictures flash up. Add image paths (relative to the site root) here.
   const VOICE_IMAGES = ["assets/voices/voices-1.jpg", "assets/voices/voices-2.jpg", "assets/voices/voices-3.jpg", "assets/voices/voices-4.jpg"];
-  const VOICE_IMAGE_OPACITY = 0.2;
+  const VOICE_IMAGE_OPACITY = 0.25;
+  // They creep in slowly and linger, so it feels like they've been there a while before you notice.
+  const VOICE_FADE_MS = 6000;               // fade in (and out) time
+  const VOICE_LINGER_MS = [15000, 30000];   // how long one stays, between these
+  const VOICE_MAX = 2;                      // most on screen at once
   const SANITY_RECOVERY = 1; // points regained per second on safe pages (<body data-safe>)
   // Shown when someone clicks a link that has no page yet, on pages with data-lock-dead-links
   const LOCKED_MESSAGE = "DENIED";
@@ -238,16 +242,19 @@
           pick.classList.add("voice-glitch");
           setTimeout(() => pick.classList.remove("voice-glitch"), 250 + Math.random() * 350);
         }
-        if (n >= 4 && VOICE_IMAGES.length && Math.random() < (n === 5 ? 0.35 : 0.15)) {
+        if (n >= 4 && VOICE_IMAGES.length && document.querySelectorAll(".voice-image").length < VOICE_MAX
+            && Math.random() < (n === 5 ? 0.2 : 0.08)) {
           const img = document.createElement("img");
           img.className = "voice-image";
           img.alt = "";
           img.src = ROOT + VOICE_IMAGES[Math.floor(Math.random() * VOICE_IMAGES.length)];
           img.style.left = Math.random() * 70 + "vw";
           img.style.top = Math.random() * 70 + "vh";
-          img.style.setProperty("--o", VOICE_IMAGE_OPACITY);
+          img.style.transition = `opacity ${VOICE_FADE_MS}ms ease-in-out`;
           document.body.append(img);
-          setTimeout(() => img.remove(), 700 + Math.random() * 600);
+          setTimeout(() => { img.style.opacity = VOICE_IMAGE_OPACITY; }, 50);
+          const linger = VOICE_LINGER_MS[0] + Math.random() * (VOICE_LINGER_MS[1] - VOICE_LINGER_MS[0]);
+          setTimeout(() => { img.style.opacity = 0; setTimeout(() => img.remove(), VOICE_FADE_MS); }, VOICE_FADE_MS + linger);
         }
       }
       const gap = { 3: 6000, 4: 3000, 5: 1200 }[n] || 4000;
