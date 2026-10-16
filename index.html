@@ -19,17 +19,19 @@
   #intro {
     position: fixed; inset: 0; z-index: 1000;
     background: var(--term-bg);
-    transition: opacity 900ms ease;
   }
-  #intro.fade { opacity: 0; }
   #term {
     padding: 16px 20px;
     color: var(--peo-green);
     font: 18px/1.5 var(--term-font);
     white-space: pre-wrap;
-    transition: transform 900ms cubic-bezier(.6,0,.4,1);
   }
-  #intro.fade #term { transform: translateY(-100vh); }
+  /* The closing flood: copies of the last line filling the screen */
+  #flood { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  #flood span {
+    position: absolute; white-space: pre;
+    color: var(--peo-green); font: 18px/1.5 var(--term-font);
+  }
   .cursor { animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
@@ -50,9 +52,8 @@
   }
   #skip:focus-visible { outline: 2px solid var(--peo-green); outline-offset: 2px; }
 
-  @media (max-width: 480px) { #term { font-size: 15px; padding: 16px; } }
+  @media (max-width: 480px) { #term, #flood span { font-size: 15px; } #term { padding: 16px; } }
   @media (prefers-reduced-motion: reduce) {
-    #intro, #term { transition: none; }
     .cursor { animation: none; }
   }
 
@@ -77,6 +78,8 @@ const TYPE_MS = 55;     // per typed character
 const ERASE_MS = 18;    // per erased character (held backspace)
 const LINE_PAUSE = 600; // pause after each line
 const DOT_PAUSE = 280;  // extra pause after each ". " in the dotted lines
+const FLOOD_MS = 2600;  // how long the closing line takes to cover the screen
+const FLOOD_HOLD = 500; // how long the covered screen stays before vanishing
 
 const LINES = ["CONNECTING. . .", "Verifying. . ."];
 const QUESTION = "Are you sure you want to do this? ";
@@ -174,28 +177,72 @@ async function run() {
   await eraseAll();
   await wait(LINE_PAUSE);
   await type(FAREWELL);
-  await wait(1200);
-  finish(false);
+  await wait(900);
+  await flood();
+  finish();
 }
 
-function finish(instant) {
-  if (done && !instant) return;
+// Copies of the closing line pop up all over the screen, faster and faster, until it's covered.
+function flood() {
+  if (reduce || done) return Promise.resolve();
+  const layer = document.createElement("div");
+  layer.id = "flood";
+  layer.setAttribute("aria-hidden", "true");
+  intro.appendChild(layer);
+
+  // Measure one copy, then lay out a jittered grid so the whole screen ends up covered.
+  const probe = document.createElement("span");
+  probe.textContent = FAREWELL;
+  layer.appendChild(probe);
+  const w = probe.offsetWidth, h = probe.offsetHeight;
+  probe.remove();
+  const cols = Math.ceil(innerWidth / w) + 1, rows = Math.ceil(innerHeight / h) + 1;
+  const spots = [];
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++)
+      spots.push([c * w - Math.random() * w * 0.6, r * h - Math.random() * h * 0.5]);
+  for (let i = spots.length - 1; i > 0; i--) { // shuffle the order they appear in
+    const j = Math.floor(Math.random() * (i + 1));
+    [spots[i], spots[j]] = [spots[j], spots[i]];
+  }
+
+  return new Promise(resolve => {
+    const start = performance.now();
+    let shown = 0;
+    (function frame(now) {
+      if (done) return resolve();
+      // The number shown grows with the square of elapsed time: slow at first, then rushing in.
+      const due = Math.min(spots.length, Math.floor(spots.length * ((now - start) / FLOOD_MS) ** 2));
+      const batch = document.createDocumentFragment();
+      for (; shown < due; shown++) {
+        const s = document.createElement("span");
+        s.textContent = FAREWELL;
+        s.style.left = spots[shown][0] + "px";
+        s.style.top = spots[shown][1] + "px";
+        batch.appendChild(s);
+      }
+      layer.appendChild(batch);
+      if (shown < spots.length) requestAnimationFrame(frame);
+      else setTimeout(resolve, FLOOD_HOLD);
+    })(start);
+  });
+}
+
+// Everything vanishes at once, revealing the page.
+function finish() {
   done = true;
   try { sessionStorage.setItem("peoIntroSeen", "1"); } catch (e) {}
-  if (instant || reduce) {
-    intro.remove(); document.body.classList.remove("intro-active"); return;
-  }
-  intro.classList.add("fade");
-  setTimeout(() => { intro.remove(); document.body.classList.remove("intro-active"); }, 950);
+  intro.remove();
+  document.body.classList.remove("intro-active");
 }
 
-skipBtn.addEventListener("click", () => finish(true));
-document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("intro")) finish(true); });
+skipBtn.addEventListener("click", finish);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("intro")) finish(); });
 
 // Once per visit: the intro is skipped if it already played in this browser tab session.
 let seen = false;
 try { seen = sessionStorage.getItem("peoIntroSeen") === "1"; } catch (e) {}
-if (seen) finish(true); else run();
+if (seen) finish(); else run();
 </script>
 </body>
 </html>
