@@ -4,26 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Peo Corp</title>
+<link rel="stylesheet" href="assets/site.css">
 <style>
+  /* Intro only; shared page styles live in assets/site.css */
   :root {
     /* Peo's shirt green (same hue as the reference photo, brightened so it reads on black) */
     --peo-green: #63c125;
     --term-bg: #000000;
-    --term-font: Consolas, "Lucida Console", "Courier New", monospace; /* Windows Command Prompt fonts */
-
-    /* Home page palette, taken from the Peo plushie and photo */
-    --bg: #1c1d1f;          /* dark grey page */
-    --panel: #25272a;       /* boxes and sidebar */
-    --line: #3a3d41;        /* borders */
-    --text: #d2cfc0;        /* Peo's pale head color, for body text */
-    --muted: #9c998d;
-    --banner: #24401c;      /* dark Peo green for the top banner */
-    --accent: #63c125;      /* Peo green, for headings */
-    --link: #8fb0d8;        /* Peo's blue pants, brightened for links */
-    --body-font: system-ui, "Segoe UI", sans-serif; /* body text; headings, menus and codes stay in the terminal font */
   }
-  html, body { margin: 0; }
-  body { font: 16px/1.6 var(--body-font); background: var(--bg); color: var(--text); }
   body.intro-active { overflow: hidden; }
 
   /* ── Intro terminal ── */
@@ -68,40 +56,6 @@
     .cursor { animation: none; }
   }
 
-  /* ── Home page ── */
-  a { color: var(--link); }
-  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .ph { color: var(--muted); font-style: italic; } /* placeholder text to replace */
-
-  .banner { background: var(--banner); border-bottom: 2px solid var(--accent); }
-  .banner-inner { max-width: 1100px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; gap: 16px; }
-  .logo { width: 64px; height: 64px; object-fit: cover; image-rendering: pixelated; border: 2px solid var(--accent); background: #000; }
-  .site-name { margin: 0; font: 700 28px/1.1 var(--term-font); letter-spacing: 0.08em; color: #e9f5e0; }
-  .tagline { margin: 4px 0 0; font: 14px var(--term-font); color: #b9d4ab; }
-
-  .layout { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; display: grid; grid-template-columns: 220px 1fr; gap: 24px; }
-  nav.side { background: var(--panel); border: 1px solid var(--line); padding: 12px 0; align-self: start; font-family: var(--term-font); }
-  nav.side h2 { margin: 0 16px 6px; font-size: 12px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
-  nav.side ul { list-style: none; margin: 0 0 12px; padding: 0; }
-  nav.side a { display: block; padding: 5px 16px; text-decoration: none; color: var(--text); }
-  nav.side a:hover { background: var(--line); color: var(--accent); }
-
-  main h1, main h2 { font-family: var(--term-font); color: var(--accent); }
-  main h1 { margin: 0 0 12px; font-size: 26px; }
-  main h2 { margin: 28px 0 10px; font-size: 18px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
-  .box { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 12px 16px; margin: 16px 0; }
-  ul.entries { list-style: none; margin: 0; padding: 0; }
-  ul.entries li { padding: 8px 0; border-bottom: 1px dashed var(--line); display: flex; gap: 16px; flex-wrap: wrap; }
-  ul.entries .code { font-family: var(--term-font); color: var(--accent); min-width: 7em; }
-
-  footer.site { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
-  footer.site div { max-width: 1100px; margin: 0 auto; padding: 16px; }
-
-  @media (max-width: 760px) {
-    .layout { grid-template-columns: 1fr; }
-    .site-name { font-size: 22px; }
-    .logo { width: 48px; height: 48px; }
-  }
 </style>
 </head>
 <body class="intro-active">
@@ -124,7 +78,7 @@
 <div class="layout">
   <nav class="side" aria-label="Site">
     <ul>
-      <li><a href="#">Home</a></li>
+      <li><a href="./" aria-current="page">Home</a></li>
     </ul>
     <h2>Branches</h2>
     <ul>
@@ -133,7 +87,7 @@
       <li><a href="#">Dreamland</a></li>
       <li><a href="#">Kipshyrian</a></li>
       <li><a href="#">Zomgoosian</a></li>
-      <li><a href="#">Southern</a></li>
+      <li><a href="southern/">Southern</a></li>
     </ul>
     <h2>Records</h2>
     <ul>
@@ -158,7 +112,7 @@
 
     <h2>Latest entries</h2>
     <ul class="entries">
-      <li><span class="code">SO-02-88</span><a href="https://thepeoverse.blogspot.com/2026/10/so-02-88.html">SO-02-88</a></li>
+      <li><span class="code">SO-02-88</span><a href="southern/so-02-88.html">SO-02-88</a></li>
       <li><span class="code">SO-08-88</span><a href="https://thepeoverse.blogspot.com/2026/03/so-08-88.html">SO-08-88</a></li>
     </ul>
   </main>
