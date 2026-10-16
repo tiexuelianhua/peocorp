@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Peoverse Archive</title>
+<title>Peo Corp</title>
 <style>
   :root {
     /* Peo's shirt green (same hue as the reference photo, brightened so it reads on black) */
@@ -79,7 +79,9 @@ const ERASE_MS = 18;    // per erased character (held backspace)
 const LINE_PAUSE = 600; // pause after each line
 const DOT_PAUSE = 280;  // extra pause after each ". " in the dotted lines
 const FLOOD_MS = 2600;  // how long the closing line takes to cover the screen
-const FLOOD_HOLD = 500; // how long the covered screen stays before vanishing
+const FLOOD_HOLD = 500; // how long the covered screen stays before fading
+const FLOOD_EXTRA = 0.5; // extra scattered copies, as a share of the grid (more = more chaotic)
+const FADE_MS = 1000;   // how long the final fade to the page takes
 
 const LINES = ["CONNECTING. . .", "Verifying. . ."];
 const QUESTION = "Are you sure you want to do this? ";
@@ -187,7 +189,7 @@ async function run() {
   await type(FAREWELL);
   await wait(900);
   await flood();
-  finish();
+  finish(true);
 }
 
 // Copies of the closing line pop up all over the screen, faster and faster, until it's covered.
@@ -198,27 +200,33 @@ function flood() {
   layer.setAttribute("aria-hidden", "true");
   intro.appendChild(layer);
 
-  // Measure one copy, then lay out a jittered grid so the whole screen ends up covered.
+  // Measure one copy, then lay out an overlapping grid (half a line apart sideways,
+  // slightly less than a line apart vertically) so no black is left anywhere.
   const probe = document.createElement("span");
   probe.textContent = FAREWELL;
   layer.appendChild(probe);
   const w = probe.offsetWidth, h = probe.offsetHeight;
   probe.remove();
-  const cols = Math.ceil(innerWidth / w) + 1, rows = Math.ceil(innerHeight / h) + 1;
+  const stepX = w * 0.5, stepY = h * 0.8;
+  const cols = Math.ceil((innerWidth + w) / stepX) + 1, rows = Math.ceil(innerHeight / stepY) + 1;
   const spots = [];
   for (let r = 0; r < rows; r++)
     for (let c = 0; c < cols; c++)
-      spots.push([c * w - Math.random() * w * 0.6, r * h - Math.random() * h * 0.5]);
+      spots.push([c * stepX - w * 0.5 - Math.random() * stepX * 0.5, r * stepY - Math.random() * stepY * 0.5]);
+  // A burst of extra copies scattered anywhere, for a more chaotic finish.
+  const extra = Math.floor(spots.length * FLOOD_EXTRA);
+  for (let i = 0; i < extra; i++) spots.push([Math.random() * innerWidth - w * 0.5, Math.random() * innerHeight - h * 0.5]);
   for (let i = spots.length - 1; i > 0; i--) { // shuffle the order they appear in
     const j = Math.floor(Math.random() * (i + 1));
     [spots[i], spots[j]] = [spots[j], spots[i]];
   }
 
-  // On a rare visit, one random easter egg replaces one random copy.
+  // On a rare visit, one random easter egg replaces one of the last copies, drawn on top so it stays legible.
   const eggs = new Map();
   if (Math.random() < EGG_CHANCE) {
     const text = EASTER_EGGS[Math.floor(Math.random() * EASTER_EGGS.length)];
-    eggs.set(Math.floor(Math.random() * spots.length), text);
+    const late = Math.floor(spots.length * 0.85);
+    eggs.set(late + Math.floor(Math.random() * (spots.length - late)), text);
   }
 
   return new Promise(resolve => {
@@ -232,6 +240,7 @@ function flood() {
       for (; shown < due; shown++) {
         const s = document.createElement("span");
         s.textContent = eggs.get(shown) || FAREWELL;
+        if (eggs.has(shown)) s.style.zIndex = "1";
         s.style.left = spots[shown][0] + "px";
         s.style.top = spots[shown][1] + "px";
         batch.appendChild(s);
@@ -243,15 +252,18 @@ function flood() {
   });
 }
 
-// Everything vanishes at once, revealing the page.
-function finish() {
+// Fades everything away to reveal the page (skipping removes it instantly).
+function finish(fade) {
   done = true;
   try { sessionStorage.setItem("peoIntroSeen", "1"); } catch (e) {}
-  intro.remove();
-  document.body.classList.remove("intro-active");
+  const reveal = () => { intro.remove(); document.body.classList.remove("intro-active"); };
+  if (fade !== true || reduce) return reveal();
+  intro.style.transition = `opacity ${FADE_MS}ms ease`;
+  requestAnimationFrame(() => { intro.style.opacity = "0"; });
+  setTimeout(reveal, FADE_MS + 50);
 }
 
-skipBtn.addEventListener("click", finish);
+skipBtn.addEventListener("click", () => finish());
 document.addEventListener("keydown", e => { if (e.key === "Escape" && document.getElementById("intro")) finish(); });
 
 // Once per visit: the intro is skipped if it already played in this browser tab session.
