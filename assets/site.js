@@ -9,7 +9,7 @@
     { label: "Home", href: "" },
     { label: "Southern Branch", href: "southern/" },
     { label: "About", href: "#" },
-    { label: "Discord", href: "#" }
+    { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
   const STATUS = "[Status readout: Placeholder]";
   const NAV = [
@@ -54,7 +54,7 @@
         </div>
         <div class="banner-tools">
           <nav class="top-links" aria-label="Quick links">
-            ${BANNER_LINKS.map(l => `<a href="${link(l.href)}">${esc(l.label)}</a>`).join("")}
+            ${BANNER_LINKS.map(l => `<a href="${link(l.href)}"${/^https?:/.test(l.href) ? ' target="_blank" rel="noopener"' : ""}>${esc(l.label)}</a>`).join("")}
           </nav>
           <p class="status ${STATUS.startsWith("[") ? "ph" : ""}">${esc(STATUS)}</p>
           <div class="search">
