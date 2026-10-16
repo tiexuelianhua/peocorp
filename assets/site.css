@@ -72,6 +72,15 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 .gallery figcaption { margin-top: 6px; font-size: 13px; }
 @media (max-width: 560px) { .gallery img { height: auto; width: 100%; } .gallery figure { width: 100%; box-sizing: border-box; } }
 
+/* Bottom of an entry: revision log and links to related entries, like SCP footnotes */
+.file-footer { margin-top: 36px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 14px; }
+.file-footer h2 { font-size: 14px; margin: 14px 0 6px; border: 0; padding: 0; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.file-footer ol, .file-footer ul { margin: 0; padding-left: 0; list-style: none; }
+.file-footer li { margin: 3px 0; }
+.revisions .rev { font-family: var(--term-font); color: var(--accent); margin-right: 8px; }
+.revisions .date { font-family: var(--term-font); color: var(--muted); margin-right: 8px; }
+.refs li::before { content: "\21B3\00A0"; color: var(--muted); }
+
 .disclaimer { margin-top: 32px; font-size: 13px; color: var(--muted); font-style: italic; }
 
 footer.site { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
