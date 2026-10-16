@@ -14,7 +14,7 @@
 
 /* Header image: the Vigil, darkened so text stays readable */
 .hero {
-  background: linear-gradient(rgba(10, 6, 4, 0.72), rgba(18, 13, 11, 0.95)), url("vigil.jpg") center 35% / cover;
+  background: linear-gradient(rgba(10, 6, 4, 0.72), rgba(18, 13, 11, 0.95)), url("southern-hallway.jpg") center 55% / cover;
   border-bottom: 1px solid var(--line);
 }
 .hero-inner { max-width: 1100px; margin: 0 auto; padding: 40px 16px 28px; }
