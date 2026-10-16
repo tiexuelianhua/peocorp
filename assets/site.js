@@ -286,10 +286,17 @@
       const n = stageNow();
       if (n >= 3 && !document.hidden) {
         const blocks = document.querySelectorAll("main p, main li, main h1, main h2, main dd, .page-text");
-        const pick = blocks[Math.floor(Math.random() * blocks.length)];
-        if (pick) {
+        // At "critically low", two blocks glitch at once, for longer
+        for (let i = 0; i < (n === 5 ? 2 : 1); i++) {
+          const pick = blocks[Math.floor(Math.random() * blocks.length)];
+          if (!pick) continue;
           pick.classList.add("voice-glitch");
-          setTimeout(() => pick.classList.remove("voice-glitch"), 250 + Math.random() * 350);
+          setTimeout(() => pick.classList.remove("voice-glitch"), (n === 5 ? 400 : 250) + Math.random() * 350);
+        }
+        const main = document.querySelector("main");
+        if (n === 5 && main && Math.random() < 0.12) {
+          main.classList.add("voice-shudder");
+          setTimeout(() => main.classList.remove("voice-shudder"), 200 + Math.random() * 250);
         }
         if (n >= 4 && VOICE_IMAGES.length && document.querySelectorAll(".voice-image").length < VOICE_MAX
             && Math.random() < (n === 5 ? 0.2 : 0.08)) {
