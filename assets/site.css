@@ -81,6 +81,10 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 .revisions .date { font-family: var(--term-font); color: var(--muted); margin-right: 8px; }
 .refs li::before { content: "\21B3\00A0"; color: var(--muted); }
 
+/* Links with no page yet, on pages that lock them */
+a.locked { opacity: 0.45; cursor: not-allowed; text-decoration: none; }
+.locked-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; margin: 0; padding: 8px 16px; max-width: calc(100% - 32px); box-sizing: border-box; background: #000; border: 1px solid var(--accent); color: var(--accent); font: 14px var(--term-font); }
+
 .disclaimer { margin-top: 32px; font-size: 13px; color: var(--muted); font-style: italic; }
 
 footer.site { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }

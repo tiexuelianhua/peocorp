@@ -12,6 +12,8 @@
     { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
   const STATUS = "[Status readout: Placeholder]";
+  // Shown when someone clicks a link that has no page yet, on pages with data-lock-dead-links
+  const LOCKED_MESSAGE = "[Locked link message: Placeholder]";
   const NAV = [
     { items: [{ label: "Home", href: "", page: "home" }] },
     { heading: "Branches", items: [
@@ -96,5 +98,26 @@
     nav.innerHTML = NAV.map(group => `
       ${group.heading ? `<h2>${esc(group.heading)}</h2>` : ""}
       <ul>${group.items.map(i => `<li><a href="${link(i.href)}"${i.page && i.page === CURRENT ? ' aria-current="page"' : ""}>${esc(i.label)}</a></li>`).join("")}</ul>`).join("");
+  }
+  // ── Links with no page yet ──
+  // Only on pages that opt in (<body data-lock-dead-links>). Real links are untouched.
+  if (document.body.hasAttribute("data-lock-dead-links")) {
+    const toast = document.createElement("p");
+    toast.className = "locked-toast" + (LOCKED_MESSAGE.startsWith("[") ? " ph" : "");
+    toast.setAttribute("role", "status");
+    toast.hidden = true;
+    toast.textContent = LOCKED_MESSAGE;
+    document.body.append(toast);
+    let timer;
+    document.querySelectorAll('a[href="#"]').forEach(a => {
+      a.classList.add("locked");
+      a.setAttribute("aria-disabled", "true");
+      a.addEventListener("click", e => {
+        e.preventDefault();
+        toast.hidden = false;
+        clearTimeout(timer);
+        timer = setTimeout(() => { toast.hidden = true; }, 2500);
+      });
+    });
   }
 })();
