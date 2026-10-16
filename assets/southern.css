@@ -88,3 +88,52 @@ details.page.sculk .page-text { color: #a9e9e6; font-family: "La Belle Aurore", 
 .hensa-img.photo img { image-rendering: auto; height: auto; }
 /* Sub-parts of a Story section, e.g. <The Present> */
 .story-part { margin: 18px 0 6px; font: 16px var(--term-font); color: var(--accent); }
+
+/* SO-02-08's photo: it never quite holds still. Hover steadies it briefly. */
+.distort { position: relative; width: 160px; height: 158px; margin: 0 auto 8px; overflow: hidden; background: #000; outline: none; }
+.distort img { width: 100%; height: 100%; margin: 0; animation: so-jitter 3.1s steps(1) infinite; }
+.distort::before, .distort::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: url("so-02-08.png") center / 100% 100%; mix-blend-mode: screen; opacity: 0;
+}
+.distort::before { animation: so-slice-a 2.3s steps(1) infinite; }
+.distort::after { animation: so-slice-b 3.7s steps(1) infinite; filter: hue-rotate(60deg); }
+.distort .scan {
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.35) 0 1px, transparent 1px 3px);
+  animation: so-roll 0.9s linear infinite;
+}
+.distort.steady img, .distort.steady::before, .distort.steady::after, .distort.steady .scan { animation: none; }
+.distort.steady::before, .distort.steady::after { opacity: 0; }
+.distort.steady .scan { opacity: 0.4; }
+
+@keyframes so-jitter {
+  0%   { transform: none; filter: contrast(1.1) brightness(0.9); }
+  12%  { transform: translateX(-3px); filter: contrast(1.4) brightness(1.2) hue-rotate(-20deg); }
+  14%  { transform: none; filter: contrast(1.1) brightness(0.9); }
+  41%  { transform: translateX(2px) skewX(-2deg); filter: contrast(1.2) brightness(0.6); }
+  44%  { transform: none; filter: contrast(1.1) brightness(0.9); }
+  67%  { transform: translate(-1px, 1px); filter: blur(1px) brightness(1.1); }
+  70%  { transform: none; filter: contrast(1.1) brightness(0.9); }
+  88%  { transform: translateX(4px); filter: brightness(0.3); }
+  90%  { transform: none; filter: contrast(1.1) brightness(0.9); }
+}
+@keyframes so-slice-a {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.8; clip-path: inset(30% 0 55% 0); transform: translateX(-8px); }
+  23%  { opacity: 0; }
+  58%  { opacity: 0.7; clip-path: inset(70% 0 12% 0); transform: translateX(6px); }
+  61%  { opacity: 0; }
+}
+@keyframes so-slice-b {
+  0%   { opacity: 0; }
+  33%  { opacity: 0.6; clip-path: inset(10% 0 78% 0); transform: translateX(10px); }
+  35%  { opacity: 0; }
+  79%  { opacity: 0.7; clip-path: inset(48% 0 38% 0); transform: translateX(-12px); }
+  82%  { opacity: 0; }
+}
+@keyframes so-roll { to { background-position: 0 3px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .distort img, .distort::before, .distort::after, .distort .scan { animation: none; }
+}

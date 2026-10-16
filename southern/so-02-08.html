@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SO-02-08 · Peo Corp</title>
-<link rel="stylesheet" href="../assets/site.css?v=22">
-<link rel="stylesheet" href="../assets/southern.css?v=22">
+<link rel="stylesheet" href="../assets/site.css?v=23">
+<link rel="stylesheet" href="../assets/southern.css?v=23">
 </head>
 <body data-page="southern" data-lock-dead-links>
 
@@ -24,7 +24,10 @@
 
   <main>
     <figure class="hensa-img photo">
-      <img src="../assets/so-02-08.png" alt="A blurry, distorted photo of purple pillars in the dark" width="233" height="230">
+      <div class="distort" tabindex="0">
+        <img src="../assets/so-02-08.png" alt="A blurry, distorted photo of purple pillars in the dark" width="233" height="230">
+        <span class="scan" aria-hidden="true"></span>
+      </div>
       <figcaption>SO-02-08</figcaption>
     </figure>
 
@@ -74,6 +77,22 @@
   <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
 </footer>
 
-<script src="../assets/site.js?v=22" data-root="../"></script>
+<script src="../assets/site.js?v=23" data-root="../"></script>
+
+<script>
+// Hovering (or tapping) the photo steadies it for a moment before the distortion returns.
+const STEADY_MS = 1200;
+document.querySelectorAll(".distort").forEach(el => {
+  let timer;
+  const steady = () => {
+    el.classList.add("steady");
+    clearTimeout(timer);
+    timer = setTimeout(() => el.classList.remove("steady"), STEADY_MS);
+  };
+  el.addEventListener("pointerenter", steady);
+  el.addEventListener("pointerdown", steady);
+  el.addEventListener("focus", steady);
+});
+</script>
 </body>
 </html>
