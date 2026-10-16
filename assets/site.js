@@ -36,7 +36,7 @@
   // What the search box can find. Add each new page here.
   const SEARCH = [
     { title: "SO-02-88", href: "southern/so-02-88.html", where: "Southern Branch", words: "sculk journal book poem forget-me-not" },
-    { title: "SO-08-88", href: "https://thepeoverse.blogspot.com/2026/03/so-08-88.html", where: "Southern Branch (blog)", words: "plushie infinity eight" },
+    { title: "SO-08-88", href: "southern/so-08-88.html", where: "Southern Branch", words: "plushie infinity eight" },
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
     { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SO-08-88 · Peo Corp</title>
+<link rel="stylesheet" href="../assets/site.css?v=13">
+<link rel="stylesheet" href="../assets/southern.css?v=13">
+</head>
+<body data-page="southern">
+
+<header class="banner" id="site-banner"></header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="crumbs"><a href="../">Home</a> / <a href="./">Southern Branch</a> / SO-08-88</p>
+    <h1>SO-08-88</h1>
+    <p>Southern Branch</p>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="side" id="site-nav" aria-label="Site"></nav>
+
+  <main>
+    <!-- Stays black until the reader reaches the line that mentions it. Put the image inside .attach-frame when it's ready. -->
+    <figure class="hensa-img attachment" id="attachment">
+      <div class="attach-frame" aria-label="Attachment, not yet shown"></div>
+      <figcaption>Attachment</figcaption>
+    </figure>
+
+    <dl class="file">
+      <dt>Designation</dt><dd>SO-08-88</dd>
+      <dt>Branch</dt><dd>Southern Branch</dd>
+    </dl>
+
+    <p>This entry won’t follow the typical format we usually write hensa pages in, but that’s solely due to what this “thing” is. Indeed, I can’t quite say that it’s appropriate to call SO-08-88 a hensa in the first place. I myself have the slightest clue as to when this “thing” came into containment, either.</p>
+    <p>They say the number 8 signifies equilibrium and harmony. If the number was turned sideways, it now resembles infinity; the limitless. Something with no end in sight. Something with no bounds.</p>
+    <p>Of course, we can’t have an infinite amount of hensa in our facilities, despite our impressive containment space quantity. That’s besides the point, though. There’s a reason this hensa was assigned SO-08-88; it should be noted that not a single Southern Branch facility has 88 hensas on its eighth floor, so the assignment of this hensa falls out of ordinary procedure.</p>
+    <p>Ignore absolutely everything about Peo Corp practices for now. The abilities, origin, details, and everything else about this hensa have no significance in the grand scheme of things. You must only know one thing: what this hensa symbolizes.</p>
+    <p>Turning 8 into infinity. How would one go about that? Is it even possible to do so in the first place? You can’t simply erase 8 and write down infinity. I’m sure your teacher would chuckle and mark points off if you tried to do so. So, just how could you do it?</p>
+    <p>They thought there was a way. They thought that 8 was related to infinity simply because putting it on its side turned it into infinity. They thought that putting equilibrium and harmony on its side would lead them towards infinity.</p>
+    <p>They thought wrong.</p>
+    <p>Newton’s third law of motion states that for every action, there is an equal and opposite reaction.</p>
+    <p>If you try to flip the 8 on its side, you’d get points deducted; you get an equal and opposite reaction. Because you can’t just turn 8 on its side to get infinity, right? That’s not how math works. That’s not how the Peoverse works, either.</p>
+    <p>They attempted to disrupt equilibrium and harmony. What happened was an equal and opposite reaction. They realized this too late. Their swift demise followed. Only the broken remains of the Southern branch remained, lost to the vast, convoluted web that ensnares our very own Peoverse.</p>
+    <p>I write this from one of those branches. The tree has long been uprooted and placed on its side, its branches broken and withering, all because 8 cannot be turned into infinity. Every action has an equal and opposite reaction.</p>
+    <p id="attached-line">So, what is SO-08-88 at the end of the day? It certainly is a “thing”, and it isn’t something unrecognizable or incomprehensible. As a matter of fact, I think all of you will recognize it. <a class="attach-link" href="#attachment">It's attached to this entry.</a></p>
+    <p>They wanted to be like him. They wanted to follow in his footsteps. They failed. This is all that remains from their work. All that remains is a reminder.</p>
+    <p>A constant reminder.</p>
+
+    <section class="file-footer" aria-label="Revision log and references">
+      <h2>Revision log</h2>
+      <ol class="revisions">
+        <li><span class="rev">Rev. 1</span> <span class="date ph">[Date: Placeholder]</span> <span class="ph">[Revision note: Placeholder]</span></li>
+      </ol>
+      <h2>References</h2>
+      <ul class="refs">
+        <li class="ph">[Related entry or addendum: Placeholder]</li>
+      </ul>
+    </section>
+
+    <p class="disclaimer">Note: immersive effects on this page are here to mimic the actual hensa</p>
+
+    <p style="margin-top:16px"><a href="https://thepeoverse.blogspot.com/2026/03/so-08-88.html">Original entry on The Peoverse blog</a></p>
+  </main>
+</div>
+
+<footer class="site">
+  <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
+</footer>
+
+<script src="../assets/site.js?v=13" data-root="../"></script>
+
+<script>
+// The attachment fades in from black once the line mentioning it scrolls into view.
+const attachment = document.getElementById("attachment");
+const line = document.getElementById("attached-line");
+const reveal = () => attachment.classList.add("revealed");
+const check = () => {
+  const box = line.getBoundingClientRect();
+  if (box.bottom <= innerHeight && box.top >= 0) { reveal(); removeEventListener("scroll", check); }
+};
+addEventListener("scroll", check, { passive: true });
+check();
+document.querySelector(".attach-link").addEventListener("click", reveal);
+</script>
+</body>
+</html>
