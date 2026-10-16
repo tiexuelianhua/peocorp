@@ -135,6 +135,18 @@ body:is(.sanity-5, .sanity-6) .voice-glitch { animation-name: voice-glitch-hard;
 @media (prefers-reduced-motion: reduce) { .status-flicker, .status-blink { animation: none; } }
 
 /* Sanity at zero: the screen goes black for the Voices' lines and the warning (see site.js) */
+/* At zero, before the black: the whole page warps and blurs out */
+body.meltdown :is(header.banner, nav.side, main, footer.site, .voice-image) {
+  filter: blur(14px) contrast(1.8) saturate(2) hue-rotate(-25deg);
+  transition: filter 3.5s ease-in;
+  animation: meltdown 0.09s steps(1) infinite;
+}
+@keyframes meltdown {
+  0%  { transform: translate(-10px, 3px) skewX(4deg) scale(1.02); }
+  25% { transform: translate(8px, -6px) skewX(-6deg); }
+  50% { transform: translate(-4px, 8px) skewY(2deg) scale(0.98); }
+  75% { transform: translate(12px, 0) skewX(3deg) scaleY(1.04); }
+}
 .critical { position: fixed; inset: 0; z-index: 2000; background: #000; overflow: hidden; opacity: 0; }
 .critical .critical-final { position: absolute; left: 0; top: 0; margin: 0; padding: 16px 20px; color: #63c125; font: 18px/1.5 var(--term-font); white-space: pre-wrap; }
 

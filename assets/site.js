@@ -38,10 +38,12 @@
   // At "low" (stage 4) and "critically low" (stage 5): most lines at once, and the wait between them
   const VOICE_LINE_STAGES = { 4: { max: 1, gap: [15000, 30000] }, 5: { max: 2, gap: [6000, 14000] }, 6: { max: 2, gap: [6000, 14000] } };
   // At zero: the screen goes black, this many lines appear, then the warning (in green), then the boot.
-  const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY !!";
+  const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY. !!";
   const CRITICAL_LINE_COUNT = 14;
   const CRITICAL_LINE_GAP_MS = 450;   // time between each new line starting
-  const CRITICAL_FADE_MS = 1200;      // how long the screen takes to go black
+  const CRITICAL_OPENING_LINES = 5;   // Voices lines typed over the page first
+  const CRITICAL_OPENING_GAP_MS = 500;
+  const CRITICAL_FADE_MS = 3500;      // the page distorts and blurs while going black, this long
   const CRITICAL_HOLD_MS = 1800;      // how long the warning stays before the boot
   const BOOT_URL = "https://www.google.com";
   const SANITY_AFTER_BOOT = 20;   // what a booted visitor comes back with
@@ -247,7 +249,8 @@
   }
   const randomLine = () => VOICE_LINES[Math.floor(Math.random() * VOICE_LINES.length)];
 
-  // At zero: fade to black, the Voices' lines come one after another, then the warning, then out.
+  // At zero: a handful of the Voices' lines over the page, then the page distorts and blurs
+  // while fading to black, then many lines one after another, then the warning, then out.
   async function critical() {
     booting = true;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -256,7 +259,17 @@
     screen.setAttribute("role", "alert");
     document.body.append(screen);
     if (!reduce) {
-      screen.style.transition = `opacity ${CRITICAL_FADE_MS}ms ease`;
+      const opening = document.createElement("div");
+      opening.className = "voice-lines";
+      opening.setAttribute("aria-hidden", "true");
+      document.body.append(opening);
+      for (let i = 0; i < CRITICAL_OPENING_LINES; i++) {
+        speak(opening, randomLine(), 6000);
+        await sleep(CRITICAL_OPENING_GAP_MS);
+      }
+      await sleep(1500);
+      document.body.classList.add("meltdown");
+      screen.style.transition = `opacity ${CRITICAL_FADE_MS}ms ease-in`;
       await sleep(30);
       screen.style.opacity = "1";
       await sleep(CRITICAL_FADE_MS);
