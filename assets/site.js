@@ -36,7 +36,7 @@
   const SANITY_AFTER_BOOT = 20;   // what a booted visitor comes back with
   // The Voices: as sanity drops (stage 3 and below), text blurs and twitches, and at the
   // lowest stages faint pictures flash up. Add image paths (relative to the site root) here.
-  const VOICE_IMAGES = ["assets/voices/voices-1.jpg", "assets/voices/voices-2.jpg", "assets/voices/voices-3.jpg"];
+  const VOICE_IMAGES = ["assets/voices/voices-1.jpg", "assets/voices/voices-2.jpg", "assets/voices/voices-3.jpg", "assets/voices/voices-4.jpg"];
   const VOICE_IMAGE_OPACITY = 0.35;
   const SANITY_RECOVERY = 1; // points regained per second on safe pages (<body data-safe>)
   // Shown when someone clicks a link that has no page yet, on pages with data-lock-dead-links
