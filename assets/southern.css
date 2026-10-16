@@ -139,3 +139,8 @@ details.page.sculk .page-text { color: #a9e9e6; font-family: "La Belle Aurore", 
 @media (prefers-reduced-motion: reduce) {
   .distort img, .distort::before, .distort::after, .distort .scan { animation: none; }
 }
+
+/* A full photo in the body of a page, e.g. the Vigil on the branch page */
+.branch-photo { margin: 22px 0; }
+.branch-photo img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+.branch-photo figcaption { margin-top: 6px; font-size: 13px; color: var(--muted); font-style: italic; }
