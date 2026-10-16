@@ -13,12 +13,14 @@
   ];
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
   // Each stage shows while sanity is at or above its "min". Highest first.
+  // The "zero" stage shows only at exactly 0. "blink" makes the readout blink constantly.
   const SANITY_STAGES = [
-    { min: 80, text: "Access approved and sanity stable." },
-    { min: 60, text: "Access approved and sanity is average." },
-    { min: 40, text: "Access approved and sanity is dropping." },
-    { min: 20, text: "Access approved and sanity is low." },
-    { min: 0,  text: "Access approved and sanity is critically low." }
+    { min: 80, text: "Access approved. Sanity: 100%" },
+    { min: 60, text: "Access approved. Sanity: 75%" },
+    { min: 40, text: "Access approved. Sanity: 50%" },
+    { min: 20, text: "Access approved. Sanity: 25%" },
+    { min: 0,  text: "Access approved. Sanity: 5%", blink: true },
+    { min: 0,  text: "???????. Sanity: 0%", blink: true, zero: true }
   ];
   // The Voices' lines: typed out in red at random spots, then fading away.
   // A few start at "low" sanity; at zero many come at once before the warning.
@@ -33,7 +35,7 @@
   const VOICE_HOLD_MS = 2500;    // how long a finished line stays before fading
   const VOICE_LINE_FADE_MS = 1500;
   // At "low" (stage 4) and "critically low" (stage 5): most lines at once, and the wait between them
-  const VOICE_LINE_STAGES = { 4: { max: 1, gap: [15000, 30000] }, 5: { max: 2, gap: [6000, 14000] } };
+  const VOICE_LINE_STAGES = { 4: { max: 1, gap: [15000, 30000] }, 5: { max: 2, gap: [6000, 14000] }, 6: { max: 2, gap: [6000, 14000] } };
   // At zero: the screen goes black, this many lines appear, then the warning (in green), then the boot.
   const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY !!";
   const CRITICAL_LINE_COUNT = 14;
@@ -180,17 +182,25 @@
   try { const saved = parseFloat(localStorage.getItem(KEY)); if (!isNaN(saved)) sanity = clamp(saved); } catch (e) {}
   const status = document.getElementById("site-status");
   let lastStage = 0;
+  // Stage number (1 = highest) for the current sanity
+  const stageNow = () => {
+    const stage = sanity === 0 ? SANITY_STAGES.find(s => s.zero) : SANITY_STAGES.find(s => !s.zero && sanity >= s.min);
+    return SANITY_STAGES.indexOf(stage || SANITY_STAGES[SANITY_STAGES.length - 1]) + 1;
+  };
   const render = () => {
     if (!status) return;
-    const stage = SANITY_STAGES.find(s => sanity >= s.min) || SANITY_STAGES[SANITY_STAGES.length - 1];
+    const n = stageNow(), stage = SANITY_STAGES[n - 1];
     status.textContent = stage.text;
     status.classList.toggle("ph", stage.text.startsWith("["));
-    const n = SANITY_STAGES.indexOf(stage) + 1;
+    status.classList.toggle("status-blink", !!stage.blink);
     // The readout flickers whenever it moves to a new stage
     if (lastStage && n !== lastStage) {
       status.classList.remove("status-flicker");
       void status.offsetWidth;
       status.classList.add("status-flicker");
+      // Drop it afterwards so the blink (if any) takes over again
+      clearTimeout(render.flickerTimer);
+      render.flickerTimer = setTimeout(() => status.classList.remove("status-flicker"), 750);
     }
     lastStage = n;
     for (let i = 1; i <= SANITY_STAGES.length; i++) document.body.classList.toggle("sanity-" + i, i === n);
@@ -281,25 +291,24 @@
   // ── The Voices ──
   // Every so often, a random block of text glitches; lower sanity = more often, and faint pictures.
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const stageNow = () => SANITY_STAGES.indexOf(SANITY_STAGES.find(s => sanity >= s.min)) + 1;
     const voices = () => {
       const n = stageNow();
       if (n >= 3 && !document.hidden) {
         const blocks = document.querySelectorAll("main p, main li, main h1, main h2, main dd, .page-text");
         // At "critically low", two blocks glitch at once, for longer
-        for (let i = 0; i < (n === 5 ? 2 : 1); i++) {
+        for (let i = 0; i < (n >= 5 ? 2 : 1); i++) {
           const pick = blocks[Math.floor(Math.random() * blocks.length)];
           if (!pick) continue;
           pick.classList.add("voice-glitch");
-          setTimeout(() => pick.classList.remove("voice-glitch"), (n === 5 ? 400 : 250) + Math.random() * 350);
+          setTimeout(() => pick.classList.remove("voice-glitch"), (n >= 5 ? 400 : 250) + Math.random() * 350);
         }
         const main = document.querySelector("main");
-        if (n === 5 && main && Math.random() < 0.12) {
+        if (n >= 5 && main && Math.random() < 0.12) {
           main.classList.add("voice-shudder");
           setTimeout(() => main.classList.remove("voice-shudder"), 200 + Math.random() * 250);
         }
         if (n >= 4 && VOICE_IMAGES.length && document.querySelectorAll(".voice-image").length < VOICE_MAX
-            && Math.random() < (n === 5 ? 0.2 : 0.08)) {
+            && Math.random() < (n >= 5 ? 0.2 : 0.08)) {
           const img = document.createElement("img");
           img.className = "voice-image";
           img.alt = "";
