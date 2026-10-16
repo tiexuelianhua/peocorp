@@ -22,6 +22,14 @@
   ];
   // At zero: the warning floods the screen, then the visitor is booted from the site.
   const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY !!";
+  // The Voices' lines that flood the screen before the warning
+  const CRITICAL_LINES = [
+    "IT'S REAL, I'VE SEEN IT. IT'S REAL, I'VE SEEN IT. IT'S REAL, I'VE SEEN IT.",
+    "THEY SAID IT. WE SAID IT. YOU WILL BELIEVE THE TRUTH",
+    "THE WAY TO THE SOUTH",
+    "THE SEARCH WILL COMMENCE.",
+    "IT'S A LIE, I KNOW IT. IT'S A LIE, I KNOW IT. IT'S A LIE, I KNOW IT."
+  ];
   const CRITICAL_FLOOD_MS = 2600; // how long the warning takes to cover the screen
   const CRITICAL_HOLD_MS = 1800;  // how long the final warning stays before the boot
   const BOOT_URL = "https://www.google.com";
@@ -175,7 +183,7 @@
     if (sanity === 0 && !booting && !document.body.hasAttribute("data-safe")) critical();
   };
 
-  // Black terminal, copies of the warning popping up faster and faster until the screen
+  // Black terminal, the Voices' lines popping up faster and faster until the screen
   // is covered, then a clean screen with the warning alone, then out.
   function critical() {
     booting = true;
@@ -194,17 +202,16 @@
       setTimeout(() => location.replace(BOOT_URL), CRITICAL_HOLD_MS);
     };
     if (reduce) return boot();
-    const probe = line(CRITICAL);
-    screen.append(probe);
-    const w = probe.offsetWidth, h = probe.offsetHeight;
-    probe.remove();
+    const probes = CRITICAL_LINES.map(t => screen.appendChild(line(t)));
+    const w = probes.reduce((sum, p) => sum + p.offsetWidth, 0) / probes.length, h = probes[0].offsetHeight;
+    probes.forEach(p => p.remove());
     const total = Math.ceil((innerWidth / (w * 0.5) + 2) * (innerHeight / (h * 0.8) + 1) * 1.5);
     const start = performance.now();
     let shown = 0;
     (function frame() {
       const due = Math.min(total, Math.floor(total * ((performance.now() - start) / CRITICAL_FLOOD_MS) ** 2));
       for (; shown < due; shown++) {
-        const s = line(CRITICAL);
+        const s = line(CRITICAL_LINES[Math.floor(Math.random() * CRITICAL_LINES.length)]);
         s.style.left = (Math.random() * (innerWidth + w) - w) + "px";
         s.style.top = (Math.random() * (innerHeight + h) - h) + "px";
         screen.append(s);
