@@ -156,7 +156,6 @@ details.clearance > summary:focus-visible { outline: 2px solid #63c125; outline-
 .clr-status { display: block; font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase; color: #63c125; }
 .clr-status::before { content: "[+] "; color: var(--muted); letter-spacing: 0; }
 details.clearance[open] .clr-status::before { content: "[-] "; }
-.clr-sub { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; }
 details.clearance.verifying .clr-status { color: var(--muted); animation: clr-blink 0.3s steps(1) infinite; }
 @keyframes clr-blink { 50% { opacity: 0.35; } }
 .clr-body { border-top: 1px solid #2f5a22; padding: 4px 16px 12px; }
