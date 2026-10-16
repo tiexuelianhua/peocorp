@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Peo Corp</title>
-<link rel="stylesheet" href="assets/site.css?v=5">
+<link rel="stylesheet" href="assets/site.css?v=6">
 <style>
   /* Intro only; shared page styles live in assets/site.css */
   :root {
@@ -58,49 +58,17 @@
 
 </style>
 </head>
-<body class="intro-active">
+<body class="intro-active" data-page="home">
 
 <div id="intro" role="dialog" aria-modal="true" aria-label="Access check">
   <div id="term" aria-live="polite"></div>
   <button id="skip" type="button">Skip</button>
 </div>
 
-<header class="banner">
-  <div class="banner-inner">
-    <img class="logo" src="assets/peo.webp" alt="Peo" width="64" height="64">
-    <div>
-      <p class="site-name">PEO CORP</p>
-      <p class="tagline">Expediting towards infinity.</p>
-    </div>
-  </div>
-</header>
+<header class="banner" id="site-banner"></header>
 
 <div class="layout">
-  <nav class="side" aria-label="Site">
-    <ul>
-      <li><a href="./" aria-current="page">Home</a></li>
-    </ul>
-    <h2>Branches</h2>
-    <ul>
-      <li><a href="#">Hilltop Branch</a></li>
-      <li><a href="#">Realmouth Branch</a></li>
-      <li><a href="#">Dreamland Branch</a></li>
-      <li><a href="#">Kipshyrian Branch</a></li>
-      <li><a href="#">Zomgoosian Branch</a></li>
-      <li><a href="southern/">Southern Branch</a></li>
-    </ul>
-    <h2>Records</h2>
-    <ul>
-      <li><a href="#">Retellings</a></li>
-      <li><a href="#">Expedition logs</a></li>
-    </ul>
-    <h2>Reference</h2>
-    <ul>
-      <li><a href="#">Glossary</a></li>
-      <li><a href="#">Timeline</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-  </nav>
+  <nav class="side" id="site-nav" aria-label="Site"></nav>
 
   <main>
     <h1 class="ph">[Welcome heading: Placeholder]</h1>
@@ -121,6 +89,8 @@
 <footer class="site">
   <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
 </footer>
+
+<script src="assets/site.js?v=6" data-root=""></script>
 
 <script>
 // ── Settings: adjust speed here (milliseconds) ──

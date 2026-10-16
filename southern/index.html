@@ -4,20 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Southern Branch · Peo Corp</title>
-<link rel="stylesheet" href="../assets/site.css?v=5">
-<link rel="stylesheet" href="../assets/southern.css?v=5">
+<link rel="stylesheet" href="../assets/site.css?v=6">
+<link rel="stylesheet" href="../assets/southern.css?v=6">
 </head>
-<body>
+<body data-page="southern">
 
-<header class="banner">
-  <div class="banner-inner">
-    <a href="../"><img class="logo" src="../assets/peo.webp" alt="Peo Corp home" width="64" height="64"></a>
-    <div>
-      <p class="site-name">PEO CORP</p>
-      <p class="tagline">Expediting towards infinity.</p>
-    </div>
-  </div>
-</header>
+<header class="banner" id="site-banner"></header>
 
 <div class="hero">
   <div class="hero-inner">
@@ -27,31 +19,7 @@
 </div>
 
 <div class="layout">
-  <nav class="side" aria-label="Site">
-    <ul>
-      <li><a href="../">Home</a></li>
-    </ul>
-    <h2>Branches</h2>
-    <ul>
-      <li><a href="#">Hilltop Branch</a></li>
-      <li><a href="#">Realmouth Branch</a></li>
-      <li><a href="#">Dreamland Branch</a></li>
-      <li><a href="#">Kipshyrian Branch</a></li>
-      <li><a href="#">Zomgoosian Branch</a></li>
-      <li><a href="./" aria-current="page">Southern Branch</a></li>
-    </ul>
-    <h2>Records</h2>
-    <ul>
-      <li><a href="#">Retellings</a></li>
-      <li><a href="#">Expedition logs</a></li>
-    </ul>
-    <h2>Reference</h2>
-    <ul>
-      <li><a href="#">Glossary</a></li>
-      <li><a href="#">Timeline</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-  </nav>
+  <nav class="side" id="site-nav" aria-label="Site"></nav>
 
   <main>
     <p class="ph">[Southern Branch description: Placeholder]</p>
@@ -67,5 +35,7 @@
 <footer class="site">
   <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
 </footer>
+
+<script src="../assets/site.js?v=6" data-root="../"></script>
 </body>
 </html>
