@@ -95,7 +95,14 @@ body.sanity-5 main { filter: blur(1px); animation: voices-sway 3.5s ease-in-out 
   0%  { transform: translateX(-3px); filter: blur(2px); opacity: 0.7; }
   50% { transform: translateX(3px); filter: blur(0); text-shadow: -2px 0 rgba(255, 60, 60, 0.6), 2px 0 rgba(60, 200, 255, 0.6); }
 }
-.voice-image { position: fixed; z-index: 1500; max-width: 30vw; max-height: 30vh; opacity: var(--o); pointer-events: none; filter: grayscale(1) blur(1px); }
+/* Pictures of the Voices: "screen" blending drops their black backgrounds into the page,
+   and the soft round mask hides the picture's edges so no rectangle shows */
+.voice-image {
+  position: fixed; z-index: 1500; max-width: 30vw; max-height: 30vh; opacity: var(--o); pointer-events: none;
+  mix-blend-mode: screen; filter: blur(1px);
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
+  mask-image: radial-gradient(closest-side, #000 55%, transparent);
+}
 @media (prefers-reduced-motion: reduce) { body[class*="sanity-"] main { animation: none; } }
 
 /* Sanity at zero: the critical warning screen (see site.js) */
