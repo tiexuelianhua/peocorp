@@ -171,12 +171,20 @@
   let sanity = 100;
   try { const saved = parseFloat(localStorage.getItem(KEY)); if (!isNaN(saved)) sanity = clamp(saved); } catch (e) {}
   const status = document.getElementById("site-status");
+  let lastStage = 0;
   const render = () => {
     if (!status) return;
     const stage = SANITY_STAGES.find(s => sanity >= s.min) || SANITY_STAGES[SANITY_STAGES.length - 1];
     status.textContent = stage.text;
     status.classList.toggle("ph", stage.text.startsWith("["));
     const n = SANITY_STAGES.indexOf(stage) + 1;
+    // The readout flickers whenever it moves to a new stage
+    if (lastStage && n !== lastStage) {
+      status.classList.remove("status-flicker");
+      void status.offsetWidth;
+      status.classList.add("status-flicker");
+    }
+    lastStage = n;
     for (let i = 1; i <= SANITY_STAGES.length; i++) document.body.classList.toggle("sanity-" + i, i === n);
   };
   let booting = false;
@@ -226,8 +234,16 @@
   }
   window.PeoSanity = { get: () => sanity, drain: n => set(sanity - n), restore: n => set(sanity + n) };
   render();
+  // Testing: add ?drain=2 to any page URL to lose 2 points a second on every non-safe page,
+  // for as long as this tab stays open. ?drain=0 turns it off. Normal visitors never see this.
+  let testDrain = 0;
+  try {
+    const q = new URLSearchParams(location.search).get("drain");
+    if (q !== null) sessionStorage.setItem("peo-test-drain", q);
+    testDrain = parseFloat(sessionStorage.getItem("peo-test-drain")) || 0;
+  } catch (e) {}
   const perSecond = document.body.hasAttribute("data-safe") ? SANITY_RECOVERY
-    : -(parseFloat(document.body.dataset.sanityDrain) || 0);
+    : -((parseFloat(document.body.dataset.sanityDrain) || 0) + testDrain);
   if (perSecond) setInterval(() => { if (!document.hidden && clamp(sanity + perSecond) !== sanity) set(sanity + perSecond); }, 1000);
   // ── The Voices ──
   // Every so often, a random block of text glitches; lower sanity = more often, and faint pictures.

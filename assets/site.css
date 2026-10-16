@@ -105,6 +105,14 @@ body.sanity-5 main { filter: blur(1px); animation: voices-sway 3.5s ease-in-out 
 }
 @media (prefers-reduced-motion: reduce) { body[class*="sanity-"] main { animation: none; } }
 
+/* The readout flickers when sanity moves to a new stage */
+.status-flicker { animation: status-flicker 0.7s steps(1) 1; }
+@keyframes status-flicker {
+  0% { opacity: 0; } 12% { opacity: 1; } 24% { opacity: 0.2; transform: translateX(2px); }
+  36% { opacity: 1; transform: none; } 48% { opacity: 0; } 62% { opacity: 0.8; } 76% { opacity: 0.3; } 88% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .status-flicker { animation: none; } }
+
 /* Sanity at zero: the critical warning screen (see site.js) */
 .critical { position: fixed; inset: 0; z-index: 2000; background: #000; overflow: hidden; }
 .critical span { position: absolute; white-space: pre; color: #63c125; font: 18px/1.5 var(--term-font); }
