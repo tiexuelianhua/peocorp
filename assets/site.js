@@ -39,8 +39,6 @@
   const VOICE_LINE_STAGES = { 4: { max: 1, gap: [15000, 30000] }, 5: { max: 2, gap: [6000, 14000] }, 6: { max: 2, gap: [6000, 14000] } };
   // At zero: the screen goes black, this many lines appear, then the warning (in green), then the boot.
   const CRITICAL = "!! CRITICAL STATUS. INGEST NORMAL PILLS IMMEDIATELY. !!";
-  const CRITICAL_LINE_COUNT = 24;
-  const CRITICAL_LINE_GAP_MS = 300;   // time between each new line starting
   const CRITICAL_OPENING_LINES = 12;   // Voices lines typed over the page first
   const CRITICAL_OPENING_GAP_MS = 300;
   const CRITICAL_FADE_MS = 3500;      // the page distorts and blurs while going black, this long
@@ -253,7 +251,7 @@
   const randomLine = () => VOICE_LINES[Math.floor(Math.random() * VOICE_LINES.length)];
 
   // At zero: a handful of the Voices' lines over the page, then the page distorts and blurs
-  // while fading to black, then many lines one after another, then the warning, then out.
+  // while fading to black, then only the warning on the black screen, then out.
   async function critical() {
     booting = true;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -280,12 +278,6 @@
       await sleep(30);
       screen.style.opacity = "1";
       await sleep(CRITICAL_FADE_MS);
-      const lines = [];
-      for (let i = 0; i < CRITICAL_LINE_COUNT; i++) {
-        lines.push(speak(screen, randomLine(), 2000));
-        await sleep(CRITICAL_LINE_GAP_MS);
-      }
-      await Promise.all(lines);
     } else {
       screen.style.opacity = "1";
     }
