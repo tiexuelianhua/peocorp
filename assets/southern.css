@@ -51,10 +51,11 @@ details.page summary:focus-visible { outline: 2px solid var(--accent); outline-o
 /* Journal pages: typed out like Peo Corp's recorded transcription of the firsthand account */
 .page-text { padding: 4px 24px 16px; white-space: pre-line; text-align: center; font-family: "Special Elite", "Courier New", monospace; font-size: 16px; line-height: 1.8; }
 details.page summary { text-align: center; }
-/* Every page is the size of the sculk page, centered, like pages of one book.
-   The petals on the sculk page are placed for this width, so change them together. */
+/* Every page is as wide as the sculk page, centered, like pages of one book,
+   and as tall as its own text. The petals on the sculk page are placed for this width
+   and height, so change them together. */
 details.page { width: 365px; max-width: 100%; box-sizing: border-box; margin-left: auto; margin-right: auto; }
-details.page[open] { min-height: 445px; }
+details.page.sculk[open] { min-height: 445px; }
 
 /* The sculk page */
 details.page.sculk { border-color: #1d5a5c; background: #08191a; }
