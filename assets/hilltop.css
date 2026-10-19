@@ -1,0 +1,24 @@
+/* Hilltop Branch theme: the brightest branch, in Peo's greens. Loaded after site.css. */
+:root {
+  --bg: #161c14;
+  --panel: #1f281b;
+  --line: #34452c;
+  --text: #dfe3cf;
+  --muted: #9fae8f;
+  --banner: #2c5a1c;     /* bright Peo green banner */
+  --accent: #7fd63f;     /* Hilltop green */
+  --link: #b5e08f;
+  --memo-accent: #7fd63f;
+}
+.site-name { color: #f1ffe0; }
+.tagline { color: #b9d99a; }
+
+/* Header: no photo yet, so a soft hill-shaped glow */
+.hero {
+  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(127, 214, 63, 0.22), transparent 70%), linear-gradient(#1d2a17, #161c14);
+  border-bottom: 1px solid var(--line);
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; padding: 40px 16px 28px; }
+.crumbs { font: 13px var(--term-font); color: var(--muted); margin: 0 0 10px; }
+.crumbs a { color: var(--muted); }
+.hero h1 { margin: 0; font: 700 40px/1.1 var(--term-font); color: var(--accent); letter-spacing: 0.04em; }
