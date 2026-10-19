@@ -1,11 +1,11 @@
-/* Southern Branch theme: dark, lava-lit, based on the Vigil. Loaded after site.css. */
+/* Southern Branch theme: black first, lava orange as the accent (based on the Vigil). Loaded after site.css. */
 :root {
-  --bg: #120d0b;
-  --panel: #1c1411;
-  --line: #3b2a20;
+  --bg: #0a0807;
+  --panel: #120d0b;
+  --line: #2e221a;
   --text: #e3d6c6;
   --muted: #a8907a;
-  --banner: #2a1208;     /* dark ember */
+  --banner: #120d0b;     /* Southern black */
   --accent: #ff8a2a;     /* lava orange */
   --link: #f2b27a;
 }
@@ -42,7 +42,7 @@
 .note p:last-child { margin-bottom: 0; }
 
 /* Journal pages as dropdowns */
-details.page { border: 1px solid var(--line); background: #1a130f; margin: 10px 0; }
+details.page { border: 1px solid var(--line); background: #100c0a; margin: 10px 0; }
 details.page summary { cursor: pointer; padding: 10px 16px; font: 14px var(--term-font); color: var(--accent); list-style: none; }
 details.page summary::-webkit-details-marker { display: none; }
 details.page summary::before { content: "[+] "; color: var(--muted); }
