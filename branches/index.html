@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Branches · Peo Corp</title>
 <link rel="icon" type="image/jpeg" href="../assets/peoverse-icon.jpg">
-<link rel="stylesheet" href="../assets/site.css?v=54">
+<link rel="stylesheet" href="../assets/site.css?v=55">
 <style>
   /* Each branch card uses that branch's colors (from the brainstorm doc) */
   .branches { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
@@ -25,6 +25,11 @@
   .kipshyrian { --b1: #ff9a2e; --b2: #7cc8ff; } /* orange with a matching sky blue */
   .zomgoosian { --b1: #4f9d5e; --b2: #6e8fd6; } /* dark green and dark blue, brightened to read */
   .southern   { --b1: #ff8a2a; --b2: #c96a3a; } /* lava */
+  /* The Manager's background message, in the Peo Corp embed color */
+  .memo { border: 1px solid var(--line); border-left: 6px solid #ff8500; background: var(--panel); padding: 14px 20px; margin: 0 0 24px; }
+  .memo h2 { margin: 0 0 10px; border: 0; padding: 0; font: 18px var(--term-font); color: #ff8500; letter-spacing: 0.05em; }
+  .memo ol { margin: 0 0 1em; }
+  .memo .sign { margin: 1.2em 0 0; }
 </style>
 </head>
 <body data-page="branches" data-safe>
@@ -37,7 +42,27 @@
   <main>
     <p class="crumbs" style="font:13px var(--term-font);color:var(--muted);margin:0 0 10px"><a href="../" style="color:var(--muted)">Home</a> / Branches</p>
     <h1>Branches</h1>
-    <p class="ph">[Branches overview: Placeholder]</p>
+    <section class="memo">
+      <h2>PEO CORP: BACKGROUND</h2>
+      <p>Hello agents! Today I will explain to you what Peo Corp is!</p>
+      <p>Our corporation follows in Peo’s footsteps. We travel to other universes to extract energy. Just how do we do this? I’ll explain right now!</p>
+      <p>Within our facilities, we contain hensa and creatures native to the universes we enter!<br>
+      (Note that hensa are anomalies not originating in the current reality, wherever that may be! The term was coined by our friends at the K.S.I. - the Kipshyrian Supernatural Investigators organization)</p>
+      <p>Through the entities we contain, we are able to generate essences through a complex and closely-guarded process. To not bore you, just know that containment = energy!</p>
+      <p>There are 6 different branches/teams in Peo Corp. Here is a list of all of them:</p>
+      <ol>
+        <li>The Hilltop Branch (uppermost branch)</li>
+        <li>The Realmouth Branch</li>
+        <li>The Dreamland Branch</li>
+        <li>The Kipshyrian Branch</li>
+        <li>The Zomgoosian Branch</li>
+        <li>The Southern Branch (lowermost branch)</li>
+      </ol>
+      <p>Each team has a captain, who is in charge of all the affairs in their branch. Teams closer to the bottom typically contain more dangerous hensa, while teams near the top often contain local universe entities.</p>
+      <p>Who’s the manager of all these branches? Me, of course! However, I’m only the manager of this facility. There are other Peo Corp facilities in other universes, but I’m happy to announce that we are the main Peo Corp facility!</p>
+      <p>I hope to talk to all of you again soon! I am still looking into our next mission, so stay tuned!</p>
+      <p class="sign">Sincerely,<br>Peo Corp Manager</p>
+    </section>
 
     <ul class="branches">
       <li class="branch hilltop">
@@ -74,6 +99,6 @@
   <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
 </footer>
 
-<script src="../assets/site.js?v=54" data-root="../"></script>
+<script src="../assets/site.js?v=55" data-root="../"></script>
 </body>
 </html>
