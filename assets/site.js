@@ -61,7 +61,7 @@
     { heading: "Branches", items: [
       { label: "All branches", href: "branches/", page: "branches" },
       { label: "Hilltop Branch", href: "hilltop/", page: "hilltop" },
-      { label: "Realmouth Branch", href: "#" },
+      { label: "Realmouth Branch", href: "realmouth/", page: "realmouth" },
       { label: "Dreamland Branch", href: "#" },
       { label: "Kipshyrian Branch", href: "#" },
       { label: "Zomgoosian Branch", href: "#" },
@@ -83,6 +83,7 @@
     { title: "SO-08-88", href: "southern/so-08-88.html", where: "Southern Branch", words: "plushie infinity eight" },
     { title: "SO-02-08", href: "southern/so-02-08.html", where: "Southern Branch", words: "town bablateville pillars purple nether pokemon" },
     { title: "Hilltop Branch", href: "hilltop/", where: "Branch", words: "north peoville captain station hilltop meetings refuge" },
+    { title: "Realmouth Branch", href: "realmouth/", where: "Branch", words: "rituals round table research code-sustain code-preserve candles" },
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
     { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern manager background captain essences" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
