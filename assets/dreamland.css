@@ -1,0 +1,24 @@
+/* Dreamland Branch theme: green and white. Loaded after site.css. */
+:root {
+  --bg: #161a17;
+  --panel: #1f2520;
+  --line: #36423a;
+  --text: #e9ece6;
+  --muted: #a3b0a5;
+  --banner: #2f5a2a;     /* soft green banner */
+  --accent: #8fe07a;     /* Dreamland green */
+  --link: #c4f0b6;
+  --memo-accent: #8fe07a;
+}
+.site-name { color: #f2f2ee; }
+.tagline { color: #c4e6ba; }
+
+/* Header: no photo yet, so a pale green-white glow */
+.hero {
+  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(242, 242, 238, 0.12), transparent 70%), linear-gradient(#1d241e, #161a17);
+  border-bottom: 1px solid var(--line);
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; padding: 40px 16px 28px; }
+.crumbs { font: 13px var(--term-font); color: var(--muted); margin: 0 0 10px; }
+.crumbs a { color: var(--muted); }
+.hero h1 { margin: 0; font: 700 40px/1.1 var(--term-font); color: #f2f2ee; letter-spacing: 0.04em; text-shadow: 0 0 18px rgba(143, 224, 122, 0.35); }
