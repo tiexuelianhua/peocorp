@@ -215,3 +215,9 @@ details.clearance[open] .clr-status::before { content: "[-] "; }
 details.clearance.verifying .clr-status { color: var(--muted); animation: clr-blink 0.3s steps(1) infinite; }
 @keyframes clr-blink { 50% { opacity: 0.35; } }
 .clr-body { border-top: 1px solid #2f5a22; padding: 4px 16px 12px; }
+/* Optional numbered label in a clearance bar: "[+] ADDENDUM 1 · REQUIRES ACCESS" */
+.clr-label { font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+.clr-label::before { content: "[+] "; color: var(--muted); letter-spacing: 0; }
+details.clearance[open] .clr-label::before { content: "[-] "; }
+.clr-label ~ .clr-status { display: inline; }
+.clr-label ~ .clr-status::before, details.clearance[open] .clr-label ~ .clr-status::before { content: " · "; color: var(--muted); }
