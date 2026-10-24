@@ -198,6 +198,6 @@ footer.site div.ai-note { padding-top: 0; font-size: 12px; opacity: 0.85; }
 .ticker:hover .ticker-track { animation-play-state: paused; }
 .ticker-run { display: inline-flex; flex: none; }
 .ticker-msg { padding: 5px 0; }
-.ticker-msg::after { content: "\25C6"; margin: 0 2.5em; opacity: 0.6; font-size: 10px; vertical-align: 1px; }
+.ticker-msg::after { content: "\25C6"; margin: 0 4.5em; opacity: 0.6; font-size: 10px; vertical-align: 1px; }
 @keyframes ticker { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }

@@ -15,7 +15,7 @@
   // (from that section's theme css). The messages themselves live in banner-messages.txt at the
   // site root (one per line), so they can be edited on GitHub without touching this file.
   const TICKER_FILE = "banner-messages.txt";
-  const TICKER_SPEED = 60; // pixels per second
+  const TICKER_SPEED = 45; // pixels per second
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
   // Each stage shows while sanity is at or above its "min". Highest first.
   // The readout is "<text> Sanity: N%" with the live number (rounded up, so 0% only at exactly 0).
