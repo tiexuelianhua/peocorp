@@ -74,7 +74,8 @@
     { heading: "Reference", items: [
       { label: "Glossary", href: "#" },
       { label: "Timeline", href: "#" },
-      { label: "About", href: "about/", page: "about" }
+      { label: "About", href: "about/", page: "about" },
+      { label: "Update Log", href: "updates/", page: "updates" }
     ]}
   ];
   // What the search box can find. Add each new page here.
@@ -89,6 +90,7 @@
     { title: "Zomgoosian Branch", href: "zomgoosian/", where: "Branch", words: "expeditions south camp camera zomgoose trail" },
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
     { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern" },
+    { title: "Update Log", href: "updates/", where: "Reference", words: "updates changes news log" },
     { title: "About Peo Corp", href: "about/", where: "Reference", words: "about manager background captain essences mission addendum" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
     { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" }

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Peo Corp</title>
 <link rel="icon" type="image/jpeg" href="assets/peoverse-icon.jpg">
-<link rel="stylesheet" href="assets/site.css?v=67">
+<link rel="stylesheet" href="assets/site.css?v=68">
 <style>
   /* Intro only; shared page styles live in assets/site.css */
   :root {
@@ -57,12 +57,6 @@
     .cursor { animation: none; }
   }
 
-  /* Update log inside the begin-here box: newest first, scrolls once it gets long */
-  .log { margin: 12px 0 0; padding: 10px 0 0; border-top: 1px solid var(--line); }
-  .log h2 { margin: 0 0 6px; border: 0; padding: 0; font: 14px var(--term-font); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-  .log ul { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow-y: auto; }
-  .log li { display: flex; gap: 12px; padding: 3px 0; }
-  .log time { flex: none; font: 13px var(--term-font); color: var(--accent); padding-top: 2px; }
 </style>
 </head>
 <body class="intro-active" data-page="home" data-safe="10">
@@ -84,15 +78,8 @@
       <p style="margin:0">If you are a newcomer, please begin <a href="about/">here</a>.</p>
       <div class="log">
         <h2>Update Log</h2>
-        <ul>
-          <!-- Newest first. One <li> per update. -->
-          <li><time datetime="2026-10-24">2026-10-24</time><span>Added About Page</span></li>
-          <li><time datetime="2026-10-24">2026-10-24</time><span>Removed Background section and link from All branches page</span></li>
-          <li><time datetime="2026-10-24">2026-10-24</time><span>Branch cards on All branches page now darken as you get lower</span></li>
-          <li><time datetime="2026-10-24">2026-10-24</time><span>Added descriptions for Kipshyrian and Zomgoosian Branch</span></li>
-          <li><time datetime="2026-10-24">2026-10-24</time><span>Moved Peo Corp Background to the About Page</span></li>
-          <li><time datetime="2026-10-24">2026-10-24</time><span>Changed Start Here placeholder</span></li>
-        </ul>
+        <ul data-updates data-limit="5"></ul>
+        <p class="log-more"><a href="updates/">Full Update Log</a></p>
       </div>
     </div>
 
@@ -112,7 +99,8 @@
   <div class="ai-note">Site code built with Claude (Anthropic). Lore, writing and images are by the authors of the Peoverse; Claude assisted with edits.</div>
 </footer>
 
-<script src="assets/site.js?v=67" data-root=""></script>
+<script src="assets/site.js?v=68" data-root=""></script>
+<script src="assets/updates.js?v=68"></script>
 
 <script>
 // ── Settings: adjust speed here (milliseconds) ──
