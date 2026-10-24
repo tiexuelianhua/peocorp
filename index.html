@@ -57,6 +57,12 @@
     .cursor { animation: none; }
   }
 
+  /* Update log inside the begin-here box: newest first, scrolls once it gets long */
+  .log { margin: 12px 0 0; padding: 10px 0 0; border-top: 1px solid var(--line); }
+  .log h2 { margin: 0 0 6px; border: 0; padding: 0; font: 14px var(--term-font); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .log ul { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow-y: auto; }
+  .log li { display: flex; gap: 12px; padding: 3px 0; }
+  .log time { flex: none; font: 13px var(--term-font); color: var(--accent); padding-top: 2px; }
 </style>
 </head>
 <body class="intro-active" data-page="home" data-safe="10">
@@ -76,6 +82,14 @@
 
     <div class="box">
       <p style="margin:0">If you are new, please begin <a href="about/">here</a>.</p>
+      <div class="log">
+        <h2>[Update log heading: Placeholder]</h2>
+        <ul>
+          <!-- Newest first. One <li> per update. -->
+          <li><time datetime="2026-10-24">2026-10-24</time><span class="ph">[Update entry: Placeholder]</span></li>
+          <li><time datetime="2026-10-24">2026-10-24</time><span class="ph">[Update entry: Placeholder]</span></li>
+        </ul>
+      </div>
     </div>
 
     <h2>Latest entries</h2>
