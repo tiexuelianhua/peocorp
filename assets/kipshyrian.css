@@ -1,0 +1,25 @@
+/* Kipshyrian Branch theme: orange with a matching sky blue. Loaded after site.css. */
+:root {
+  --bg: #12171d;
+  --panel: #1a222b;
+  --line: #2f3d4b;
+  --text: #e4e8ec;
+  --muted: #9aa9b8;
+  --banner: #1d3550;     /* deep sky-blue banner */
+  --accent: #ff9a2e;     /* Kipshyrian orange */
+  --link: #7cc8ff;       /* sky blue */
+  --memo-accent: #ff9a2e;
+}
+.banner { border-bottom-color: #7cc8ff; }
+.site-name { color: #f4f8fb; }
+.tagline { color: #a9d8f7; }
+
+/* Header: no photo yet, so an orange glow under a sky-blue sky */
+.hero {
+  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(255, 154, 46, 0.2), transparent 70%), linear-gradient(#182636, #12171d);
+  border-bottom: 1px solid var(--line);
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; padding: 40px 16px 28px; }
+.crumbs { font: 13px var(--term-font); color: var(--muted); margin: 0 0 10px; }
+.crumbs a { color: var(--muted); }
+.hero h1 { margin: 0; font: 700 40px/1.1 var(--term-font); color: var(--accent); letter-spacing: 0.04em; }
