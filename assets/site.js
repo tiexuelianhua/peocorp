@@ -404,4 +404,22 @@
     };
     setTimeout(lineLoop, 4000);
   }
+
+  // Opening the clearance file checks credentials for a moment first
+  document.querySelectorAll("details.clearance").forEach(d => {
+    const status = d.querySelector(".clr-status");
+    d.querySelector("summary").addEventListener("click", e => {
+      if (d.open || d.classList.contains("approved")) return;
+      e.preventDefault();
+      if (d.classList.contains("verifying")) return;
+      d.classList.add("verifying");
+      status.textContent = "Verifying. . .";
+      setTimeout(() => {
+        d.classList.remove("verifying");
+        d.classList.add("approved");
+        status.textContent = "Access Approved";
+        d.open = true;
+      }, 900);
+    });
+  });
 })();
