@@ -1,22 +1,22 @@
-/* Zomgoosian Branch theme: dark green with a dark blue. Loaded after site.css. */
+/* Zomgoosian Branch theme: Zomgoose green with a royal blue (from Echo's in-game reference). Loaded after site.css. */
 :root {
-  --bg: #101613;
-  --panel: #18211c;
-  --line: #2c3d33;
-  --text: #e3e9e5;
-  --muted: #98aa9f;
-  --banner: #1a3424;     /* dark green banner */
-  --accent: #5fb870;     /* Zomgoosian green */
-  --link: #8aa6e6;       /* dark blue, brightened to read */
-  --memo-accent: #5fb870;
+  --bg: #0f150d;
+  --panel: #161f13;
+  --line: #2a3a24;
+  --text: #e4e9e2;
+  --muted: #9aab95;
+  --banner: #183212;     /* dark green banner */
+  --accent: #56b02e;     /* Zomgoosian green */
+  --link: #6f93ee;       /* royal blue, brightened to read */
+  --memo-accent: #56b02e;
 }
-.banner { border-bottom-color: #6e8fd6; }
+.banner { border-bottom-color: #2f5ad0; }
 .site-name { color: #f2f7f3; }
-.tagline { color: #b3c4ec; }
+.tagline { color: #a9bff2; }
 
 /* Header: no photo yet, so a blue glow under a dark green field */
 .hero {
-  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(110, 143, 214, 0.22), transparent 70%), linear-gradient(#16251c, #101613);
+  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(47, 90, 208, 0.3), transparent 70%), linear-gradient(#152312, #0f150d);
   border-bottom: 1px solid var(--line);
 }
 .hero-inner { max-width: 1100px; margin: 0 auto; padding: 40px 16px 28px; }
