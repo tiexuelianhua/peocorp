@@ -1,0 +1,25 @@
+/* Zomgoosian Branch theme: dark green with a dark blue. Loaded after site.css. */
+:root {
+  --bg: #101613;
+  --panel: #18211c;
+  --line: #2c3d33;
+  --text: #e3e9e5;
+  --muted: #98aa9f;
+  --banner: #1a3424;     /* dark green banner */
+  --accent: #5fb870;     /* Zomgoosian green */
+  --link: #8aa6e6;       /* dark blue, brightened to read */
+  --memo-accent: #5fb870;
+}
+.banner { border-bottom-color: #6e8fd6; }
+.site-name { color: #f2f7f3; }
+.tagline { color: #b3c4ec; }
+
+/* Header: no photo yet, so a blue glow under a dark green field */
+.hero {
+  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(110, 143, 214, 0.22), transparent 70%), linear-gradient(#16251c, #101613);
+  border-bottom: 1px solid var(--line);
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; padding: 40px 16px 28px; }
+.crumbs { font: 13px var(--term-font); color: var(--muted); margin: 0 0 10px; }
+.crumbs a { color: var(--muted); }
+.hero h1 { margin: 0; font: 700 40px/1.1 var(--term-font); color: var(--accent); letter-spacing: 0.04em; }

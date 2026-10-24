@@ -64,7 +64,7 @@
       { label: "Realmouth Branch", href: "realmouth/", page: "realmouth" },
       { label: "Dreamland Branch", href: "dreamland/", page: "dreamland" },
       { label: "Kipshyrian Branch", href: "kipshyrian/", page: "kipshyrian" },
-      { label: "Zomgoosian Branch", href: "#" },
+      { label: "Zomgoosian Branch", href: "zomgoosian/", page: "zomgoosian" },
       { label: "Southern Branch", href: "southern/", page: "southern" }
     ]},
     { heading: "Records", items: [
@@ -86,6 +86,7 @@
     { title: "Realmouth Branch", href: "realmouth/", where: "Branch", words: "rituals round table research code-sustain code-preserve candles" },
     { title: "Dreamland Branch", href: "dreamland/", where: "Branch", words: "pharmaceuticals masks normal pill scouting south dream" },
     { title: "Kipshyrian Branch", href: "kipshyrian/", where: "Branch", words: "manufacturing building cube runes tools weapons machinery archipelago" },
+    { title: "Zomgoosian Branch", href: "zomgoosian/", where: "Branch", words: "expeditions south camp camera zomgoose trail" },
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
     { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern manager background captain essences" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
