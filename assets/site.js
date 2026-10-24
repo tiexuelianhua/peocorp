@@ -8,7 +8,7 @@
   const BANNER_LINKS = [
     { label: "Home", href: "" },
     { label: "Branches", href: "branches/" },
-    { label: "About", href: "#" },
+    { label: "About", href: "about/" },
     { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
@@ -74,7 +74,7 @@
     { heading: "Reference", items: [
       { label: "Glossary", href: "#" },
       { label: "Timeline", href: "#" },
-      { label: "About", href: "#" }
+      { label: "About", href: "about/", page: "about" }
     ]}
   ];
   // What the search box can find. Add each new page here.
@@ -88,7 +88,8 @@
     { title: "Kipshyrian Branch", href: "kipshyrian/", where: "Branch", words: "manufacturing building cube runes tools weapons machinery archipelago" },
     { title: "Zomgoosian Branch", href: "zomgoosian/", where: "Branch", words: "expeditions south camp camera zomgoose trail" },
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
-    { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern manager background captain essences" },
+    { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern" },
+    { title: "About Peo Corp", href: "about/", where: "Reference", words: "about manager background captain essences mission addendum" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
     { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" }
   ];
