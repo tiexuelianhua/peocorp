@@ -1,11 +1,11 @@
 /* Realmouth Branch theme: brownish orange, leaning brown. Loaded after site.css. */
 :root {
-  --bg: #1a1511;
-  --panel: #241d17;
-  --line: #43352a;
+  --bg: #16120f;
+  --panel: #201a15;
+  --line: #3d3027;
   --text: #e6dccf;
   --muted: #ad9a86;
-  --banner: #4a3020;     /* deep brown banner */
+  --banner: #3e281b;     /* deep brown banner */
   --accent: #c88a52;     /* Realmouth brownish orange */
   --link: #e3b88d;
   --memo-accent: #c88a52;
@@ -15,7 +15,7 @@
 
 /* Header: no photo yet, so a warm low glow */
 .hero {
-  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(200, 138, 82, 0.22), transparent 70%), linear-gradient(#271d16, #1a1511);
+  background: radial-gradient(ellipse 70% 120% at 50% 120%, rgba(200, 138, 82, 0.22), transparent 70%), linear-gradient(#231a14, #16120f);
   border-bottom: 1px solid var(--line);
 }
 .hero-inner { max-width: 1100px; margin: 0 auto; padding: 40px 16px 28px; }
