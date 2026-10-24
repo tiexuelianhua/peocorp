@@ -96,7 +96,7 @@
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
     { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern" },
     { title: "Update Log", href: "updates/", where: "Reference", words: "updates changes news log" },
-    { title: "About Peo Corp", href: "about/", where: "Reference", words: "about manager background captain essences mission addendum" },
+    { title: "About Peo Corp", href: "about/", where: "Reference", words: "about manager background captain essences mission our mission expedition north peoville addendum" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
     { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" }
   ];
