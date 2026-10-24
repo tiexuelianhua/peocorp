@@ -13,12 +13,12 @@
     { date: "2026-10-24", text: "Changed Start Here placeholder" }
   ];
 
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   // Fills every <ul data-updates>; data-limit="N" shows only the newest N
   document.querySelectorAll("ul[data-updates]").forEach(ul => {
     const limit = parseInt(ul.dataset.limit, 10) || UPDATES.length;
     ul.innerHTML = UPDATES.slice(0, limit).map(u =>
-      `<li><time datetime="${u.date}">${u.date}</time><span>${esc(u.text)}</span></li>`).join("");
+      `<li><time datetime="${esc(u.date)}">${esc(u.date)}</time><span>${esc(u.text)}</span></li>`).join("");
     // Hide the "full log" link while everything already fits
     const more = ul.parentElement.querySelector(".log-more");
     if (more && UPDATES.length <= limit) more.hidden = true;

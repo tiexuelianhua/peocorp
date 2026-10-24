@@ -101,8 +101,9 @@
     { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" }
   ];
 
-  const link = href => (/^(https?:|#)/.test(href) ? href : ROOT + href) || "./";
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Link addresses are escaped too, so nothing in one can break out of href="..."
+  const link = href => esc((/^(https?:|#)/.test(href) ? href : ROOT + href) || "./");
 
   // ── Banner ──
   const banner = document.getElementById("site-banner");
