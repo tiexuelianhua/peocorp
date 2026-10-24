@@ -221,3 +221,5 @@ details.clearance.verifying .clr-status { color: var(--muted); animation: clr-bl
 details.clearance[open] .clr-label::before { content: "[-] "; }
 .clr-label ~ .clr-status { display: inline; }
 .clr-label ~ .clr-status::before, details.clearance[open] .clr-label ~ .clr-status::before { content: " · "; color: var(--muted); }
+/* Stop phone browsers (iOS Safari, Chrome on Android) from auto-enlarging some text blocks, e.g. parts of the banner strip */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
