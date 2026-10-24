@@ -10,8 +10,8 @@
   /* Each branch card uses that branch's colors (from the brainstorm doc) */
   .branches { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
   .branch {
-    border: 1px solid var(--line); border-left: 6px solid var(--b1);
-    background: linear-gradient(90deg, color-mix(in srgb, var(--b1) 14%, var(--panel)), var(--panel) 60%);
+    border: 1px solid var(--edge); border-left: 6px solid var(--b1);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--b1) 14%, var(--base)), var(--base) 60%);
     padding: 14px 18px;
   }
   .branch h2 { margin: 0; border: 0; padding: 0; font-size: 20px; color: var(--b1); }
@@ -19,13 +19,13 @@
   .branch h2 a:hover { text-decoration: underline; }
   .branch .depth { margin: 2px 0 8px; font: 12px var(--term-font); color: var(--b2); text-transform: uppercase; letter-spacing: 0.1em; }
   .branch p { margin: 0; }
-  .hilltop    { --b1: #7fd63f; --b2: #d2cfc0; } /* brightest, closest to Peo's colors */
-  .realmouth  { --b1: #c88a52; --b2: #d9b48f; } /* brownish orange, leaning brown */
-  .dreamland  { --b1: #8fe07a; --b2: #f2f2ee; } /* green and white */
-  .kipshyrian { --b1: #ff9a2e; --b2: #7cc8ff; } /* orange with a matching sky blue */
-  .zomgoosian { --b1: #56b02e; --b2: #2f5ad0; } /* Zomgoose green and royal blue */
-  .southern   { --b1: #ff8a2a; --b2: #c96a3a; } /* lava */
-  .branch.southern { background: linear-gradient(90deg, #120d0b, #0a0706 60%); border-color: #3b2a20; border-left-color: var(--b1); } /* black with orange, like its own page */
+  /* Cards get darker with depth: each uses its own branch's panel color, stepped down toward black */
+  .hilltop    { --b1: #7fd63f; --b2: #d2cfc0; --base: #2b3825; --edge: #415536; } /* brightest, closest to Peo's colors */
+  .realmouth  { --b1: #c88a52; --b2: #d9b48f; --base: #282019; --edge: #43352a; } /* brownish orange, leaning brown */
+  .dreamland  { --b1: #8fe07a; --b2: #f2f2ee; --base: #1d231e; --edge: #33403a; } /* green and white */
+  .kipshyrian { --b1: #ff9a2e; --b2: #7cc8ff; --base: #161d25; --edge: #2a3745; } /* orange with a matching sky blue */
+  .zomgoosian { --b1: #56b02e; --b2: #2f5ad0; --base: #10170e; --edge: #22301d; } /* Zomgoose green and royal blue */
+  .southern   { --b1: #ff8a2a; --b2: #c96a3a; --base: #0a0706; --edge: #2e221a; } /* black with orange, like its own page */
 </style>
 </head>
 <body data-page="branches" data-safe>
