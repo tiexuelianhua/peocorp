@@ -1,0 +1,4 @@
+# Messages for the scrolling strip under the banner, one per line.
+# They scroll in this order. Add, remove or reorder lines, then commit.
+# Lines starting with # (like these) are ignored. Delete every message to hide the strip.
+[Banner message: Placeholder]

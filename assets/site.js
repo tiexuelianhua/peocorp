@@ -12,10 +12,9 @@
     { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
   // Scrolling message strip along the bottom of the banner. It takes each section's accent color
-  // (from that section's theme css). Add, remove or reorder messages here.
-  const TICKER = [
-    "[Banner message: Placeholder]"
-  ];
+  // (from that section's theme css). The messages themselves live in banner-messages.txt at the
+  // site root (one per line), so they can be edited on GitHub without touching this file.
+  const TICKER_FILE = "banner-messages.txt";
   const TICKER_SPEED = 60; // pixels per second
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
   // Each stage shows while sanity is at or above its "min". Highest first.
@@ -128,24 +127,28 @@
           </div>
         </div>
       </div>
-      ${TICKER.length ? `<div class="ticker" role="marquee" aria-label="Messages">
-        <div class="ticker-track">${[0, 1].map(i => `<span class="ticker-run"${i ? ' aria-hidden="true"' : ""}>${TICKER.map(t => `<span class="ticker-msg">${esc(t)}</span>`).join("")}</span>`).join("")}</div>
-      </div>` : ""}`;
+      <div class="ticker" role="marquee" aria-label="Messages" hidden><div class="ticker-track"></div></div>`;
 
-    // Scroll speed stays the same however long the messages are
-    const run = banner.querySelector(".ticker-run");
-    if (run) {
-      const track = run.parentElement;
-      const fit = () => {
+    // Load the messages; the strip stays hidden if the file is empty or can't be read
+    const ticker = banner.querySelector(".ticker");
+    fetch(ROOT + TICKER_FILE, { cache: "no-cache" })
+      .then(r => (r.ok ? r.text() : ""))
+      .catch(() => "")
+      .then(text => {
+        // One message per line; blank lines and lines starting with # are skipped
+        const msgs = text.split(/\r?\n/).map(l => l.trim()).filter(l => l && !l.startsWith("#"));
+        if (!msgs.length) return;
+        const track = ticker.firstElementChild;
+        const runHtml = () => msgs.map(t => `<span class="ticker-msg">${esc(t)}</span>`).join("");
+        track.innerHTML = `<span class="ticker-run">${runHtml()}</span><span class="ticker-run" aria-hidden="true"></span>`;
+        ticker.hidden = false;
+        const run = track.firstElementChild;
         // Repeat the messages until one run is wider than the screen, so the strip never shows a gap
-        while (run.offsetWidth && run.offsetWidth < window.innerWidth && run.children.length < 200) {
-          TICKER.forEach(t => { const m = document.createElement("span"); m.className = "ticker-msg"; m.textContent = t; run.append(m); });
-        }
+        while (run.offsetWidth && run.offsetWidth < window.innerWidth && run.children.length < 200) run.insertAdjacentHTML("beforeend", runHtml());
         track.lastElementChild.innerHTML = run.innerHTML;
+        // Scroll speed stays the same however long the messages are
         track.style.setProperty("--ticker-s", Math.max(8, run.offsetWidth / TICKER_SPEED) + "s");
-      };
-      fit();
-    }
+      });
 
     const input = banner.querySelector("#site-search");
     const list = banner.querySelector("#site-search-results");
