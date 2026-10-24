@@ -2,6 +2,7 @@
 // Add new entries at the TOP: { date: "YYYY-MM-DD", text: "..." }
 (() => {
   const UPDATES = [
+    { date: "2026-10-24", text: "About page added" },
     { date: "2026-10-24", text: "Added About Page" },
     { date: "2026-10-24", text: "Removed Background section and link from All branches page" },
     { date: "2026-10-24", text: "Branch cards on All branches page now darken as you get lower" },
