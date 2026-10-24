@@ -192,3 +192,12 @@ footer.site div.ai-note { padding-top: 0; font-size: 12px; opacity: 0.85; }
 .log time, .log-full time { flex: none; font: 13px var(--term-font); color: var(--accent); padding-top: 2px; }
 .log-full li { padding: 6px 0; border-bottom: 1px dashed var(--line); }
 .log-more { margin: 8px 0 0; font: 13px var(--term-font); }
+/* Scrolling message strip at the bottom of the banner; messages are in site.js (TICKER). Color follows each section's accent. */
+.ticker { overflow: hidden; background: color-mix(in srgb, var(--banner) 55%, #000); border-top: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); font: 13px var(--term-font); color: var(--accent); letter-spacing: 0.06em; white-space: nowrap; }
+.ticker-track { display: inline-flex; animation: ticker var(--ticker-s, 30s) linear infinite; }
+.ticker:hover .ticker-track { animation-play-state: paused; }
+.ticker-run { display: inline-flex; flex: none; }
+.ticker-msg { padding: 5px 0; }
+.ticker-msg::after { content: "\25C6"; margin: 0 2.5em; opacity: 0.6; font-size: 10px; vertical-align: 1px; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }

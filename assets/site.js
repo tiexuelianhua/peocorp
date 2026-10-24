@@ -11,6 +11,12 @@
     { label: "About", href: "about/" },
     { label: "Discord", href: "https://discord.gg/tNb5w8UDU" }
   ];
+  // Scrolling message strip along the bottom of the banner. It takes each section's accent color
+  // (from that section's theme css). Add, remove or reorder messages here.
+  const TICKER = [
+    "[Banner message: Placeholder]"
+  ];
+  const TICKER_SPEED = 60; // pixels per second
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
   // Each stage shows while sanity is at or above its "min". Highest first.
   // The readout is "<text> Sanity: N%" with the live number (rounded up, so 0% only at exactly 0).
@@ -121,7 +127,25 @@
             <ul id="site-search-results" class="search-results" hidden></ul>
           </div>
         </div>
-      </div>`;
+      </div>
+      ${TICKER.length ? `<div class="ticker" role="marquee" aria-label="Messages">
+        <div class="ticker-track">${[0, 1].map(i => `<span class="ticker-run"${i ? ' aria-hidden="true"' : ""}>${TICKER.map(t => `<span class="ticker-msg">${esc(t)}</span>`).join("")}</span>`).join("")}</div>
+      </div>` : ""}`;
+
+    // Scroll speed stays the same however long the messages are
+    const run = banner.querySelector(".ticker-run");
+    if (run) {
+      const track = run.parentElement;
+      const fit = () => {
+        // Repeat the messages until one run is wider than the screen, so the strip never shows a gap
+        while (run.offsetWidth && run.offsetWidth < window.innerWidth && run.children.length < 200) {
+          TICKER.forEach(t => { const m = document.createElement("span"); m.className = "ticker-msg"; m.textContent = t; run.append(m); });
+        }
+        track.lastElementChild.innerHTML = run.innerHTML;
+        track.style.setProperty("--ticker-s", Math.max(8, run.offsetWidth / TICKER_SPEED) + "s");
+      };
+      fit();
+    }
 
     const input = banner.querySelector("#site-search");
     const list = banner.querySelector("#site-search-results");
