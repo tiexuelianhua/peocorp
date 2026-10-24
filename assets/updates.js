@@ -6,7 +6,6 @@
     { date: "2026-10-24", text: "Banner added" },
     { date: "2026-10-24", text: "Update log added" },
     { date: "2026-10-24", text: "Coloring changes" },
-    { date: "2026-10-24", text: "Added About Page" },
     { date: "2026-10-24", text: "Removed Background section and link from All branches page" },
     { date: "2026-10-24", text: "Branch cards on All branches page now darken as you get lower" },
     { date: "2026-10-24", text: "Added descriptions for Kipshyrian and Zomgoosian Branch" },
