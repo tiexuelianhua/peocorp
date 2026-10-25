@@ -81,7 +81,7 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 .revisions .date { font-family: var(--term-font); color: var(--muted); margin-right: 8px; }
 /* References work like citations: a superscript number in the text ("cite") points to the
    same number in the list ("\21B3 1  ..."). Pages that cite this one go under a separate
-   "Attribution" heading as plain links (ul.refs.backrefs). */
+   "Referenced in" heading as plain links (ul.refs.backrefs). */
 .refs li::before { content: "\21B3\00A0"; color: var(--muted); }
 .refs.backrefs li::before { content: none; }
 .refs li:target { background: rgba(255,255,255,0.06); }
