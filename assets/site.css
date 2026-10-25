@@ -79,9 +79,16 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 .file-footer li { margin: 3px 0; }
 .revisions .rev { font-family: var(--term-font); color: var(--accent); margin-right: 8px; }
 .revisions .date { font-family: var(--term-font); color: var(--muted); margin-right: 8px; }
-/* Each reference: arrow, whole number, link ("\21B3 1  ...") */
+/* References work like citations: a superscript number in the text ("cite") points to the
+   same number in the list ("\21B3 1  ..."). A page that is cited elsewhere but cites nothing
+   itself lists those pages with the arrow reversed and no number (li.backref). */
 .refs li::before { content: "\21B3\00A0"; color: var(--muted); }
+.refs li.backref::before { content: "\21B2\00A0"; }
+.refs li:target { background: rgba(255,255,255,0.06); }
 .refs .ref-num { font-family: var(--term-font); color: var(--accent); margin-right: 8px; }
+sup.cite { font-family: var(--term-font); font-size: 0.7em; line-height: 0; margin-left: 1px; }
+sup.cite a { color: var(--accent); text-decoration: none; }
+sup.cite a:hover { text-decoration: underline; }
 
 /* Links with no page yet, on pages that lock them */
 a.locked { opacity: 0.45; cursor: not-allowed; text-decoration: none; }
