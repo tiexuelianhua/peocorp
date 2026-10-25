@@ -80,10 +80,10 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 .revisions .rev { font-family: var(--term-font); color: var(--accent); margin-right: 8px; }
 .revisions .date { font-family: var(--term-font); color: var(--muted); margin-right: 8px; }
 /* References work like citations: a superscript number in the text ("cite") points to the
-   same number in the list ("\21B3 1  ..."). A page that is cited elsewhere but cites nothing
-   itself lists those pages with the arrow reversed and no number (li.backref). */
+   same number in the list ("\21B3 1  ..."). Pages that cite this one go under a separate
+   "Referenced in" heading as plain links (ul.refs.backrefs). */
 .refs li::before { content: "\21B3\00A0"; color: var(--muted); }
-.refs li.backref::before { content: "\21B2\00A0"; }
+.refs.backrefs li::before { content: none; }
 .refs li:target { background: rgba(255,255,255,0.06); }
 .refs .ref-num { font-family: var(--term-font); color: var(--accent); margin-right: 8px; }
 sup.cite { font-family: var(--term-font); font-size: 0.7em; line-height: 0; margin-left: 1px; }
