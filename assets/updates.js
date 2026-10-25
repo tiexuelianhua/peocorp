@@ -2,6 +2,8 @@
 // Add new entries at the TOP: { date: "YYYY-MM-DD", text: "..." }
 (() => {
   const UPDATES = [
+    { date: "2026-10-25", text: "Glossary and Timeline page placeholders added" },
+    { date: "2026-10-25", text: "Reference/Referenced In list added for whenever one page refers to another page" },
     { date: "2026-10-24", text: "About page added" },
     { date: "2026-10-24", text: "Banner added" },
     { date: "2026-10-24", text: "Update log added" },
