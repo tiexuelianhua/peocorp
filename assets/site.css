@@ -79,8 +79,9 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 .file-footer li { margin: 3px 0; }
 .revisions .rev { font-family: var(--term-font); color: var(--accent); margin-right: 8px; }
 .revisions .date { font-family: var(--term-font); color: var(--muted); margin-right: 8px; }
-/* Numbered like addendums, but whole numbers: "REFERENCE 1" */
-.refs .ref-num { font-family: var(--term-font); color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; margin-right: 8px; }
+/* Each reference: arrow, whole number, link ("\21B3 1  ...") */
+.refs li::before { content: "\21B3\00A0"; color: var(--muted); }
+.refs .ref-num { font-family: var(--term-font); color: var(--accent); margin-right: 8px; }
 
 /* Links with no page yet, on pages that lock them */
 a.locked { opacity: 0.45; cursor: not-allowed; text-decoration: none; }
