@@ -77,8 +77,8 @@
       { label: "Expedition logs", href: "expeditions/", page: "expeditions" }
     ]},
     { heading: "Reference", items: [
-      { label: "Glossary", href: "#" },
-      { label: "Timeline", href: "#" },
+      { label: "Glossary", href: "glossary/", page: "glossary" },
+      { label: "Timeline", href: "timeline/", page: "timeline" },
       { label: "About", href: "about/", page: "about" },
       { label: "Update Log", href: "updates/", page: "updates" }
     ]}
@@ -95,6 +95,8 @@
     { title: "Zomgoosian Branch", href: "zomgoosian/", where: "Branch", words: "expeditions south camp camera zomgoose trail" },
     { title: "Southern Branch", href: "southern/", where: "Branch", words: "vigil south" },
     { title: "Branches", href: "branches/", where: "Overview", words: "hilltop realmouth dreamland kipshyrian zomgoosian southern" },
+    { title: "Glossary", href: "glossary/", where: "Reference", words: "glossary terms definitions" },
+    { title: "Timeline", href: "timeline/", where: "Reference", words: "timeline history events dates" },
     { title: "Update Log", href: "updates/", where: "Reference", words: "updates changes news log" },
     { title: "About Peo Corp", href: "about/", where: "Reference", words: "about manager background captain essences mission our mission expedition north peoville addendum" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },

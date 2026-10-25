@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timeline · Peo Corp</title>
+<link rel="icon" type="image/jpeg" href="../assets/peoverse-icon.jpg">
+<link rel="stylesheet" href="../assets/site.css?v=81">
+<style>
+  /* Events in order, top to bottom, strung along a vertical line */
+  .timeline { list-style: none; margin: 20px 0 0; padding: 0 0 0 22px; border-left: 2px solid var(--line); }
+  .timeline li { position: relative; margin: 0 0 22px; }
+  .timeline li::before { content: ""; position: absolute; left: -29px; top: 5px; width: 10px; height: 10px; background: var(--accent); border: 1px solid var(--line); }
+  .timeline .when { margin: 0 0 4px; font: bold 14px var(--term-font); color: var(--accent); }
+  .timeline h2 { margin: 0 0 6px; border: 0; padding: 0; font-size: 18px; }
+  .timeline p { margin: 0; }
+</style>
+</head>
+<body data-page="timeline" data-safe>
+
+<header class="banner" id="site-banner"></header>
+
+<div class="layout">
+  <nav class="side" id="site-nav" aria-label="Site"></nav>
+
+  <main>
+    <p class="crumbs"><a href="../">Home</a> / Timeline</p>
+    <h1>Timeline</h1>
+    <p class="ph">[Timeline introduction: Placeholder]</p>
+
+    <ol class="timeline">
+      <li>
+        <p class="when ph">[Date 1: Placeholder]</p>
+        <h2 class="ph">[Event 1: Placeholder]</h2>
+        <p class="ph">[Event 1 description: Placeholder]</p>
+      </li>
+      <li>
+        <p class="when ph">[Date 2: Placeholder]</p>
+        <h2 class="ph">[Event 2: Placeholder]</h2>
+        <p class="ph">[Event 2 description: Placeholder]</p>
+      </li>
+      <li>
+        <p class="when ph">[Date 3: Placeholder]</p>
+        <h2 class="ph">[Event 3: Placeholder]</h2>
+        <p class="ph">[Event 3 description: Placeholder]</p>
+      </li>
+    </ol>
+  </main>
+</div>
+
+<footer class="site">
+  <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
+  <div class="ai-note">Site code built with Claude (Anthropic). Lore, writing and images are by the authors of the Peoverse; Claude assisted with edits.</div>
+</footer>
+
+<script src="../assets/site.js?v=81" data-root="../"></script>
+</body>
+</html>
