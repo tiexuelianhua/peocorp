@@ -85,9 +85,12 @@
   .sky.drained { background: linear-gradient(#0f1014, #17181e); }
   body.scene-garden[data-sky="day"] .sky.day,
   body.scene-garden[data-sky="dusk"] .sky.dusk,
-  body.scene-garden[data-sky="night"] .sky.night,
+  body.scene-garden[data-sky="night"] .sky.dusk,
   body.scene-garden[data-sky="drained"] .sky.drained { opacity: 1; }
-  /* The sunset doesn't fade into night: it cuts straight to the dark moonlit sky (page 4 uses the same sky) */
+  /* Night comes on steadily with scrolling, from the sunset down to "The night became dark."
+     (--night, 0 to 1, set by the script). Page 4 opens in the same dark moonlit sky. */
+  body.scene-garden .sky.night { opacity: var(--night, 0); transition: opacity 0.25s linear; }
+  /* Turning a page swaps everything at once */
   body.cut .sky, body.cut .garden, body.cut .hy { transition: none; }
   body.scene-garden { background: #141238; }
   .garden { font: 23px/1.75 var(--garden-font); text-align: center; transition: color 2.4s ease; }
@@ -140,7 +143,7 @@
     <div class="event-head" id="event-head" aria-label="Event header"></div>
     <div class="rec-body">
       <p class="journal-note">A journal recovered by Agent Zomgoose after the END OF PEO CORP</p>
-      <p><span class="label">Description:</span> It was seemingly a typical day. We had just recently entered this new universe and established base underneath a pizzeria, closely guarded so that nothing unauthorized could enter. Our main room had a rather unorthodox hilltop, but it had all its necessary functions, so no one really objected.</p>
+      <p><span class="label">DESCRIPTION:</span> It was seemingly a typical day. We had just recently entered this new universe and established base underneath a pizzeria, closely guarded so that nothing unauthorized could enter. Our main room had a rather unorthodox hilltop, but it had all its necessary functions, so no one really objected.</p>
       <p>In the days leading up to this event, we had already done a great deal of research, containing two local entities within base and setting up camp across the world; one notable camp was deep underwater near a trench.</p>
       <p>That night, it began. The sound of something hitting the ground above us with incredible force prompted a reaction from anyone awake. I took a look outside with a fellow agent and saw that something foreign had landed. It was a massive robot that resembled a jellyfish, and the technology behind it was seemingly alien.</p>
       <p>After lying dormant for a few seconds, it suddenly came to life, firing a beam at the nearby area. The beam decimated the surrounding grass, leaving a crater. We immediately got to work, attempting to engage with it as it was most definitely hostile.</p>
@@ -325,16 +328,7 @@ skipBtn.addEventListener("click", () => { skipping = true; });
 
 // ── Pages: swap instantly, no transition ──
 let current = 0;
-function sky(v) {
-  const b = document.body;
-  if (b.dataset.sky === "dusk" && v === "night") {
-    b.classList.add("cut");
-    b.dataset.sky = v;
-    requestAnimationFrame(() => requestAnimationFrame(() => b.classList.remove("cut")));
-    return;
-  }
-  b.dataset.sky = v;
-}
+function sky(v) { document.body.dataset.sky = v; }
 function go(i) {
   pages[current].classList.remove("current");
   current = i;
@@ -346,6 +340,7 @@ function go(i) {
   // Swap the sky instantly too, so the new page lands all at once
   document.body.classList.add("cut");
   document.body.dataset.sky = first ? first.dataset.sky : "day";
+  document.body.style.setProperty("--night", first && first.dataset.sky === "night" ? 1 : 0);
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove("cut")));
   // Jump straight to the top so the change lands all at once
   document.documentElement.style.scrollBehavior = "auto";
@@ -372,6 +367,13 @@ function follow() {
   const atEnd = scrollY + innerHeight >= document.documentElement.scrollHeight - 4;
   const reached = atEnd ? ps[ps.length - 1] : ps.filter(el => el.getBoundingClientRect().top < innerHeight * 0.35).pop() || ps[0];
   if (reached && document.body.dataset.sky !== reached.dataset.sky) sky(reached.dataset.sky);
+  // From the first sunset paragraph to the first night one, the dark sky fades in with the scroll
+  const from = ps.find(el => el.dataset.sky === "dusk"), to = ps.find(el => el.dataset.sky === "night");
+  if (from && to) {
+    const line = innerHeight * 0.35, a = from.getBoundingClientRect().top, z = to.getBoundingClientRect().top;
+    const n = atEnd ? 1 : Math.min(1, Math.max(0, (line - a) / (z - a)));
+    document.body.style.setProperty("--night", n.toFixed(3));
+  }
 }
 addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(follow); } }, { passive: true });
 
