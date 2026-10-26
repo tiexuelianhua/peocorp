@@ -338,8 +338,8 @@ async function run() {
   await typeGate(FAREWELL, TYPE_MS);
   await wait(1100);
   openPage1(true);
-  // The header starts typing while the warning screen is still fading, so one flows into the other
-  await wait(FADE_MS * 0.6);
+  // The header types onto a clean screen: once the fade is over, after a short pause
+  await wait(FADE_MS + 400);
   await typeHeader();
   skipBtn.remove();
   await wait(skipping ? 0 : 700);
