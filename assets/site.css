@@ -74,6 +74,8 @@ ul.entries .code { font-family: var(--term-font); color: var(--accent); min-widt
 
 /* Bottom of an entry: revision log and links to related entries, like SCP footnotes */
 .file-footer { margin-top: 36px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 14px; }
+/* A second footer list right after another (References, then Referenced in) is set apart by spacing alone, no extra line */
+.file-footer + .file-footer { margin-top: 18px; padding-top: 0; border-top: 0; }
 .file-footer h2 { font-size: 14px; margin: 14px 0 6px; border: 0; padding: 0; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
 .file-footer ol, .file-footer ul { margin: 0; padding-left: 0; list-style: none; }
 .file-footer li { margin: 3px 0; }

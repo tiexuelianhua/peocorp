@@ -231,11 +231,11 @@
 
 <script>
 // ── Settings (milliseconds) ──
-const WARN_MS = 18;      // per character of the warning
-const TYPE_MS = 40;      // per character of the event header (the opening screen uses 55)
+// Typing matches the opening screen on Home (55 per character, plus 280 after each ".")
+const TYPE_MS = 55;      // per typed character
 const ERASE_MS = 8;
 const LINE_PAUSE = 600;
-const DOT_PAUSE = 200;   // extra pause after a "." in the header
+const DOT_PAUSE = 280;   // extra pause after each "."
 const HOME_URL = "../../"; // where "N" sends visitors
 
 const WARNING = "WARNING: Classified, sensitive information is beyond this point. If you are not authorized to access it, turn back now. Failure to comply will result in a termination of your status as an agent. Have you been given explicit authorization to proceed?";
@@ -262,7 +262,7 @@ function render() {
   term.appendChild(c);
 }
 async function typeGate(s, ms) {
-  for (const ch of s) { text += ch; render(); if (!skipping) await wait(ms); }
+  for (const ch of s) { text += ch; render(); if (!skipping) await wait(ms + (ch === "." ? DOT_PAUSE : 0)); }
 }
 async function eraseGate() {
   tail = null;
@@ -322,7 +322,7 @@ function openPage1() {
 
 async function run() {
   await wait(400);
-  await typeGate(WARNING + "\n\n", WARN_MS);
+  await typeGate(WARNING + "\n\n", TYPE_MS);
   skipBtn.hidden = true;
   const answer = await askYesNo();
   if (answer === "N") { location.href = HOME_URL; return; }
