@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>END OF PEO CORP · Peo Corp</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/jpeg" href="../../assets/peoverse-icon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Special+Elite&display=swap">
+<style>
+  /* END OF PEO CORP event page. Deliberately unlike the rest of the site: no banner, no sidebar.
+     Two scenes swap with no transition: "record" pages (the journal, typed on ash-black paper)
+     and "garden" pages (serif, lit by a sky that changes as the reader goes down the page). */
+  :root {
+    color-scheme: dark;
+    --term-font: Consolas, "Lucida Console", "Courier New", monospace;
+    --type-font: "Special Elite", "Courier New", monospace;
+    --garden-font: "Cormorant Garamond", Garamond, "Times New Roman", serif;
+
+    --peo-green: #63c125;      /* same as the opening screen */
+    --rec-bg: #0b0a0d;         /* black with a little Wither Storm violet in it */
+    --rec-ink: #cdc7bf;        /* ash */
+    --rec-muted: #7b7482;
+    --rec-line: #26212c;
+
+    --hy: #a77be0;             /* hyacinth */
+    --day-ink: #3a3820;
+    --dusk-ink: #fbeee2;
+    --night-ink: #e2daf3;
+    --drained-ink: #a4a4ad;
+  }
+  html, body { margin: 0; }
+  body { background: var(--rec-bg); color: var(--rec-ink); }
+  body.gated { overflow: hidden; }
+  .redact { background: var(--rec-ink); color: transparent; user-select: none; }
+  .event-head .redact { background: var(--peo-green); }
+
+  /* ── Warning screen (like the opening screen) ── */
+  #gate { position: fixed; inset: 0; z-index: 100; background: #000; overflow: auto; }
+  #gate-term {
+    margin: 0; padding-block: max(16px, env(safe-area-inset-top, 0px)) 80px;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+    max-width: 52em; color: var(--peo-green); font: 18px/1.5 var(--term-font); white-space: pre-wrap;
+  }
+  .cursor { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .yn button { font: inherit; color: var(--peo-green); background: transparent; border: 0; padding: 0 2px; cursor: pointer; }
+  .yn button[aria-pressed="true"] { background: var(--peo-green); color: #000; }
+  .yn button:focus-visible { outline: 1px dashed var(--peo-green); outline-offset: 2px; }
+  #skip {
+    position: fixed; z-index: 101; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    font: 14px var(--term-font); color: var(--peo-green); background: #000; border: 1px solid var(--peo-green); padding: 6px 12px; cursor: pointer;
+  }
+  #skip:focus-visible { outline: 2px solid var(--peo-green); outline-offset: 2px; }
+
+  /* ── Pages ── */
+  .page { display: none; }
+  .page.current { display: block; }
+  .wrap {
+    max-width: 40em; margin: 0 auto; box-sizing: border-box;
+    padding-block: 48px 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  /* Record pages: the event header, then the journal */
+  .event-head { margin: 0 0 40px; padding: 0 0 28px; border-bottom: 1px solid var(--rec-line); font: 17px/1.55 var(--term-font); color: var(--peo-green); white-space: pre-wrap; min-height: 9em; }
+  .event-head .k { color: #3f7d18; }
+  .event-head .row { margin: 0; }
+  .event-head .gap { height: 1.2em; }
+  .rec-body { font: 17px/1.95 var(--type-font); }
+  .rec-body p { margin: 0 0 1.3em; }
+  .rec-body .label { color: var(--rec-muted); letter-spacing: 0.04em; }
+  .journal-note { margin: 0 0 2em; font: italic 16px/1.6 var(--body-font, Georgia, serif); color: var(--rec-muted); }
+  #p1 .rec-body { transition: opacity 1.6s ease; }
+  #p1.typing .rec-body { opacity: 0; visibility: hidden; }
+
+  /* Garden pages */
+  .sky { position: fixed; inset: 0; z-index: -1; opacity: 0; transition: opacity 2.4s ease; pointer-events: none; }
+  .sky.day     { background: radial-gradient(ellipse 90% 60% at 50% -5%, #fffbe6 0%, #f6e9b8 38%, #dfe3ab 70%, #b9cf8e 100%); }
+  .sky.dusk    { background: linear-gradient(#2c1a3a 0%, #7a3b4e 45%, #d37a4c 85%, #e9a35c 100%); }
+  .sky.night   { background: radial-gradient(circle at 88% 9%, rgba(233, 230, 246, 0.85) 0 2.6vmin, rgba(220, 214, 255, 0.16) 2.8vmin, transparent 14vmin), linear-gradient(#06071a, #141238 60%, #1d1747); }
+  .sky.drained { background: linear-gradient(#0f1014, #17181e); }
+  body.scene-garden[data-sky="day"] .sky.day,
+  body.scene-garden[data-sky="dusk"] .sky.dusk,
+  body.scene-garden[data-sky="night"] .sky.night,
+  body.scene-garden[data-sky="drained"] .sky.drained { opacity: 1; }
+  body.scene-garden { background: #141238; }
+  .garden { font: 23px/1.75 var(--garden-font); text-align: center; transition: color 2.4s ease; }
+  .garden .wrap { max-width: 34em; padding-block: 18vh 40px; }
+  .garden p { margin: 0 0 1.6em; text-wrap: pretty; }
+  body[data-sky="day"] .garden { color: var(--day-ink); }
+  body[data-sky="dusk"] .garden { color: var(--dusk-ink); }
+  body[data-sky="night"] .garden { color: var(--night-ink); }
+  body[data-sky="drained"] .garden { color: var(--drained-ink); }
+  .hy { transition: color 2.4s ease, text-shadow 2.4s ease; }
+  body[data-sky="night"] .hy { color: #c9a6ff; text-shadow: 0 0 12px rgba(167, 123, 224, 0.8); }
+  body[data-sky="drained"] .hy { color: inherit; text-shadow: none; }
+  .garden .last { margin-top: 3em; }
+
+  /* Page controls */
+  .turn { display: flex; align-items: center; justify-content: center; gap: 28px; margin: 48px 0 0; font: 14px var(--term-font); }
+  .turn button { font: 20px var(--term-font); background: transparent; color: inherit; border: 1px solid currentColor; width: 46px; height: 40px; cursor: pointer; opacity: 0.75; }
+  .turn button:hover, .turn button:focus-visible { opacity: 1; }
+  .turn button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .turn button[hidden] { display: none; }
+  .turn .count { opacity: 0.6; font-variant-numeric: tabular-nums; }
+  .scene-record .turn { color: var(--rec-muted); }
+  .garden .turn { font-family: var(--garden-font); }
+  .garden .turn button { border-color: transparent; font-family: var(--garden-font); font-size: 28px; }
+  .home-link { display: block; margin: 28px 0 0; text-align: center; font: 14px var(--term-font); color: var(--rec-muted); }
+
+  @media (max-width: 480px) {
+    #gate-term, .event-head { font-size: 15px; }
+    .rec-body { font-size: 16px; }
+    .garden { font-size: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cursor { animation: none; }
+    .sky, .garden, .hy, #p1 .rec-body { transition: none; }
+  }
+</style>
+</head>
+<body class="gated scene-record" data-sky="day">
+
+<div class="sky day"></div><div class="sky dusk"></div><div class="sky night"></div><div class="sky drained"></div>
+
+<div id="gate" role="dialog" aria-modal="true" aria-label="Warning">
+  <div id="gate-term" aria-live="polite"></div>
+</div>
+<button id="skip" type="button">Skip</button>
+
+<section class="page record current typing" id="p1" aria-label="Page 1">
+  <div class="wrap">
+    <div class="event-head" id="event-head" aria-label="Event header"></div>
+    <div class="rec-body">
+      <p class="journal-note">A journal recovered by Agent Zomgoose after the END OF PEO CORP</p>
+      <p><span class="label">Description:</span> It was seemingly a typical day. We had just recently entered this new universe and established base underneath a pizzeria, closely guarded so that nothing unauthorized could enter. Our main room had a rather unorthodox hilltop, but it had all its necessary functions, so no one really objected.</p>
+      <p>In the days leading up to this event, we had already done a great deal of research, containing two local entities within base and setting up camp across the world; one notable camp was deep underwater near a trench.</p>
+      <p>That night, it began. The sound of something hitting the ground above us with incredible force prompted a reaction from anyone awake. I took a look outside with a fellow agent and saw that something foreign had landed. It was a massive robot that resembled a jellyfish, and the technology behind it was seemingly alien.</p>
+      <p>After lying dormant for a few seconds, it suddenly came to life, firing a beam at the nearby area. The beam decimated the surrounding grass, leaving a crater. We immediately got to work, attempting to engage with it as it was most definitely hostile.</p>
+      <p>Clashing with it was no easy task. After taking a few hits and recuperating, we discovered its weak spots to be its “head”; that is, the glass bulb on the very top. Focusing our firepower there allowed us to finally put it down, but at a cost, as the farmlands we had set up were erased by its beams.</p>
+      <p>We thought that was all, but suddenly, another large object landed near our area. And another. And another. And another. And another. And another.</p>
+      <p>46 hours of fighting had passed. Our resources were spent, but we still had enough to get our agents back on their feet. All of the invaders had fallen by now. We took the remains of some of them to research back in base. We were finally done fighting the onslaught.</p>
+      <p>Or so we thought. Nothing could have prepared me for this. None of the training I received when I first joined Peo Corp, none of the emergency manuals, none of the archived reports.</p>
+      <p>Nothing.</p>
+      <p>I have no idea when it arrived here. Maybe the initial assault was just a distraction. But I caught wind of it when I saw something in the distance. In the sky.</p>
+      <p>And it was getting closer.</p>
+      <p>I ran back down to the base, notifying the other agents immediately. Some didn’t believe me, being tired from the 46 hours of straight fighting.</p>
+      <p>Until everyone heard it.</p>
+      <p>Land being ripped up from the ground. Buildings crumbling in mere seconds. People, animals, and mobs running away. And for those unlucky enough to be caught in its gaze, only Peo knows what happened to them.</p>
+      <p>I was one of the first to evacuate via emergency protocol. That camp under the water proved to be a bastion of refuge while we decided our next move. Some of my fellow agents weren’t so lucky, as I never saw them on the other side.</p>
+      <p>We gave it an hour, and some of us, including myself, decided to return and see what happened. Our base was miraculously still intact, leading our captain to request all remaining agents to return to base.</p>
+      <p>I decided to take a look at the surface. It was all in ruins; the land itself looked like it was carved and grated, the grass all gone and ores exposed. The pizzeria was reduced to rubble, with only bits of its foundation left. Our base was partially exposed, though not broken. We somehow managed to survive.</p>
+    </div>
+    <nav class="turn" aria-label="Pages"></nav>
+  </div>
+</section>
+
+<section class="page garden" id="p2" aria-label="Page 2">
+  <div class="wrap">
+    <p data-sky="day">An extravagant garden, basking in the sun. One that would put the Gardens of Babylon to shame. Glistening flowers covered bushes as far as the eye could see. But the most notable part of it was the fountain. What surrounded the fountain were clusters of vibrant, <span class="hy">purple</span> <span class="hy">hyacinth</span>. The type of flowers to glisten in the moonlight, as if they didn’t need the sun to grow.</p>
+    <p data-sky="dusk">I walked near these beauties. I came closer, taking in a waft of their wondrous scent. And as the sun started to set, I rested near them, seeking refuge, reminiscing, reflecting.</p>
+    <p data-sky="dusk">I noticed a pair of clippers on the ground, probably for the gardener to tend to the bushes, making sure they didn’t overgrow and disrupt other flowers.</p>
+    <p data-sky="night">The night became dark. One by one, the <span class="hy">hyacinths</span> were suddenly plucked from where they stood, being crumpled and then vanishing into the night sky. I desperately picked one for myself and grasped it within my two hands, shielding it. Holding it close to my heart.</p>
+    <p data-sky="night">Soft <span class="hy">violet</span> no longer circled the fountain. What remained on those bushes were.</p>
+    <p data-sky="night">They were. They were?</p>
+    <nav class="turn" aria-label="Pages"></nav>
+  </div>
+</section>
+
+<section class="page record" id="p3" aria-label="Page 3">
+  <div class="wrap rec-body">
+      <p>Black tentacles flailing in the sky, concealing the stars behind them. There was screaming as agents got caught in its gaze, trying to fight back but ultimately succumbing to their inevitable fate.</p>
+      <p>I ran into what remained of the base, barely getting away while the rest of it was sucked up by its gaze. Our captain had led us to our death. I regrouped at the camp with seven others, and after some time, we concluded we were the only survivors.</p>
+      <p>Days passed, and we made do on the food underwater as there was no way for us to return to North Peoville. Each of us would take turns scouting out how far it was from us, gauging how much time we had left.</p>
+      <p>One day, I decided to sail out a bit after completing my scouting routine. I stumbled upon untouched land. After venturing out for a bit and not finding any animals, I found something peculiar. A grey chest. Opening it required a code, but I broke the seal open with my tools.</p>
+      <p>Inside, I found an axe. A formidable one. It was called the “Constant Reminder”. The weight of it alone already told me how much power it contained. What’s it doing out here, in the middle of nowhere, in a chest locked by a passcode? Who put this here?</p>
+      <p>I sailed back and swam down to base, showing the other agents. They were confused, too, but agreed that it would be a big help.</p>
+      <p>The time had come. Our resources were scarce but enough to keep us afloat. It was above the ocean, getting closer. We were more prepared.</p>
+      <p>No one knew what happened when you got consumed by it. However, all of our attacks so far had done nothing to it. One of the agents spotted something, though. A small hole just above its heads. Perhaps it was mere luck or fate, but that hole only appeared to us now instead of earlier when numbers were still on our side.</p>
+      <p>We all voluntarily got stuck in its gaze, allowing us to get closer to the hole. Each of us took turns throwing ender pearls until we all successfully entered. Before we knew it, we found ourselves inside it.</p>
+    <nav class="turn" aria-label="Pages"></nav>
+  </div>
+</section>
+
+<section class="page garden" id="p4" aria-label="Page 4">
+  <div class="wrap">
+    <p data-sky="night">Sun and moon would continue to pass, and only a cluster of <span class="hy">hyacinths</span> remained. Only the cluster, and the <span class="hy">hyacinth</span> in my own hands, glowed <span class="hy">purple</span>.</p>
+    <p data-sky="night">There was a full moon tonight, illuminating the fountain. The streams of water continued to flow down without end, unbreaking and continuous.</p>
+    <p data-sky="night">The clippers had reappeared, this time closer to my feet, as I continued to watch the fountain. A lone butterfly had landed on it, perhaps mistaking it for a flower. I kneeled near the clippers and let the butterfly crawl onto my hand.</p>
+    <p data-sky="night">And then I killed it. Or did I kill it? Why would I kill the butterfly, who has done nothing to me? Nothing to hurt me?</p>
+    <p data-sky="night">Because when I had come back to my senses, the clippers were in my hands. The butterfly was nowhere to be seen.</p>
+    <p data-sky="drained">But the <span class="hy">hyacinths</span> were all gone. No more streaks of <span class="hy">violet</span> circled the fountain. The cluster had vanished. Only the <span class="hy">hyacinth</span>, still in my hands and crushed against the clippers, remained. Crumpled, and a shell of its former self, losing its vibrance.</p>
+    <nav class="turn" aria-label="Pages"></nav>
+  </div>
+</section>
+
+<section class="page record" id="p5" aria-label="Page 5">
+  <div class="wrap rec-body">
+      <p>I embedded the Constant Reminder into the beast’s heart, killing it. Ending this nightmare. Ending this hell.</p>
+      <p>And now, I have nothing left.</p>
+      <p>I dropped the clippers. And crushed the hyacinth in my hand, myself.</p>
+    <nav class="turn" aria-label="Pages"></nav>
+    <a class="home-link" href="../../">Home</a>
+  </div>
+</section>
+
+<script>
+// ── Settings (milliseconds) ──
+const WARN_MS = 18;      // per character of the warning
+const TYPE_MS = 40;      // per character of the event header (the opening screen uses 55)
+const ERASE_MS = 8;
+const LINE_PAUSE = 600;
+const DOT_PAUSE = 200;   // extra pause after a "." in the header
+const HOME_URL = "../../"; // where "N" sends visitors
+
+const WARNING = "WARNING: Classified, sensitive information is beyond this point. If you are not authorized to access it, turn back now. Failure to comply will result in a termination of your status as an agent. Have you been given explicit authorization to proceed?";
+const FAREWELL = "May Peo be with you.";
+// The event header: [label, value] per line; null = blank line
+const HEADER = [["EVENT TITLE: ", "END OF PEO CORP"], ["EVENT DATE: ", "October 26, ████"], null, ["PRECONDITION: ", "Disappearance of ████ and ██████. Peo Corp’s arrival into █████████."], ["POSTCONDITION: ", "Nigh-complete eradication of Peo Corp outside of the Peoverse. Peo Corp left fully crippled."]];
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+const gate = document.getElementById("gate");
+const term = document.getElementById("gate-term");
+const skipBtn = document.getElementById("skip");
+const head = document.getElementById("event-head");
+const pages = [...document.querySelectorAll(".page")];
+let skipping = false;
+
+// ── Warning terminal ──
+let text = "", tail = null;
+function render() {
+  term.textContent = text;
+  if (tail) term.appendChild(tail);
+  const c = document.createElement("span");
+  c.className = "cursor"; c.textContent = "_";
+  term.appendChild(c);
+}
+async function typeGate(s, ms) {
+  for (const ch of s) { text += ch; render(); if (!skipping) await wait(ms); }
+}
+async function eraseGate() {
+  tail = null;
+  while (text.length) { text = text.slice(0, -3); render(); await wait(ERASE_MS); }
+}
+// [Y/N]: arrow keys switch, Enter confirms, or click
+function askYesNo() {
+  return new Promise(resolve => {
+    const wrap = document.createElement("span");
+    wrap.className = "yn"; wrap.setAttribute("role", "group"); wrap.setAttribute("aria-label", "Yes or no");
+    const mk = (t, l) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.setAttribute("aria-label", l); return b; };
+    const y = mk("Y", "Yes"), n = mk("N", "No");
+    wrap.append("[", y, "/", n, "]");
+    let choice = "Y";
+    const show = () => { y.setAttribute("aria-pressed", choice === "Y"); n.setAttribute("aria-pressed", choice === "N"); };
+    const pick = c => { document.removeEventListener("keydown", onKey); resolve(c); };
+    const onKey = e => {
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) { e.preventDefault(); choice = choice === "Y" ? "N" : "Y"; show(); (choice === "Y" ? y : n).focus(); }
+      else if (e.key === "Enter") { e.preventDefault(); pick(choice); }
+      else if (e.key === "y" || e.key === "Y") pick("Y");
+      else if (e.key === "n" || e.key === "N") pick("N");
+    };
+    y.addEventListener("click", () => pick("Y"));
+    n.addEventListener("click", () => pick("N"));
+    y.addEventListener("mouseenter", () => { choice = "Y"; show(); });
+    n.addEventListener("mouseenter", () => { choice = "N"; show(); });
+    document.addEventListener("keydown", onKey);
+    show(); tail = wrap; render(); y.focus();
+  });
+}
+
+// ── Event header, typed onto page 1 ──
+const redact = s => s.replace(/█+/g, m => `<span class="redact">${m}</span>`);
+function headerHTML() {
+  return HEADER.map(l => l ? `<p class="row"><span class="k">${l[0]}</span>${redact(l[1])}</p>` : `<div class="gap"></div>`).join("");
+}
+async function typeHeader() {
+  head.innerHTML = "";
+  for (const l of HEADER) {
+    if (skipping) break;
+    if (!l) { head.insertAdjacentHTML("beforeend", `<div class="gap"></div>`); continue; }
+    const row = document.createElement("p"); row.className = "row";
+    const k = document.createElement("span"); k.className = "k";
+    const v = document.createElement("span");
+    row.append(k, v); head.append(row);
+    for (const ch of l[0]) { if (skipping) break; k.textContent += ch; await wait(TYPE_MS); }
+    for (const ch of l[1]) { if (skipping) break; v.textContent += ch; await wait(TYPE_MS + (ch === "." ? DOT_PAUSE : 0)); }
+    await wait(LINE_PAUSE / 2);
+  }
+  head.innerHTML = headerHTML(); // final form, with the redaction bars
+}
+
+function openPage1() {
+  gate.remove();
+  document.body.classList.remove("gated");
+}
+
+async function run() {
+  await wait(400);
+  await typeGate(WARNING + "\n\n", WARN_MS);
+  skipBtn.hidden = true;
+  const answer = await askYesNo();
+  if (answer === "N") { location.href = HOME_URL; return; }
+  skipping = false; skipBtn.hidden = false;
+  await wait(250);
+  await eraseGate();
+  await wait(LINE_PAUSE);
+  await typeGate(FAREWELL, TYPE_MS);
+  await wait(1100);
+  openPage1();
+  await wait(500);
+  await typeHeader();
+  skipBtn.remove();
+  await wait(skipping ? 0 : 700);
+  document.getElementById("p1").classList.remove("typing");
+}
+skipBtn.addEventListener("click", () => { skipping = true; });
+
+// ── Pages: swap instantly, no transition ──
+let current = 0;
+function sky(v) { document.body.dataset.sky = v; }
+function go(i) {
+  pages[current].classList.remove("current");
+  current = i;
+  const p = pages[i];
+  p.classList.add("current");
+  document.body.classList.toggle("scene-garden", p.classList.contains("garden"));
+  document.body.classList.toggle("scene-record", !p.classList.contains("garden"));
+  const first = p.querySelector("[data-sky]");
+  sky(first ? first.dataset.sky : "day");
+  // Jump straight to the top so the change lands all at once
+  document.documentElement.style.scrollBehavior = "auto";
+  scrollTo(0, 0);
+  p.querySelector(".turn button:not([hidden])")?.blur();
+}
+pages.forEach((p, i) => {
+  const nav = p.querySelector(".turn");
+  nav.innerHTML = `<button type="button" aria-label="Previous page"${i === 0 ? " hidden" : ""}>&larr;</button>
+    <span class="count">${i + 1} / ${pages.length}</span>
+    <button type="button" aria-label="Next page"${i === pages.length - 1 ? " hidden" : ""}>&rarr;</button>`;
+  const [prev, next] = nav.querySelectorAll("button");
+  prev.addEventListener("click", () => go(i - 1));
+  next.addEventListener("click", () => go(i + 1));
+});
+
+// The garden's sky follows the paragraph the reader has reached (the last one whose top
+// has passed the upper third of the screen; the page opens on the first one's sky)
+let ticking = false;
+function follow() {
+  ticking = false;
+  if (!document.body.classList.contains("scene-garden")) return;
+  const ps = [...pages[current].querySelectorAll("[data-sky]")];
+  const reached = ps.filter(el => el.getBoundingClientRect().top < innerHeight * 0.35).pop() || ps[0];
+  if (reached && document.body.dataset.sky !== reached.dataset.sky) sky(reached.dataset.sky);
+}
+addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(follow); } }, { passive: true });
+
+// Review shortcut for the mockup: #p1 ... #p5 opens that page directly, without the warning
+const jump = /^#p([1-5])$/.exec(location.hash);
+if (jump) {
+  skipping = true;
+  openPage1(); skipBtn.remove();
+  head.innerHTML = headerHTML();
+  document.getElementById("p1").classList.remove("typing");
+  go(+jump[1] - 1);
+} else run();
+</script>
+</body>
+</html>
