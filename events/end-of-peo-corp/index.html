@@ -65,7 +65,7 @@
   }
 
   /* Record pages: the event header, then the journal */
-  .event-head { margin: 0 0 40px; padding: 0 0 28px; border-bottom: 1px solid var(--rec-line); font: 17px/1.55 var(--term-font); color: var(--peo-green); white-space: pre-wrap; min-height: 9em; }
+  .event-head { margin: 0 0 40px; padding: 0 0 28px; font: 17px/1.55 var(--term-font); color: var(--peo-green); white-space: pre-wrap; min-height: 9em; }
   .event-head .k { color: #3f7d18; }
   .event-head .row { margin: 0; }
   .event-head .gap { height: 1.2em; }
@@ -85,14 +85,16 @@
   .sky.drained { background: linear-gradient(#0f1014, #17181e); }
   body.scene-garden[data-sky="day"] .sky.day,
   body.scene-garden[data-sky="dusk"] .sky.dusk,
-  body.scene-garden[data-sky="night"] .sky.dusk,
+  body.scene-garden[data-cur="p2"][data-sky="night"] .sky.dusk,
   body.scene-garden[data-sky="drained"] .sky.drained { opacity: 1; }
   /* Night comes on steadily with scrolling, from the sunset down to "The night became dark."
      (--night, 0 to 1, set by the script). Page 4 opens in the same dark moonlit sky. */
   body.scene-garden .sky.night { opacity: var(--night, 0); transition: opacity 0.25s linear; }
+  /* Page 4 comes up out of page 3's black into the night sky */
+  body.scene-garden.from-black .sky.night { transition: opacity 2.4s ease; }
   /* Turning a page swaps everything at once */
   body.cut .sky, body.cut .garden, body.cut .hy { transition: none; }
-  body.scene-garden { background: #141238; }
+  body.scene-garden { background: var(--rec-bg); }
   .garden { font: 23px/1.75 var(--garden-font); text-align: center; transition: color 2.4s ease; }
   .garden .wrap { max-width: 34em; padding-block: 18vh 40vh; }
   .garden p { margin: 0 0 1.6em; text-wrap: pretty; }
@@ -340,7 +342,15 @@ function go(i) {
   // Swap the sky instantly too, so the new page lands all at once
   document.body.classList.add("cut");
   document.body.dataset.sky = first ? first.dataset.sky : "day";
-  document.body.style.setProperty("--night", first && first.dataset.sky === "night" ? 1 : 0);
+  const b = document.body;
+  b.dataset.cur = p.id;
+  b.classList.remove("from-black");
+  b.style.setProperty("--night", 0);
+  // A garden page that opens at night (page 4) fades up from black; page 2 opens straight on the sun
+  if (first && first.dataset.sky === "night") requestAnimationFrame(() => requestAnimationFrame(() => {
+    b.classList.add("from-black");
+    b.style.setProperty("--night", 1);
+  }));
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove("cut")));
   // Jump straight to the top so the change lands all at once
   document.documentElement.style.scrollBehavior = "auto";
