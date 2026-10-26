@@ -315,9 +315,14 @@ async function typeHeader() {
   head.innerHTML = headerHTML(); // final form, with the redaction bars
 }
 
-function openPage1() {
-  gate.remove();
-  document.body.classList.remove("gated");
+// The warning screen fades away (like the opening screen on Home) to show page 1 underneath
+const FADE_MS = 1000;
+function openPage1(fade) {
+  const done = () => { gate.remove(); document.body.classList.remove("gated"); };
+  if (!fade || reduce) return done();
+  gate.style.transition = `opacity ${FADE_MS}ms ease`;
+  requestAnimationFrame(() => { gate.style.opacity = "0"; });
+  setTimeout(done, FADE_MS + 50);
 }
 
 async function run() {
@@ -332,8 +337,9 @@ async function run() {
   await wait(LINE_PAUSE);
   await typeGate(FAREWELL, TYPE_MS);
   await wait(1100);
-  openPage1();
-  await wait(500);
+  openPage1(true);
+  // The header starts typing while the warning screen is still fading, so one flows into the other
+  await wait(FADE_MS * 0.6);
   await typeHeader();
   skipBtn.remove();
   await wait(skipping ? 0 : 700);
