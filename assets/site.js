@@ -74,7 +74,8 @@
     ]},
     { heading: "Records", items: [
       { label: "Retellings", href: "#" },
-      { label: "Expedition logs", href: "expeditions/", page: "expeditions" }
+      { label: "Expedition logs", href: "expeditions/", page: "expeditions" },
+      { label: "Events", href: "events/", page: "events" }
     ]},
     { heading: "Reference", items: [
       { label: "Glossary", href: "glossary/", page: "glossary" },
@@ -100,7 +101,9 @@
     { title: "Update Log", href: "updates/", where: "Reference", words: "updates changes news log" },
     { title: "About Peo Corp", href: "about/", where: "Reference", words: "about manager background captain essences mission our mission expedition north peoville addendum" },
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
-    { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" }
+    { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" },
+    { title: "Events", href: "events/", where: "Records", words: "events event incidents history" },
+    { title: "END OF PEO CORP", href: "events/end-of-peo-corp/", where: "Events", words: "end of peo corp event journal hilltop pizzeria garden hyacinth constant reminder" }
   ];
 
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

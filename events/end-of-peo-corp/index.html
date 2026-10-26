@@ -117,6 +117,12 @@
   .scene-record .turn { color: var(--rec-muted); }
   .garden .turn { font-family: var(--garden-font); }
   .garden .turn button { border-color: transparent; font-family: var(--garden-font); font-size: 28px; }
+  /* Pages that cite this one (the site's "Referenced in" list, in this page's record style) */
+  .backrefs { margin: 56px 0 0; padding-top: 14px; border-top: 1px dashed var(--rec-line); font: 14px/1.6 var(--term-font); }
+  .backrefs h2 { margin: 0 0 6px; font: inherit; color: var(--rec-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .backrefs ul { margin: 0; padding: 0; list-style: none; }
+  .backrefs li { margin: 3px 0; }
+  .backrefs a { color: #8fb0d8; }
   .home-link { display: block; margin: 28px 0 0; text-align: center; font: 14px var(--term-font); color: var(--rec-muted); }
 
   @media (max-width: 480px) {
@@ -212,6 +218,13 @@
       <p>And now, I have nothing left.</p>
       <p>I dropped the clippers. And crushed the hyacinth in my hand, myself.</p>
     <nav class="turn" aria-label="Pages"></nav>
+    <section class="backrefs" aria-label="Referenced in">
+      <h2>Referenced in</h2>
+      <ul>
+        <li><a href="../../southern/so-08-88.html">SO-08-88</a></li>
+        <li><a href="../../about/#addendum">Addendum 1.0: PEO CORP: OUR REVISED MISSION</a></li>
+      </ul>
+    </section>
     <a class="home-link" href="../../">Home</a>
   </div>
 </section>
@@ -387,8 +400,8 @@ function follow() {
 }
 addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(follow); } }, { passive: true });
 
-// Review shortcut for the mockup: #p1 ... #p5 opens that page directly, without the warning
-const jump = /^#p([1-5])$/.exec(location.hash);
+// Review shortcut (preview copy only): #p1 ... #p5 opens that page directly, without the warning
+const jump = false && /^#p([1-5])$/.exec(location.hash);
 if (jump) {
   skipping = true;
   openPage1(); skipBtn.remove();
