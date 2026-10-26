@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Events · Peo Corp</title>
+<link rel="icon" type="image/jpeg" href="../assets/peoverse-icon.jpg">
+<link rel="stylesheet" href="../assets/site.css?v=82">
+<style>
+  /* One row per event file: its date, then its title */
+  .events { list-style: none; margin: 16px 0 0; padding: 0; }
+  .events li { display: flex; flex-wrap: wrap; gap: 4px 20px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .events .when { min-width: 11em; font: 14px/1.6 var(--term-font); color: var(--muted); }
+  .events a { font-family: var(--term-font); color: var(--accent); text-decoration: none; letter-spacing: 0.04em; }
+  .events .redact { background: var(--muted); color: transparent; user-select: none; }
+  .events a:hover { text-decoration: underline; }
+</style>
+</head>
+<body data-page="events" data-safe>
+
+<header class="banner" id="site-banner"></header>
+
+<div class="layout">
+  <nav class="side" id="site-nav" aria-label="Site"></nav>
+
+  <main>
+    <p class="crumbs"><a href="../">Home</a> / Events</p>
+    <h1>Events</h1>
+    <p class="ph">[Events introduction: Placeholder]</p>
+
+    <ul class="events">
+      <li><span class="when">October 26, <span class="redact">████</span></span><a href="end-of-peo-corp/">END OF PEO CORP</a></li>
+    </ul>
+  </main>
+</div>
+
+<footer class="site">
+  <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
+  <div class="ai-note">Site code built with Claude (Anthropic). Lore, writing and images are by the authors of the Peoverse; Claude assisted with edits.</div>
+</footer>
+
+<script src="../assets/site.js?v=82" data-root="../"></script>
+</body>
+</html>

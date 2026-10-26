@@ -72,7 +72,7 @@
   .rec-body { font: 17px/1.95 var(--type-font); }
   .rec-body p { margin: 0 0 1.3em; }
   /* "Description:" was added to the journal afterwards, so it is in the header's font, not the journal's */
-  .rec-body .label { font: 15px var(--term-font); color: #3f7d18; letter-spacing: 0.02em; }
+  .rec-body .label { font: bold 17px var(--term-font); color: #3f7d18; }
   .journal-note { margin: 0 0 2em; font: italic 16px/1.6 var(--body-font, Georgia, serif); color: var(--rec-muted); }
   #p1 .rec-body { transition: opacity 1.6s ease; }
   #p1.typing .rec-body { opacity: 0; visibility: hidden; }
@@ -81,17 +81,14 @@
   .sky { position: fixed; inset: 0; z-index: -1; opacity: 0; transition: opacity 2.4s ease; pointer-events: none; }
   .sky.day     { background: radial-gradient(ellipse 90% 60% at 50% -5%, #fffbe6 0%, #f6e9b8 38%, #dfe3ab 70%, #b9cf8e 100%); }
   .sky.dusk    { background: linear-gradient(#2c1a3a 0%, #7a3b4e 45%, #d37a4c 85%, #e9a35c 100%); }
-  .sky.night   { background: radial-gradient(circle at 88% 9%, rgba(233, 230, 246, 0.85) 0 2.6vmin, rgba(220, 214, 255, 0.16) 2.8vmin, transparent 14vmin), linear-gradient(#06071a, #141238 60%, #1d1747); }
+  .sky.night   { background: radial-gradient(circle at 88% 9%, rgba(214, 210, 232, 0.6) 0 2.6vmin, rgba(200, 194, 240, 0.09) 2.8vmin, transparent 14vmin), linear-gradient(#010106, #05051a 60%, #0a0922); }
   .sky.drained { background: linear-gradient(#0f1014, #17181e); }
-  .sky.void    { background: #000; }
   body.scene-garden[data-sky="day"] .sky.day,
   body.scene-garden[data-sky="dusk"] .sky.dusk,
   body.scene-garden[data-sky="night"] .sky.night,
-  body.scene-garden[data-sky="drained"] .sky.drained,
-  body.scene-garden[data-sky="void"] .sky.void { opacity: 1; }
-  /* The sunset doesn't fade into night: it cuts to black, and the night sky comes up out of it */
+  body.scene-garden[data-sky="drained"] .sky.drained { opacity: 1; }
+  /* The sunset doesn't fade into night: it cuts straight to the dark moonlit sky (page 4 uses the same sky) */
   body.cut .sky, body.cut .garden, body.cut .hy { transition: none; }
-  body[data-sky="void"] .garden { color: var(--night-ink); }
   body.scene-garden { background: #141238; }
   .garden { font: 23px/1.75 var(--garden-font); text-align: center; transition: color 2.4s ease; }
   .garden .wrap { max-width: 34em; padding-block: 18vh 40vh; }
@@ -120,6 +117,7 @@
   @media (max-width: 480px) {
     #gate-term, .event-head { font-size: 15px; }
     .rec-body { font-size: 16px; }
+    .rec-body .label { font-size: 15px; }
     .garden { font-size: 20px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -130,7 +128,7 @@
 </head>
 <body class="gated scene-record" data-sky="day">
 
-<div class="sky day"></div><div class="sky dusk"></div><div class="sky night"></div><div class="sky drained"></div><div class="sky void"></div>
+<div class="sky day"></div><div class="sky dusk"></div><div class="sky night"></div><div class="sky drained"></div>
 
 <div id="gate" role="dialog" aria-modal="true" aria-label="Warning">
   <div id="gate-term" aria-live="polite"></div>
@@ -327,16 +325,12 @@ skipBtn.addEventListener("click", () => { skipping = true; });
 
 // ── Pages: swap instantly, no transition ──
 let current = 0;
-const CUT_HOLD = 900; // how long the screen stays black when the sunset cuts to night
-let cutTimer;
 function sky(v) {
   const b = document.body;
-  clearTimeout(cutTimer);
   if (b.dataset.sky === "dusk" && v === "night") {
     b.classList.add("cut");
-    b.dataset.sky = "void";
+    b.dataset.sky = v;
     requestAnimationFrame(() => requestAnimationFrame(() => b.classList.remove("cut")));
-    cutTimer = setTimeout(() => { b.dataset.sky = "night"; }, reduce ? 0 : CUT_HOLD);
     return;
   }
   b.dataset.sky = v;
@@ -349,8 +343,10 @@ function go(i) {
   document.body.classList.toggle("scene-garden", p.classList.contains("garden"));
   document.body.classList.toggle("scene-record", !p.classList.contains("garden"));
   const first = p.querySelector("[data-sky]");
-  clearTimeout(cutTimer);
+  // Swap the sky instantly too, so the new page lands all at once
+  document.body.classList.add("cut");
   document.body.dataset.sky = first ? first.dataset.sky : "day";
+  requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove("cut")));
   // Jump straight to the top so the change lands all at once
   document.documentElement.style.scrollBehavior = "auto";
   scrollTo(0, 0);
@@ -375,8 +371,7 @@ function follow() {
   const ps = [...pages[current].querySelectorAll("[data-sky]")];
   const atEnd = scrollY + innerHeight >= document.documentElement.scrollHeight - 4;
   const reached = atEnd ? ps[ps.length - 1] : ps.filter(el => el.getBoundingClientRect().top < innerHeight * 0.35).pop() || ps[0];
-  const now = document.body.dataset.sky === "void" ? "night" : document.body.dataset.sky;
-  if (reached && now !== reached.dataset.sky) sky(reached.dataset.sky);
+  if (reached && document.body.dataset.sky !== reached.dataset.sky) sky(reached.dataset.sky);
 }
 addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(follow); } }, { passive: true });
 
