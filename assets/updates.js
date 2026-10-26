@@ -1,15 +1,16 @@
 // The Update Log, kept in one place. Home shows the newest few; updates/ shows them all.
 // Add new entries at the TOP: { date: "YYYY-MM-DD", text: "..." }
-// Add link: "path/" (from the site root) to make an entry open that page.
+// Add link: "path/" (from the site root) to make an entry open that page,
+// or links: { "word": "path/" } to link just those words when one entry covers several pages.
 (() => {
   const UPDATES = [
     { date: "2026-10-26", text: "END OF PEO CORP page added", link: "events/end-of-peo-corp/" },
     { date: "2026-10-26", text: "Events page added", link: "events/" },
     { date: "2026-10-26", text: "Minor References/Referenced In changes" },
     { date: "2026-10-26", text: "Minor changes to layout/format" },
-    { date: "2026-10-25", text: "Glossary and Timeline page placeholders added" },
+    { date: "2026-10-25", text: "Glossary and Timeline page placeholders added", links: { "Glossary": "glossary/", "Timeline": "timeline/" } },
     { date: "2026-10-25", text: "Reference/Referenced In list added for whenever one page refers to another page" },
-    { date: "2026-10-24", text: "About page added" },
+    { date: "2026-10-24", text: "About page added", link: "about/" },
     { date: "2026-10-24", text: "Banner added" },
     { date: "2026-10-24", text: "Update log added" },
     { date: "2026-10-24", text: "Coloring changes" },
@@ -26,10 +27,17 @@
   // Fills every <ul data-updates>; data-limit="N" shows only the newest N
   document.querySelectorAll("ul[data-updates]").forEach(ul => {
     const limit = parseInt(ul.dataset.limit, 10) || UPDATES.length;
+    const href = path => esc(new URL(path, ROOT).href);
+    // An entry's text, with any of its "links" words turned into links (each word's first use)
+    const body = u => {
+      if (u.link) return `<a href="${href(u.link)}">${esc(u.text)}</a>`;
+      let html = esc(u.text);
+      for (const [word, path] of Object.entries(u.links || {}))
+        html = html.replace(esc(word), `<a href="${href(path)}">${esc(word)}</a>`);
+      return `<span>${html}</span>`;
+    };
     ul.innerHTML = UPDATES.slice(0, limit).map(u =>
-      `<li><time datetime="${esc(u.date)}">${esc(u.date)}</time>${u.link
-        ? `<a href="${esc(new URL(u.link, ROOT).href)}">${esc(u.text)}</a>`
-        : `<span>${esc(u.text)}</span>`}</li>`).join("");
+      `<li><time datetime="${esc(u.date)}">${esc(u.date)}</time>${body(u)}</li>`).join("");
     // Hide the "full log" link while everything already fits
     const more = ul.parentElement.querySelector(".log-more");
     if (more && UPDATES.length <= limit) more.hidden = true;
