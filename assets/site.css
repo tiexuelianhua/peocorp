@@ -21,7 +21,7 @@
   --text: #e3d9c8;
   --muted: #a3958c;
   --banner: #2c1442;      /* deep purple banner */
-  --accent: #ff8500;      /* Peo Corp orange */
+  --accent: #f2741c;      /* pumpkin orange, from the Peoween logo */
   --link: #b993f0;        /* light purple links */
   --ticker-alt: #b993f0;  /* second banner message color */
 }
@@ -29,8 +29,9 @@
 :root[data-theme="peoween"] .top-links a,
 :root[data-theme="peoween"] .search-box input { color: #f3e6d6; }
 :root[data-theme="peoween"] .tagline,
-:root[data-theme="peoween"] .status { color: #ffb366; }
+:root[data-theme="peoween"] .status { color: #f5a865; }
 :root[data-theme="peoween"] .search-box input::placeholder { color: #a98bb8; }
+.logo[src*="peoween"] { image-rendering: auto; } /* the Peoween logo is a smooth picture, not pixel art */
 
 html, body { margin: 0; }
 body { font: 16px/1.6 var(--body-font); background: var(--bg); color: var(--text); }
