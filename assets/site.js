@@ -88,6 +88,7 @@
   const SEARCH = [
     { title: "SO-02-88", href: "southern/so-02-88.html", where: "Southern Branch", words: "sculk journal book poem forget-me-not" },
     { title: "SO-08-88", href: "southern/so-08-88.html", where: "Southern Branch", words: "plushie infinity eight" },
+    { title: "KP-01-05", href: "kipshyrian/kp-01-05.html", where: "Kipshyrian Branch", words: "jimbob mace enchanted temple blair smp weapon" },
     { title: "SO-02-08", href: "southern/so-02-08.html", where: "Southern Branch", words: "town bablateville pillars purple nether pokemon" },
     { title: "Hilltop Branch", href: "hilltop/", where: "Branch", words: "north peoville captain station hilltop meetings refuge" },
     { title: "Realmouth Branch", href: "realmouth/", where: "Branch", words: "rituals round table research code-sustain code-preserve candles" },
