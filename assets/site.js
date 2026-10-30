@@ -16,6 +16,11 @@
   // site root (one per line), so they can be edited on GitHub without touching this file.
   const TICKER_FILE = "banner-messages.txt";
   const TICKER_SPEED = 45; // pixels per second
+  // Site theme, switched by hand: "default" (Peo green) or "peoween".
+  // It recolors only the pages styled like Home (pages with no section css of their own);
+  // branch and other unique pages keep their colors. The saved default theme is the
+  // theme-default-2026-10-30 branch on GitHub.
+  const THEME = "peoween";
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
   // Each stage shows while sanity is at or above its "min". Highest first.
   // The readout is "<text> Sanity: N%" with the live number (rounded up, so 0% only at exactly 0).
@@ -110,6 +115,10 @@
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   // Link addresses are escaped too, so nothing in one can break out of href="..."
   const link = href => esc((/^(https?:|#)/.test(href) ? href : ROOT + href) || "./");
+
+  // ── Theme ──
+  const ownStyle = [...document.querySelectorAll('link[rel="stylesheet"]')].some(l => !/assets\/site\.css/.test(l.getAttribute("href")));
+  if (THEME !== "default" && !ownStyle) document.documentElement.dataset.theme = THEME;
 
   // ── Banner ──
   const banner = document.getElementById("site-banner");

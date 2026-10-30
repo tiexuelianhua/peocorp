@@ -13,6 +13,25 @@
   --accent: #63c125;      /* Peo green, for headings */
   --link: #8fb0d8;        /* Peo's blue pants, brightened for links */
 }
+/* Peoween theme (switched on in site.js, THEME). Only Home-styled pages get it. */
+:root[data-theme="peoween"] {
+  --bg: #121014;          /* near-black */
+  --panel: #1c1820;
+  --line: #3a2d47;        /* dusky purple borders */
+  --text: #e3d9c8;
+  --muted: #a3958c;
+  --banner: #2c1442;      /* deep purple banner */
+  --accent: #ff8500;      /* Peo Corp orange */
+  --link: #b993f0;        /* light purple links */
+  --ticker-alt: #b993f0;  /* second banner message color */
+}
+:root[data-theme="peoween"] .site-name,
+:root[data-theme="peoween"] .top-links a,
+:root[data-theme="peoween"] .search-box input { color: #f3e6d6; }
+:root[data-theme="peoween"] .tagline,
+:root[data-theme="peoween"] .status { color: #ffb366; }
+:root[data-theme="peoween"] .search-box input::placeholder { color: #a98bb8; }
+
 html, body { margin: 0; }
 body { font: 16px/1.6 var(--body-font); background: var(--bg); color: var(--text); }
 
@@ -210,6 +229,8 @@ footer.site div.ai-note { padding-top: 0; font-size: 12px; opacity: 0.85; }
 .ticker-run { display: inline-flex; flex: none; }
 .ticker-msg { padding: 5px 0; }
 .ticker-msg::after { content: "\25C6"; margin: 0 4.5em; opacity: 0.6; font-size: 10px; vertical-align: 1px; }
+/* Themes can alternate the messages between the accent and a second color */
+.ticker-msg:nth-child(even) { color: var(--ticker-alt, var(--accent)); }
 @keyframes ticker { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
 /* Clearance fold ("Requires Access" -> "Verifying. . ." -> "Access Approved"), used by SO-02-88 and the About addendum. Script in site.js. */
