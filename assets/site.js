@@ -412,6 +412,29 @@
     setTimeout(lineLoop, 4000);
   }
 
+  // Hensa with real names: anything marked <span class="hensa-label" data-code="KP-01-05" data-name="Jimbob">
+  // can show either one. A <button class="label-toggle"> swaps them; the choice is remembered sitewide.
+  const LABEL_KEY = "peo-hensa-label";
+  const labels = document.querySelectorAll(".hensa-label[data-name]");
+  if (labels.length) {
+    let showName = false;
+    try { showName = localStorage.getItem(LABEL_KEY) === "name"; } catch (e) {}
+    const toggles = document.querySelectorAll(".label-toggle");
+    const show = () => {
+      labels.forEach(el => { el.textContent = showName ? el.dataset.name : el.dataset.code; });
+      toggles.forEach(b => {
+        b.textContent = showName ? "Show classification" : "Show name";
+        b.setAttribute("aria-pressed", String(showName));
+      });
+    };
+    toggles.forEach(b => b.addEventListener("click", () => {
+      showName = !showName;
+      try { localStorage.setItem(LABEL_KEY, showName ? "name" : "code"); } catch (e) {}
+      show();
+    }));
+    show();
+  }
+
   // Opening the clearance file checks credentials for a moment first
   document.querySelectorAll("details.clearance").forEach(d => {
     const status = d.querySelector(".clr-status");

@@ -234,3 +234,8 @@ details.clearance[open] .clr-label::before { content: "[-] "; }
 .clr-label ~ .clr-status::before, details.clearance[open] .clr-label ~ .clr-status::before { content: " · "; color: var(--muted); }
 /* Stop phone browsers (iOS Safari, Chrome on Android) from auto-enlarging some text blocks, e.g. parts of the banner strip */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* Swaps a named hensa between its classification and its name (site.js) */
+.label-toggle { margin-top: 12px; padding: 4px 12px; font: 13px var(--term-font); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); background: transparent; border: 1px solid var(--accent); border-radius: 2px; cursor: pointer; }
+.label-toggle:hover { background: rgba(255, 255, 255, 0.06); }
+.label-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
