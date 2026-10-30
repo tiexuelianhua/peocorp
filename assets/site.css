@@ -236,7 +236,7 @@ details.clearance[open] .clr-label::before { content: "[-] "; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 /* Swaps a named hensa between its classification and its name (site.js) */
-.label-toggle { margin-left: 10px; width: 28px; height: 28px; padding: 0 0 2px; vertical-align: middle; font: 22px/1 "Segoe UI Symbol", "DejaVu Sans", sans-serif; color: var(--accent); background: transparent; border: 1px solid var(--accent); border-radius: 50%; cursor: pointer; }
+.label-toggle { margin-left: 10px; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; vertical-align: middle; font: 22px/1 "Segoe UI Symbol", "DejaVu Sans", sans-serif; color: var(--accent); background: transparent; border: 1px solid var(--accent); border-radius: 50%; cursor: pointer; }
 .label-toggle:hover { background: rgba(255, 255, 255, 0.06); }
 .label-toggle.spin { animation: label-spin 0.4s ease-out; }
 @keyframes label-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
