@@ -21,6 +21,8 @@
   // branch and other unique pages keep their colors. The saved default theme is the
   // theme-default-2026-10-30 branch on GitHub.
   const THEME = "peoween";
+  // Banner logo for each theme; this one changes on every page, branch pages included.
+  const LOGOS = { default: "peo.webp", peoween: "peoween-logo.webp" };
   // Sanity readout: the banner status follows the visitor's sanity (100 = full).
   // Each stage shows while sanity is at or above its "min". Highest first.
   // The readout is "<text> Sanity: N%" with the live number (rounded up, so 0% only at exactly 0).
@@ -125,7 +127,7 @@
   if (banner) {
     banner.innerHTML = `
       <div class="banner-inner">
-        <a href="${link("")}"><img class="logo" src="${ROOT}assets/peo.webp" alt="Peo Corp home" width="64" height="64"></a>
+        <a href="${link("")}"><img class="logo" src="${ROOT}assets/${LOGOS[THEME] || LOGOS.default}" alt="Peo Corp home" width="64" height="64"></a>
         <div class="brand">
           <p class="site-name">PEO CORP</p>
           <p class="tagline">Expediting towards infinity.</p>
