@@ -42,3 +42,6 @@
 .test-line .tl { font-family: var(--term-font); color: var(--accent); letter-spacing: 0.06em; }
 /* Struck-out limits in Escape Information */
 s { color: var(--muted); text-decoration-thickness: 2px; }
+/* Precondition and postcondition sit together, with no gap between them */
+.test-line.test-pre { margin-bottom: 0; }
+.test-line.test-post { margin-top: 0; }
