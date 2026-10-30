@@ -1,6 +1,8 @@
 # Messages for the scrolling strip under the banner, one per line.
 # They scroll in this order. Add, remove or reorder lines, then commit.
 # Delete every message to hide the strip.
-Peoween is soon.
+Happy Peoween!
+Trick or treat!
+The Peoween Spirit has arrived.
 Make sure to keep the daily quota in mind!
 May Peo be with you!
