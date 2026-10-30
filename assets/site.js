@@ -423,12 +423,17 @@
     const show = () => {
       labels.forEach(el => { el.textContent = showName ? el.dataset.name : el.dataset.code; });
       toggles.forEach(b => {
-        b.textContent = showName ? "Show classification" : "Show name";
-        b.setAttribute("aria-pressed", String(showName));
+        b.textContent = "\u21BB";
+        const tip = showName ? "Show classification" : "Show name";
+        b.title = tip;
+        b.setAttribute("aria-label", tip);
       });
     };
     toggles.forEach(b => b.addEventListener("click", () => {
       showName = !showName;
+      b.classList.remove("spin");
+      void b.offsetWidth;
+      b.classList.add("spin");
       try { localStorage.setItem(LABEL_KEY, showName ? "name" : "code"); } catch (e) {}
       show();
     }));
