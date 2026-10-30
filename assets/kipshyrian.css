@@ -38,7 +38,6 @@
 .note p { margin: 0 0 8px; }
 .note p:last-child { margin-bottom: 0; }
 /* Test addendums: the test's file header, then labelled lines */
-main h2.addendum { text-transform: uppercase; letter-spacing: 0.04em; }
 .test-file { font-size: 16px; margin-bottom: 12px; }
 .test-line .tl { font-family: var(--term-font); color: var(--accent); letter-spacing: 0.06em; }
 /* Struck-out limits in Escape Information */
