@@ -4,7 +4,7 @@
 // or links: { "word": "path/" } to link just those words when one entry covers several pages.
 (() => {
   const UPDATES = [
-    { date: "2026-11-26", text: "Added The Gardens page and the first poem: Forget-Me-Not and Blue Rose", links: { "The Gardens page": "garden/", "Forget-Me-Not and Blue Rose": "garden/forget-me-not-and-blue-rose/" } },
+    { date: "2026-11-26", text: "Added The Garden page and the first poem: Forget-Me-Not and Blue Rose", links: { "The Garden page": "garden/", "Forget-Me-Not and Blue Rose": "garden/forget-me-not-and-blue-rose/" } },
     { date: "2026-10-30", text: "Happy Peoween!" },
     { date: "2026-10-30", text: "Added KP-01-05", link: "kipshyrian/kp-01-05.html" },
     { date: "2026-10-30", text: "Minor changes to Addendums" },
