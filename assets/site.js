@@ -82,7 +82,8 @@
     { heading: "Records", items: [
       { label: "Retellings", href: "#" },
       { label: "Expedition logs", href: "expeditions/", page: "expeditions" },
-      { label: "Events", href: "events/", page: "events" }
+      { label: "Events", href: "events/", page: "events" },
+      { label: "The Garden", href: "garden/", page: "garden" }
     ]},
     { heading: "Reference", items: [
       { label: "Glossary", href: "glossary/", page: "glossary" },
@@ -111,7 +112,9 @@
     { title: "Expedition logs", href: "expeditions/", where: "Records", words: "expedition mimic zomgoosia golden hour hotel photos" },
     { title: "Expedition 1", href: "expeditions/expedition-1.html", where: "Expedition logs", words: "expedition first mimic photos" },
     { title: "Events", href: "events/", where: "Records", words: "events event incidents history" },
-    { title: "END OF PEO CORP", href: "events/end-of-peo-corp/", where: "Events", words: "end of peo corp event journal hilltop pizzeria garden hyacinth constant reminder" }
+    { title: "END OF PEO CORP", href: "events/end-of-peo-corp/", where: "Events", words: "end of peo corp event journal hilltop pizzeria garden hyacinth constant reminder" },
+    { title: "The Garden", href: "garden/", where: "Records", words: "garden poems flowers" },
+    { title: "Forget-Me-Not and Blue Rose", href: "garden/forget-me-not-and-blue-rose/", where: "The Garden", words: "garden poem forget-me-not blue rose tablet" }
   ];
 
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

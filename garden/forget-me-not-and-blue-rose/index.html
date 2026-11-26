@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Forget-Me-Not and Blue Rose · Peo Corp</title>
+<link rel="icon" type="image/jpeg" href="../../assets/peoverse-icon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+  /* Garden poem page. One shared design for every Garden poem (approved by Echo 2026-11-26).
+     Font and skies are borrowed from the Garden pages of END OF PEO CORP. */
+  :root {
+    color-scheme: dark;
+    --garden-font: "Cormorant Garamond", Garamond, "Times New Roman", serif;
+    --day-ink: #3a3820;
+    --dusk-ink: #fbeee2;
+    --night-ink: #e2daf3;
+    --note-ink: #b8b0c8;
+  }
+  html, body { margin: 0; }
+  body { background: #071338; font: 23px/1.75 var(--garden-font); }
+
+  /* ── The scene: three fixed layers behind the poem ──
+     .low  = the pale sky you see while standing on the ground
+     .high = the dark blue of space, with the stars on top of it
+     .ground = the meadow at the bottom of the screen
+     The script sets one number, --rise (0 at the top of the page, 1 at the bottom),
+     and every layer reads it, so the whole scene moves with the scroll. */
+  .scene { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  .low  { background: linear-gradient(#c7d9e8 0%, #e3ead8 60%, #f1eedb 100%); }
+  .high { background: linear-gradient(#030716 0%, #071338 55%, #0c1d4f 100%);
+          opacity: clamp(0, calc((var(--rise) - 0.1) / 0.45), 1); }
+  /* Stars: one tiny dot, copied many times with box-shadow. Each "x y 0 size colour" entry
+     is one star. The list is written by build.py from a fixed random seed, so the sky is
+     scattered (no grid) but identical every time the page loads. */
+  .stars { opacity: clamp(0, calc((var(--rise) - 0.35) / 0.45), 1); overflow: hidden; }
+  .stars::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 1px; height: 1px; border-radius: 50%;
+    box-shadow: 487px 654px 0 0.8px #cfd8ff, 420px 457px 0 0.8px #cfd8ff, 2279px 861px 0 0.8px #cfd8ff, 2010px 1201px 0 0.4px #fff, 10px 1257px 0 0px #fff, 1176px 200px 0 0.4px #fff, 2008px 1391px 0 0px #fff, 1627px 515px 0 0px #fff, 1541px 1051px 0 0px #fff, 367px 1141px 0 0.8px #fff, 1178px 936px 0 0px #cfd8ff, 1265px 50px 0 0px #fff, 1888px 864px 0 0px #dfe6ff, 2399px 1135px 0 0.4px #fff, 1742px 1037px 0 0.8px #dfe6ff, 1630px 1074px 0 0px #dfe6ff, 2310px 981px 0 0.8px #cfd8ff, 103px 1178px 0 0px #fff, 200px 1443px 0 0.8px #fff, 1758px 962px 0 0px #dfe6ff, 937px 249px 0 0.4px #dfe6ff, 2234px 514px 0 0.8px #dfe6ff, 1260px 1122px 0 0.8px #dfe6ff, 1646px 886px 0 0px #fff, 1101px 18px 0 0px #fff, 1876px 1070px 0 0.4px #fff, 818px 532px 0 0.4px #dfe6ff, 2094px 1018px 0 0.4px #cfd8ff, 137px 594px 0 0px #dfe6ff, 402px 897px 0 0.8px #fff, 1855px 374px 0 0.4px #dfe6ff, 263px 1328px 0 0px #dfe6ff, 1516px 197px 0 0px #dfe6ff, 599px 920px 0 0px #fff, 0px 924px 0 0.8px #cfd8ff, 340px 1249px 0 0px #fff, 494px 1271px 0 0px #cfd8ff, 1099px 1369px 0 0px #fff, 21px 641px 0 0.8px #cfd8ff, 2015px 1412px 0 0px #cfd8ff, 913px 968px 0 0.8px #fff, 2067px 595px 0 0px #dfe6ff, 655px 277px 0 0.8px #fff, 2079px 843px 0 0.4px #fff, 2130px 402px 0 0.4px #fff, 434px 797px 0 0px #fff, 1421px 1323px 0 0px #fff, 104px 1045px 0 0.4px #fff, 1243px 921px 0 0px #fff, 2038px 955px 0 0.8px #cfd8ff, 699px 315px 0 0.8px #cfd8ff, 847px 888px 0 0.8px #fff, 1879px 1225px 0 0px #fff, 2241px 817px 0 0px #fff, 710px 92px 0 0.8px #fff, 1850px 1312px 0 0px #dfe6ff, 83px 264px 0 0.8px #fff, 2117px 282px 0 0px #fff, 1597px 558px 0 0.4px #cfd8ff, 1696px 161px 0 0.4px #fff, 766px 704px 0 0px #fff, 1900px 1019px 0 0.4px #fff, 1915px 362px 0 0px #cfd8ff, 1974px 910px 0 0px #cfd8ff, 2149px 560px 0 0px #fff, 947px 10px 0 0px #dfe6ff, 1353px 835px 0 0.8px #fff, 111px 720px 0 0px #fff, 2301px 1407px 0 0.8px #cfd8ff, 886px 224px 0 0.8px #fff, 2276px 1163px 0 0px #cfd8ff, 1207px 1152px 0 0px #cfd8ff, 543px 207px 0 0px #fff, 1786px 350px 0 0px #fff, 1459px 1479px 0 0px #fff, 2075px 642px 0 0px #cfd8ff, 261px 596px 0 0px #fff, 1068px 524px 0 0px #fff, 1686px 526px 0 0.4px #fff, 234px 197px 0 0px #fff, 1269px 251px 0 0px #cfd8ff, 2361px 717px 0 0px #dfe6ff, 155px 827px 0 0px #cfd8ff, 883px 1216px 0 0.4px #dfe6ff, 489px 1405px 0 0px #cfd8ff, 1030px 796px 0 0px #fff, 236px 1464px 0 0.4px #fff, 1152px 1423px 0 0px #fff, 501px 608px 0 0.4px #fff, 2398px 41px 0 0.8px #fff, 808px 1148px 0 0px #fff, 664px 1267px 0 0px #fff, 152px 257px 0 0.8px #fff, 1237px 58px 0 0.4px #cfd8ff, 517px 729px 0 0.4px #dfe6ff, 1544px 490px 0 0.4px #fff, 512px 375px 0 0.8px #fff, 2217px 1400px 0 0.8px #dfe6ff, 1044px 302px 0 0px #fff, 67px 566px 0 0.8px #dfe6ff, 1711px 540px 0 0px #fff, 366px 367px 0 0.8px #fff, 2105px 543px 0 0px #cfd8ff, 1300px 115px 0 0px #fff, 1927px 119px 0 0px #cfd8ff, 617px 817px 0 0px #fff, 2300px 564px 0 0px #fff, 1534px 735px 0 0.4px #dfe6ff, 2247px 970px 0 0.8px #fff, 769px 324px 0 0.4px #fff, 1985px 10px 0 0px #cfd8ff, 1672px 76px 0 0px #fff, 1224px 763px 0 0.8px #fff, 565px 1463px 0 0px #fff, 2184px 444px 0 0.8px #fff, 2345px 91px 0 0.4px #dfe6ff, 2207px 1057px 0 0px #cfd8ff, 429px 175px 0 0px #dfe6ff, 1366px 1121px 0 0px #fff, 170px 1213px 0 0px #fff, 1199px 604px 0 0.8px #fff, 1463px 274px 0 0.4px #fff, 38px 1240px 0 0.4px #dfe6ff, 1456px 1100px 0 0px #cfd8ff, 120px 367px 0 0px #cfd8ff, 592px 335px 0 0px #fff, 2109px 1367px 0 0px #fff, 260px 753px 0 0px #fff, 2179px 315px 0 0.8px #cfd8ff, 1016px 259px 0 0px #fff, 1984px 219px 0 0px #dfe6ff, 1075px 1263px 0 0px #fff, 1424px 971px 0 0.4px #fff, 2275px 1062px 0 0px #fff, 1867px 1198px 0 0px #fff, 282px 179px 0 0.4px #fff, 1086px 1355px 0 0px #fff, 1331px 885px 0 0.8px #cfd8ff, 1358px 660px 0 0.4px #dfe6ff, 1284px 361px 0 0px #dfe6ff, 901px 1411px 0 0px #fff, 1678px 1208px 0 0.4px #fff, 632px 904px 0 0.8px #fff, 1766px 548px 0 0px #fff, 1310px 545px 0 0.4px #fff, 595px 1116px 0 0px #fff, 1358px 293px 0 0.8px #fff, 1097px 601px 0 0.8px #dfe6ff, 1643px 818px 0 0px #cfd8ff, 1348px 1380px 0 0.4px #fff, 389px 1390px 0 0.4px #cfd8ff, 2116px 429px 0 0.4px #fff, 1353px 122px 0 0.4px #fff, 43px 546px 0 0.8px #fff, 534px 684px 0 0.8px #cfd8ff, 1698px 974px 0 0.4px #fff, 48px 76px 0 0px #fff, 1100px 668px 0 0px #fff, 1872px 1054px 0 0px #cfd8ff, 1513px 161px 0 0.8px #fff, 2207px 23px 0 0px #fff, 1351px 449px 0 0.4px #fff, 699px 1444px 0 0px #fff, 2324px 854px 0 0.8px #cfd8ff, 2290px 272px 0 0px #fff, 1109px 859px 0 0px #fff, 2253px 1051px 0 0px #dfe6ff, 1397px 703px 0 0px #fff, 1964px 522px 0 0.4px #fff, 1024px 75px 0 0.4px #fff, 89px 984px 0 0px #fff, 1909px 407px 0 0px #fff, 2098px 1499px 0 0.4px #fff, 894px 1191px 0 0px #dfe6ff, 264px 1486px 0 0.8px #cfd8ff, 1223px 988px 0 0.8px #fff, 2087px 1069px 0 0.8px #fff, 2003px 651px 0 0px #fff, 742px 159px 0 0.8px #fff, 1054px 1081px 0 0.8px #dfe6ff, 435px 1247px 0 0px #fff, 1899px 493px 0 0px #dfe6ff, 2080px 1078px 0 0px #cfd8ff, 865px 554px 0 0.4px #fff, 2289px 1389px 0 0px #fff, 1605px 1090px 0 0.8px #cfd8ff, 774px 311px 0 0.8px #cfd8ff, 627px 1492px 0 0px #fff, 2346px 125px 0 0px #fff, 1226px 366px 0 0px #fff, 2213px 1419px 0 0px #fff, 1873px 344px 0 0px #fff, 760px 1392px 0 0px #dfe6ff, 2005px 1118px 0 0px #fff, 904px 1053px 0 0px #cfd8ff, 376px 953px 0 0.4px #fff, 1329px 298px 0 0.8px #fff, 1928px 15px 0 0px #fff, 1445px 1200px 0 0px #fff, 115px 335px 0 0.8px #fff, 368px 865px 0 0.4px #fff, 699px 493px 0 0px #dfe6ff, 871px 762px 0 0px #cfd8ff, 1728px 1476px 0 0.4px #dfe6ff, 1487px 1443px 0 0px #fff, 1804px 1144px 0 0.8px #dfe6ff, 375px 432px 0 0px #fff, 322px 724px 0 0.8px #fff, 471px 352px 0 0px #dfe6ff, 775px 876px 0 0px #cfd8ff, 593px 1327px 0 0px #fff, 1495px 815px 0 0px #dfe6ff, 2134px 942px 0 0px #fff, 1999px 282px 0 0px #fff, 2292px 455px 0 0px #dfe6ff, 1545px 1246px 0 0.8px #fff, 2294px 668px 0 0px #fff, 1888px 959px 0 0px #cfd8ff, 2152px 1086px 0 0px #fff, 1215px 76px 0 0px #cfd8ff, 171px 143px 0 0.8px #dfe6ff, 2311px 222px 0 0.4px #cfd8ff, 1871px 1256px 0 0.4px #cfd8ff, 89px 313px 0 0px #fff, 108px 215px 0 0.4px #fff, 688px 1095px 0 0px #fff, 189px 145px 0 0.8px #cfd8ff, 490px 1500px 0 0px #fff, 1257px 964px 0 0px #fff, 1919px 1414px 0 0px #dfe6ff, 976px 1052px 0 0px #dfe6ff, 169px 1001px 0 0px #cfd8ff, 754px 898px 0 0px #fff, 1950px 1209px 0 0.4px #dfe6ff, 2170px 33px 0 0.4px #fff, 1575px 1495px 0 0px #cfd8ff, 1906px 287px 0 0px #fff, 2135px 642px 0 0px #dfe6ff, 2377px 53px 0 0px #cfd8ff, 2129px 340px 0 0.8px #fff, 2305px 754px 0 0px #cfd8ff, 311px 1135px 0 0px #dfe6ff, 1660px 227px 0 0px #dfe6ff, 1642px 11px 0 0px #fff, 209px 537px 0 0px #cfd8ff, 1091px 766px 0 0px #fff, 686px 74px 0 0px #cfd8ff, 473px 916px 0 0.8px #fff, 1456px 1421px 0 0.4px #cfd8ff, 141px 389px 0 0.4px #fff, 1193px 186px 0 0px #fff, 1143px 419px 0 0px #fff, 178px 965px 0 0px #fff, 2238px 343px 0 0.8px #cfd8ff, 2390px 1106px 0 0px #dfe6ff, 218px 1109px 0 0px #fff, 2198px 804px 0 0.4px #fff, 992px 64px 0 0px #dfe6ff, 1580px 1138px 0 0px #dfe6ff, 731px 351px 0 0px #fff;
+  }
+  /* The meadow: a soft horizon line, then grass greens down to earth.
+     As you rise it slides down off the screen (translateY), so you seem to lift off the ground. */
+  .ground {
+    top: auto; height: 60vh; overflow: hidden;
+    will-change: transform;   /* own GPU layer: sliding it moves a finished picture instead of repainting 6000 flowers */
+    /* No CSS background: the canvas paints the grass itself, under a rolling horizon */
+    transform: translateY(calc(min(var(--rise) / 0.45, 1) * 100%));
+  }
+
+  /* Meadow flowers: thousands of copies of the forget-me-not, painted ONCE onto a single
+     <canvas> by the script (see drawMeadow). One canvas is cheap to scroll; thousands of
+     separate elements made scrolling lag. */
+  .ground canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  /* Text: dark ink over the daylit ground, pale ink once the sky has turned dark.
+     It switches at one point and eases over 2.4s, so it is never mid-grey on a mid-tone sky. */
+  body { --ink: #2c3424; --note-ink: #4f5741; }
+  body.up { --ink: #e6e9f7; --note-ink: #aab3d6; }
+  .poem { color: var(--ink); }
+  /* A soft pale halo behind the dark text keeps it readable over the meadow flowers */
+  body:not(.up) .lines, body:not(.up) h1 { text-shadow: 0 0 2px #f4f1df, 0 0 6px #f4f1df, 0 0 14px #f4f1df, 0 0 24px rgba(244, 241, 223, 0.9); font-weight: 500; }
+  .note { color: var(--note-ink); }
+
+  .poem { max-width: 30em; margin: 0 auto; box-sizing: border-box; text-align: center;
+          padding: 14vh max(16px, env(safe-area-inset-right, 0px)) 45vh max(16px, env(safe-area-inset-left, 0px));
+          transition: color 2.4s ease; }
+  .series { margin: 0; font-size: 19px; font-style: italic; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.8; }
+  h1 { margin: 0.2em 0 0; font-weight: 500; font-size: 38px; line-height: 1.25; text-wrap: balance; }
+  .flower { display: block; margin: 1.4em auto 2.2em; height: auto; }
+  .flower.fmn  { width: 120px; }
+  .flower.rose { width: 104px; margin: 3.2em auto 2em; }
+  /* Soft blue glow on the flowers once the sky is dark (like the hyacinth glow on END OF PEO CORP) */
+  .flower { transition: filter 2.4s ease; }
+  body.up .flower { filter: drop-shadow(0 0 14px rgba(140, 150, 230, 0.55)); }
+  .lines p { margin: 0 0 1.6em; text-wrap: pretty; }
+  .note { margin: 0; font-style: italic; font-size: 18px; line-height: 1.6; color: var(--note-ink); transition: color 2.4s ease; }
+
+  /* Way out, at the very end, in the starry sky */
+  .leave { display: flex; justify-content: center; gap: 2em; margin: 4em 0 0; font-size: 17px; }
+  .leave a { color: #c9d2ff; text-decoration-color: rgba(201, 210, 255, 0.4); text-underline-offset: 3px; }
+  .leave a:hover { text-decoration-color: currentColor; }
+
+  @media (max-width: 480px) {
+    body { font-size: 20px; }
+    h1 { font-size: 30px; }
+    .series { font-size: 16px; }
+    .note { font-size: 16px; }
+    .flower.fmn { width: 96px; } .flower.rose { width: 84px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .poem, .note, .flower { transition: none; } }
+</style>
+</head>
+<body style="--rise: 0">
+<div class="scene low"></div><div class="scene high"></div><div class="scene stars"></div><div class="scene ground"><canvas id="meadow"></canvas></div>
+
+<main class="poem">
+  <p class="series">The Garden:</p>
+  <h1>Forget-Me-Not and Blue Rose</h1>
+  <img class="flower fmn" alt="A forget-me-not" src="../../assets/garden/forget-me-not.png">
+  <div class="lines">
+    <p>And so, we remember that sorrowful reminder of her.</p>
+    <p>She wished, yet was never answered.</p>
+    <p>When she was still with us.</p>
+    <p>She gave us flowers.</p>
+    <p>A forget-me-not, usually.</p>
+    <p>She had naught but a forget-me-not.</p>
+    <p>But she longed for a blue rose.</p>
+    <p>And then, she was not with us anymore.</p>
+    <p>As the Great Unknown had called to her.</p>
+    <p>An eternity of exile, of atonement.</p>
+    <p>Full of suffering and of regret.</p>
+    <p>For we will never see her again.</p>
+    <p>For she will never see us again.</p>
+  </div>
+  <img class="flower rose" alt="A blue rose" src="../../assets/garden/blue-rose.png">
+  <p class="note">Discovered on a very small tablet scavenged by PET-Agent Rui during an expedition team’s successful journey to depth 100 of the Outskirts Forest.</p>
+  <nav class="leave" aria-label="Leave this page"><a href="../../garden/">The Garden</a><a href="../../">Home</a></nav>
+
+</main>
+
+<script>
+const b = document.body;
+
+// ── Meadow: paint every flower once onto the canvas ──
+// The flowers are worked out here in the browser (instead of a big list in the file), from a
+// small seeded random generator, so the meadow is identical on every load.
+// mulberry32: a tiny, well-known pseudo-random generator. Same seed -> same numbers.
+function mulberry32(a) {
+  return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+}
+// d = distance from the viewer (1.6 = right in front, 30 = the horizon). On screen, size and
+// height below the horizon both scale with 1/d, like real vision.
+// Each flower: [left %, top %, size px, turn deg, opacity, skip key]
+const MEADOW = (() => {
+  const rnd = mulberry32(1126), u = (a, b) => a + rnd() * (b - a);
+  const NEAR = 1.6, FAR = 30;
+  const topOf = d => 100 * (1/d - 1/FAR) / (1/NEAR - 1/FAR);   // % down the ground (0 = horizon)
+  const perspective = () => Math.sqrt(u(NEAR * NEAR, FAR * FAR));  // more flowers far away (the view is wider there)
+  const evenly = () => 1 / u(1/FAR, 1/NEAR);                         // evenly down the screen, carpets the front
+  const under = [], main = [];
+  // Under-layer: faded flowers painted first, to hide the grass between the rest
+  for (let i = 0; i < 14000; i++) {
+    const d = rnd() < 0.6 ? evenly() : perspective();
+    under.push([u(-3, 103), topOf(d), 96 / d * u(0.8, 1.3), u(-40, 40), u(0.5, 0.9), rnd()]);
+  }
+  // Main layer: 5000 in true perspective + 1000 spread evenly, always drawn
+  for (let i = 0; i < 6000; i++) {
+    const d = i < 5000 ? perspective() : evenly();
+    main.push([u(-3, 103), topOf(d), 96 / d * u(0.8, 1.2), u(-40, 40), Math.min(1, 0.75 + 0.45 * Math.sqrt(NEAR / d)), 0]);
+  }
+  const byDepth = (p, q) => p[1] - q[1];   // far ones first, near ones on top
+  return under.sort(byDepth).concat(main.sort(byDepth));
+})();
+const flowerImg = new Image();
+flowerImg.src = "../../assets/garden/forget-me-not-small.png";
+function drawMeadow() {
+  const cv = document.getElementById("meadow");
+  const dpr = devicePixelRatio || 1;                 // sharp on high-density (phone) screens
+  const w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext("2d");
+  ctx.scale(dpr, dpr);
+  // Rolling horizon: a few overlapping sine waves (long, medium and short), so the far edge
+  // of the meadow rises and dips instead of being a ruler-straight line.
+  // hill(x) = how far down the canvas the horizon is at that x, in px.
+  const TAU = Math.PI * 2;
+  const hill = x => h * (0.065
+    + 0.018 * Math.sin(x / w * TAU * 1.3 + 1.0)
+    + 0.009 * Math.sin(x / w * TAU * 3.7 + 2.0)
+    + 0.004 * Math.sin(x / w * TAU * 9.1 + 0.5));
+
+  // 1. Flowers. Each one's height is now measured from the horizon at its own x,
+  //    and the farthest rows sit right on the line, so their tops poke above it.
+  // Narrow screens need fewer flowers for the same coverage (they're positioned in %),
+  // so each under-layer flower has a random key k and is skipped when k > density.
+  const density = Math.min(1, Math.max(0.3, w / 1600));
+  // On wide screens the flowers are drawn a bit bigger, so the meadow stays just as full
+  const grow = Math.min(1.6, Math.max(1, w / 1100));
+  for (const [x, y, s, r, o, k] of MEADOW) {
+    if (k > density) continue;
+    const px = x / 100 * w, top = hill(px);
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.translate(px, top + y / 100 * (h - top));    // move to the flower's spot
+    ctx.rotate(r * Math.PI / 180);                   // turn it
+    const z = s * grow;
+    ctx.drawImage(flowerImg, -z / 2, -z / 2, z, z);  // draw it centred, at its size
+    ctx.restore();
+  }
+  // 2. Lavender hue over the flowers only: "source-atop" paints just where something is
+  //    already drawn. Slightly stronger toward the horizon, like a distant haze.
+  ctx.globalCompositeOperation = "source-atop";
+  const haze = ctx.createLinearGradient(0, 0, 0, h);
+  haze.addColorStop(0, "rgba(206, 184, 240, 0.45)");
+  haze.addColorStop(1, "rgba(206, 184, 240, 0.22)");
+  ctx.fillStyle = haze;
+  ctx.fillRect(0, 0, w, h);
+  // 3. Grass, painted BEHIND everything already there ("destination-over"),
+  //    filling from the rolling horizon down. Soft sage, with a pale glow along the horizon.
+  ctx.globalCompositeOperation = "destination-over";
+  const grass = ctx.createLinearGradient(0, h * 0.04, 0, h);
+  grass.addColorStop(0, "#d9dcc6");
+  grass.addColorStop(0.08, "#b9c2a6");
+  grass.addColorStop(0.45, "#a2ad8f");
+  grass.addColorStop(1, "#8f9a80");
+  ctx.fillStyle = grass;
+  ctx.beginPath();
+  ctx.moveTo(0, h);
+  for (let x = 0; x <= w + 4; x += 4) ctx.lineTo(x, hill(x));
+  ctx.lineTo(w, h);
+  ctx.closePath();
+  ctx.fill();
+  ctx.globalCompositeOperation = "source-over";
+}
+flowerImg.onload = drawMeadow;
+let lastW = innerWidth;   // phones fire resize when the address bar hides; only redraw on real width changes
+addEventListener("resize", () => { if (innerWidth !== lastW) { lastW = innerWidth; drawMeadow(); } });
+let ticking = false;
+// --rise = how far down the page the reader is, from 0 (top) to 1 (bottom)
+function follow() {
+  ticking = false;
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const rise = max > 0 ? Math.min(1, scrollY / max) : 1;
+  b.style.setProperty("--rise", rise.toFixed(3));
+  b.classList.toggle("up", rise > 0.33);
+}
+// Scroll events fire many times a frame; requestAnimationFrame does the work at most once per frame
+addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(follow); } }, { passive: true });
+addEventListener("resize", follow);
+
+follow();
+</script>
+</body>
+</html>
