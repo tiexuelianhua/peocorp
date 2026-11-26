@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Garden · Peo Corp</title>
+<link rel="icon" type="image/jpeg" href="../assets/peoverse-icon.jpg">
+<link rel="stylesheet" href="../assets/site.css?v=95">
+<style>
+  /* One row per Garden poem: its flower, then its title (in the Garden pages' serif) */
+  .poems { list-style: none; margin: 16px 0 0; padding: 0; }
+  .poems li { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .poems img { width: 32px; height: 32px; object-fit: contain; }
+  .poems a { font: 500 21px "Cormorant Garamond", Garamond, "Times New Roman", serif; color: var(--accent); text-decoration: none; }
+  .poems a:hover { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap">
+</head>
+<body data-page="garden" data-safe>
+<header class="banner" id="site-banner"></header>
+<div class="layout">
+  <nav class="side" id="site-nav" aria-label="Site"></nav>
+  <main>
+    <p class="crumbs"><a href="../">Home</a> / The Garden</p>
+    <h1>The Garden</h1>
+    <p>A collection of poems about flowers. The significance of them is unknown, but everything so far tells us we should keep them in mind. Read with caution whenever necessary. May Peo be with you.</p>
+    <ul class="poems">
+      <li><img src="../assets/garden/forget-me-not-small.png" alt=""><a href="forget-me-not-and-blue-rose/">Forget-Me-Not and Blue Rose</a></li>
+    </ul>
+  </main>
+</div>
+<footer class="site">
+  <div>&copy; 2026 鉄血の蓮 and the respective authors of the Peoverse. All rights reserved.</div>
+  <div class="ai-note">Site code built with Claude (Anthropic). Lore, writing and images are by the authors of the Peoverse; Claude assisted with edits.</div>
+</footer>
+<script src="../assets/site.js?v=95" data-root="../"></script>
+</body>
+</html>
